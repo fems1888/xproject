@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">XProjectApp</string>
+    <string name="login_out_tips">再按一次退出程序</string>
 </resources>
+
