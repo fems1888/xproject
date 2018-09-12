@@ -21,6 +21,7 @@ public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user_register);
+        setToolBarTitle(getString(R.string.invitation_register));
     }
 
     public static void goNewUserRegisterActivity(Context context){

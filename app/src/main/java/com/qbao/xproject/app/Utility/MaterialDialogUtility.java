@@ -41,6 +41,21 @@ public class MaterialDialogUtility {
      * @param context
      */
     public static void showNoWinPriceDialog(Context context){
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialog);
+        View view = View.inflate(context, R.layout.layout_no_win_price_dialog, null);
+        builder.setView(view);
+        builder.setTitle(null);
+        builder.setCancelable(false);
+        AlertDialog alert = builder.show();
+        WindowManager.LayoutParams lp = alert.getWindow().getAttributes();
+        lp.width = CommonUtility.getScreenWidth(context) * 4 / 5;
+        alert.getWindow().setAttributes(lp);
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable());
+        view.findViewById(R.id.text_sure).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
     }
 }

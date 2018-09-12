@@ -12,7 +12,7 @@
         android:layout_height="300dp"
         android:background="@drawable/ic_mine_top"
         >
-        
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             />
 
     </FrameLayout>
-    
+
     <RelativeLayout
         android:id="@+id/relative_wallet"
         android:layout_width="match_parent"

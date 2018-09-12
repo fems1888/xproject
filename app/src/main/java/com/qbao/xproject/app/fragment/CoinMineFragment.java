@@ -11,6 +11,6 @@ import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 public class CoinMineFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
     @Override
     public int setContent() {
-        return R.layout.layout_fragment_arena;
+        return R.layout.layout_fragment_coin_mine;
     }
 }
