@@ -15,5 +15,8 @@
     <string name="win_price">恭喜您获得</string>
     <string name="current_bonus">本期奖金</string>
     <string name="sure">确认</string>
+    <string name="text_wallet">我的钱包</string>
+    <string name="text_space">领取空投</string>
+    <string name="text_feedback">用户反馈</string>
 </resources>
 

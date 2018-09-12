@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/ic_mine_top"
+        >
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_cow"
+            />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_shape_white_ring"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/size_sp_14"
+            android:layout_marginBottom="@dimen/size_dp_50"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textColor="@color/white"
+            android:text="木七"
+            />
+
+    </FrameLayout>
+    
+    <RelativeLayout
+        android:id="@+id/relative_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/size_dp_10"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/size_dp_16"
+        android:paddingRight="@dimen/size_dp_16">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_wallet"
+            android:layout_alignParentLeft="true"
+            style="@style/mine_image_style"
+            android:src="@drawable/ic_vector_mine_wallet" />
+
+        <TextView
+            android:id="@+id/text_authentication"
+            style="@style/textStyleMainColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_wallet"
+            android:layout_marginLeft="@dimen/size_dp_10"
+            android:layout_toRightOf="@+id/image_wallet" />
+
+
+        <include layout="@layout/include_right_image" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relative_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/size_dp_10"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/size_dp_16"
+        android:paddingRight="@dimen/size_dp_16">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_feedback"
+            android:layout_alignParentLeft="true"
+            style="@style/mine_image_style"
+            android:src="@drawable/ic_vector_mine_space" />
+
+        <TextView
+            android:id="@+id/text_feedback"
+            style="@style/textStyleMainColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_feedback"
+            android:layout_marginLeft="@dimen/size_dp_10"
+            android:layout_toRightOf="@+id/image_feedback" />
+
+
+        <include layout="@layout/include_right_image" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relative_space"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/size_dp_10"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/size_dp_16"
+        android:paddingRight="@dimen/size_dp_16">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_sapce"
+            android:layout_alignParentLeft="true"
+            style="@style/mine_image_style"
+            android:src="@drawable/ic_vector_mine_feedback" />
+
+        <TextView
+            android:id="@+id/text_space"
+            style="@style/textStyleMainColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_space"
+            android:layout_marginLeft="@dimen/size_dp_10"
+            android:layout_toRightOf="@+id/image_sapce" />
+
+
+        <include layout="@layout/include_right_image" />
+    </RelativeLayout>
+
+</LinearLayout>
+</layout>

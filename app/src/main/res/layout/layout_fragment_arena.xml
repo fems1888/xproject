@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
@@ -13,5 +17,6 @@
         android:padding="@dimen/size_dp_60"
         android:textSize="@dimen/size_dp_20"
         android:textColor="@color/text_main_color"/>
+
 </RelativeLayout>
 </layout>

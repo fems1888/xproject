@@ -20,11 +20,11 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
     @Override
     protected void initViews() {
         super.initViews();
-        bindingView.text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginActivity.goLoginActivity(activity);
-            }
-        });
+//        bindingView.text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LoginActivity.goLoginActivity(activity);
+//            }
+//        });
     }
 }
