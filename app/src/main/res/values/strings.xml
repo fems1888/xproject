@@ -1,5 +1,19 @@
 <resources>
     <string name="app_name">XProjectApp</string>
     <string name="login_out_tips">再按一次退出程序</string>
+    <string name="arena">竞技场</string>
+    <string name="coin_mine">矿池</string>
+    <string name="mine">我的</string>
+    <string name="get_code">获取验证码</string>
+    <string name="login">登录</string>
+    <string name="no_register_tip">未注册用户将自动创建账号登录</string>
+    <string name="text_resend_verify_code">重新获取(%d s)</string>
+    <string name="new_user_input_code">识别您为新用户，请输入邀请码</string>
+    <string name="register">注册</string>
+    <string name="input_verify_code">请输入验证码</string>
+    <string name="input_invitate_code">请输入邀请码</string>
+    <string name="win_price">恭喜您获得</string>
+    <string name="current_bonus">本期奖金</string>
+    <string name="sure">确认</string>
 </resources>
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_tool_bar" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/size_dp_80"
+            android:layout_height="@dimen/size_dp_80"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_dp_18"
+            app:srcCompat="@drawable/ic_xproject_icon" />
+
+        <TextView
+            style="@style/textStyleSeconderColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_dp_40"
+            android:text="@string/new_user_input_code" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_dp_30"
+            android:layout_marginLeft="@dimen/size_dp_50"
+            android:layout_marginRight="@dimen/size_dp_50"
+            android:layout_marginTop="@dimen/size_dp_30">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_register_icon" />
+
+            <EditText
+                android:id="@+id/edit_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/size_dp_6"
+                android:layout_toRightOf="@id/image_phone"
+                android:background="@null"
+                android:hint="@string/input_verify_code"
+                android:singleLine="true"
+                android:textColor="@color/text_main_color"
+                android:textColorHint="@color/text_hint_color"
+                android:textSize="@dimen/size_sp_14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_dp_0_5"
+                android:layout_alignParentBottom="true"
+                android:background="@color/text_seconder_color" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/text_register"
+            style="@style/textStyleWhiteColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/size_dp_50"
+            android:layout_marginRight="@dimen/size_dp_50"
+            android:layout_marginTop="@dimen/size_dp_100"
+            android:background="@drawable/gray_round_shape"
+            android:gravity="center"
+            android:padding="@dimen/size_dp_12"
+            android:text="@string/register"
+            android:textColor="@color/text_seconder_color" />
+    </LinearLayout>
+</layout>

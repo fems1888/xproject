@@ -54,7 +54,6 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentWallet);
                     }
-                    mNavigationView.setBackgroundColor(getColorByAttributeId(android.R.attr.windowBackground));
                     break;
                 case R.id.navigation_coin_mine:
 
@@ -65,7 +64,6 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentCompetition);
                     }
-                    mNavigationView.setBackground(getDrawable(R.drawable.ic_launcher_background));
 
                     break;
                 case R.id.navigation_mine:
@@ -76,7 +74,6 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentMine);
                     }
-                    mNavigationView.setBackgroundColor(getColorByAttributeId(android.R.attr.windowBackground));
                     break;
                     default:
                         break;

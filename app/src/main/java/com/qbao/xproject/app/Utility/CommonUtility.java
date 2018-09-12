@@ -1,10 +1,12 @@
 package com.qbao.xproject.app.Utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.qbao.xproject.app.BuildConfig;
@@ -72,6 +74,43 @@ public class CommonUtility {
         }
 
         return resultData;
+    }
+
+    /**
+     * Get the screen width.
+     *
+     * @param context
+     * @return the screen width
+     */
+    @SuppressLint("NewApi")
+    public static int getScreenWidth(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.widthPixels;
+    }
+
+    /**
+     * Get the screen height.
+     *
+     * @param context
+     * @return the screen width
+     */
+    @SuppressLint("NewApi")
+    public static int getScreenHeight(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.heightPixels;
+    }
+
+    /**
+     * method desc：将dipValue换算成px
+     *
+     * @param context
+     * @param dipValue
+     * @return
+     */
+
+    public static int dip2px(Context context, float dipValue) {
+        float m = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * m + 0.5f);
     }
 
     public static class SharedPreferencesUtility {

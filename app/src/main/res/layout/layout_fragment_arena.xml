@@ -4,11 +4,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="竞技场"
         android:layout_centerInParent="true"
         android:gravity="center"
+        android:padding="@dimen/size_dp_60"
         android:textSize="@dimen/size_dp_20"
         android:textColor="@color/text_main_color"/>
 </RelativeLayout>

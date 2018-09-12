@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
-    <color name="text_main_color">#212121</color>
+    <color name="text_main_color">#333333</color>
+    <color name="text_seconder_color">#979797</color>
+    <color name="text_hint_color">#DDDDDD</color>
+    <color name="text_blue">#0372FC</color>
     <color name="transparent">#00000000</color>
+    <color name="main_selected_color">#EF3713</color>
 </resources>

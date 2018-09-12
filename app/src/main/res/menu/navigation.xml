@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/navigation_arena"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="aaa" />
+        android:icon="@drawable/ic_arena_normal"
+        android:title="@string/arena" />
 
     <item
         android:id="@+id/navigation_coin_mine"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="bbb" />
+        android:icon="@drawable/ic_coin_mine_normal"
+        android:title="@string/coin_mine" />
 
     <item
         android:id="@+id/navigation_mine"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="ccc" />
+        android:icon="@drawable/ic_mine_normal"
+        android:title="@string/mine" />
 
 </menu>
