@@ -13,4 +13,6 @@
     <color name="main_selected_color">#EF3713</color>
     <color name="text_ball_color">#C9C1FF</color>
     <color name="text_ball_color_red">#FFB5B5</color>
+    <color name="text_bet_color">#C9C1FF</color>
+    <color name="bar_one_color">#351871</color>
 </resources>

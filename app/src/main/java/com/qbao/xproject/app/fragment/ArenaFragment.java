@@ -2,10 +2,16 @@ package com.qbao.xproject.app.fragment;
 
 import android.view.View;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.activity.BetActivity;
 import com.qbao.xproject.app.activity.LoginActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * @author Created by jackieyao on 2018/9/11 下午6:28.
@@ -20,11 +26,17 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
     @Override
     protected void initViews() {
         super.initViews();
-//        bindingView.text.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LoginActivity.goLoginActivity(activity);
-//            }
-//        });
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        RxView.clicks(bindingView.textNext).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        BetActivity.goBetActivity(activity);
+                    }
+                });
     }
 }

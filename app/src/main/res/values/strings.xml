@@ -25,5 +25,6 @@
     <string name="price_rule_one">本期中奖号码将于10:00:00之后陆续生成</string>
     <string name="detail_see">详细参考</string>
     <string name="arena_rule"><![CDATA[<竞技场规则>]]></string>
+    <string name="choose_three_num">请选择三个号</string>
 </resources>
 

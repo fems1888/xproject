@@ -1,5 +1,6 @@
 package com.qbao.xproject.app.base;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +24,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowInsets;
 
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.Utility.CommonUtility;
@@ -38,6 +43,25 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getWindow();
+//            View decorView = window.getDecorView();
+//            decorView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+//                @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+//                @Override
+//                public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+//                    WindowInsets defaultInsets = v.onApplyWindowInsets(insets);
+//                    return defaultInsets.replaceSystemWindowInsets(
+//                            defaultInsets.getSystemWindowInsetLeft(),
+//                            0,
+//                            defaultInsets.getSystemWindowInsetRight(),
+//                            defaultInsets.getSystemWindowInsetBottom());
+//                }
+//            });
+//            ViewCompat.requestApplyInsets(decorView);
+//            //将状态栏设成透明，如不想透明可设置其他颜色
+//            window.setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
+//        }
         TAG = new StringBuilder().append(getPackageName()).append(".").append(getClass().getSimpleName()).toString();
         CommonUtility.DebugLog.e("BaseRxActivity", TAG);
         activity = this;

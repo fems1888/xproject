@@ -1,6 +1,7 @@
 package com.qbao.xproject.app.activity;
 
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -8,8 +9,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.Utility.CommonUtility;
+import com.qbao.xproject.app.Utility.StatusBarUtils;
 import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.fragment.ArenaFragment;
@@ -24,6 +24,10 @@ import com.qbao.xproject.app.fragment.CoinMineFragment;
 import com.qbao.xproject.app.fragment.MineFragment;
 
 import java.util.ArrayList;
+
+/**
+ * @author Created by jackieyao on 2018/9/12 下午5:10
+ */
 
 public class MainActivity extends BaseRxActivity {
     BottomNavigationView mNavigationView;
@@ -54,6 +58,7 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentWallet);
                     }
+                    StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
                     break;
                 case R.id.navigation_coin_mine:
 
@@ -74,6 +79,7 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentMine);
                     }
+                    StatusBarUtils.setWindowStatusBarColor(activity,R.color.text_main_color);
                     break;
                     default:
                         break;
@@ -89,6 +95,8 @@ public class MainActivity extends BaseRxActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         mNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mNavigationView.setSelectedItemId(R.id.navigation_arena);

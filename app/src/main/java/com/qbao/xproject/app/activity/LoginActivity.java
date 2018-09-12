@@ -15,6 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
+/**
+ * @author Created by jackieyao on 2018/9/12 下午5:10
+ */
+
 public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     private CountDownTimer mCountDownTimer;
     public static void goLoginActivity(Context context){
