@@ -22,8 +22,8 @@
     <string name="my_current_bet">我本期的投注</string>
     <string name="current_no_bet">本期未投注</string>
     <string name="next_period">下一期</string>
-    <string name="price_rule_one">本期中奖号码将于10:00:00之后陆续生成</string>
-    <string name="detail_see">详细参考</string>
+    <string name="price_rule_one">本期中奖号码将于10:00:00之后，约每半小时</string>
+    <string name="detail_see">生成一个，详细参考</string>
     <string name="arena_rule"><![CDATA[<竞技场规则>]]></string>
     <string name="choose_three_num">请选择三个号</string>
     <string name="sure_pay">确认支付</string>

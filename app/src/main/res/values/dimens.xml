@@ -107,6 +107,7 @@
     <dimen name="size_dp_99">99dp</dimen>
     <dimen name="size_dp_100">100dp</dimen>
     <dimen name="size_dp_118">118dp</dimen>
+    <dimen name="size_dp_120">120dp</dimen>
     <dimen name="size_dp_200">200dp</dimen>
     <dimen name="size_dp_300">300dp</dimen>
     <dimen name="size_dp_320">320dp</dimen>

@@ -18,10 +18,10 @@ import java.util.List;
  * @author Created by jackieyao on 2018/9/13 上午10:15.
  */
 
-public class RedBallBetAdapter extends BaseQuickAdapter<BetResponseEntity,RedBallBetAdapter.ViewHolder>{
+public class BetBlueBallAdapter extends BaseQuickAdapter<BetResponseEntity,BetBlueBallAdapter.ViewHolder>{
 
 
-    public RedBallBetAdapter(int layoutResId, @Nullable List<BetResponseEntity> data) {
+    public BetBlueBallAdapter(int layoutResId, @Nullable List<BetResponseEntity> data) {
         super(layoutResId, data);
     }
 
@@ -41,9 +41,9 @@ public class RedBallBetAdapter extends BaseQuickAdapter<BetResponseEntity,RedBal
         TextView textView = (TextView) helper.getView(R.id.text_ball);
         textView.setText(item.getNum());
         if (item.isChosed()){
-            textView.setBackgroundResource(R.drawable.ic_bet_red_ball);
+            textView.setBackgroundResource(R.drawable.ic_bet_blue_ball);
         }else {
-            textView.setBackgroundResource(R.mipmap.red_chose_num_bg);
+            textView.setBackgroundResource(R.mipmap.blue_chose_num_bg);
         }
     }
 

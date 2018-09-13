@@ -77,7 +77,7 @@
                                 style="@style/textStyleWhiteColor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/ic_bet_blue_ball"
+                                android:background="@drawable/ic_bet_red_ball"
                                 android:gravity="center"
                                 android:text=""
                                 android:visibility="invisible" />
@@ -88,7 +88,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/size_dp_20"
-                                android:background="@drawable/ic_bet_blue_ball"
+                                android:background="@drawable/ic_bet_red_ball"
                                 android:gravity="center"
                                 android:text=""
                                 android:visibility="invisible" />
@@ -99,7 +99,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/size_dp_20"
-                                android:background="@drawable/ic_bet_blue_ball"
+                                android:background="@drawable/ic_bet_red_ball"
                                 android:gravity="center"
                                 android:text=""
                                 android:visibility="invisible" />

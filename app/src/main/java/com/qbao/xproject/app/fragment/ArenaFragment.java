@@ -1,11 +1,8 @@
 package com.qbao.xproject.app.fragment;
 
-import android.view.View;
-
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.activity.BetActivity;
-import com.qbao.xproject.app.activity.LoginActivity;
+import com.qbao.xproject.app.activity.BetRedActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 
@@ -35,7 +32,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        BetActivity.goBetActivity(activity);
+                        BetRedActivity.goBetActivity(activity);
                     }
                 });
     }
