@@ -7,10 +7,12 @@ import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.request_body.UserLoginRequest;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -34,7 +36,6 @@ public class XProjectService {
     public static XProjectService newInstance() {
         return XProjectHolder.XPROJECT_INSTANCE;
     }
-
 
     public static final class XProjectHolder {
         private static XProjectService XPROJECT_INSTANCE = new XProjectService();
@@ -79,5 +80,13 @@ public class XProjectService {
                 .cache(cache);
 
         return builder.build();
+    }
+
+
+    public Observable<Object> userLogin(UserLoginRequest request) {
+        return mServiceApi.userLogin(request);
+    }
+    public Observable<Object> getVerifyCode(String phone) {
+        return mServiceApi.getVerifyCode(phone);
     }
 }

@@ -26,7 +26,7 @@ android {
 
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "URL_API_BASE", '"https://api.aethercoder.com"')
+            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
             debuggable true
         }
     }

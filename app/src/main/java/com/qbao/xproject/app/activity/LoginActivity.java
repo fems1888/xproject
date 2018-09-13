@@ -8,8 +8,11 @@ import android.os.Bundle;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.Utility.RxSchedulers;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityLoginBinding;
+import com.qbao.xproject.app.request_body.UserLoginRequest;
+import com.qbao.xproject.app.viewmodel.LoginViewModel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,10 +24,13 @@ import io.reactivex.functions.Consumer;
 
 public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     private CountDownTimer mCountDownTimer;
-    public static void goLoginActivity(Context context){
-        Intent intent = new Intent(context,LoginActivity.class);
+    private LoginViewModel viewModel;
+
+    public static void goLoginActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +45,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     @Override
     protected void initData() {
         super.initData();
-
+        viewModel = new LoginViewModel(activity.getApplication());
     }
 
     @Override
@@ -49,16 +55,23 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-//                        getVerifyCode();
+                        getVerifyCode();
 
-                        NewUserRegisterActivity.goNewUserRegisterActivity(activity);
+                    }
+                });
+        RxView.clicks(bindingView.textLogin).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Login();
+
                     }
                 });
         mCountDownTimer = new CountDownTimer(60 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 bindingView.textGetCode.setEnabled(false);
-                bindingView.textGetCode.setText(String.format(getString(R.string.text_resend_verify_code),millisUntilFinished / 1000) );
+                bindingView.textGetCode.setText(String.format(getString(R.string.text_resend_verify_code), millisUntilFinished / 1000));
             }
 
             @Override
@@ -70,12 +83,32 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
         };
     }
 
+    private void Login() {
+        UserLoginRequest request = new UserLoginRequest();
+        request.setPhone(bindingView.editPhone.getText().toString());
+        request.setCaptchaCode(bindingView.editCode.getText().toString());
+        viewModel.userLogin(request).compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+
+                    }
+                });
+    }
+
     /**
      * 获取验证码
      */
     private void getVerifyCode() {
         mCountDownTimer.start();
         //调用获取验证码接口
+        viewModel.getVerifyCode(bindingView.editPhone.getText().toString())
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
 
+                    }
+                });
     }
 }

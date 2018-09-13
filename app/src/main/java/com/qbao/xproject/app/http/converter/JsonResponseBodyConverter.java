@@ -47,19 +47,18 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
         if (responseBody.contentType() != null && isPlaintext(responseBody.contentType())) {
             String body = responseBody.string();
 //            if (isDecrypt) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(body);
-//                    String resultJson = jsonObject.getString("result");
-//                    if (!CommonUtility.Utility.isNull(resultJson)) {
-//                        String result = AESUtil.decryptSign(resultJson);//解密
-//                        CommonUtility.DebugLog.e(TAG, "result = " + result);
-//                        return gson.fromJson(result, type);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    JSONObject jsonObject = new JSONObject(body);
+                    String resultJson = jsonObject.getString("result");
+                    if (!CommonUtility.isNull(resultJson)) {
+                        CommonUtility.DebugLog.e(TAG, "result = " + resultJson);
+//                        return gson.fromJson(resultJson, type);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //            } else {
                 CommonUtility.DebugLog.e(TAG, "不用解密 服务器返回数据：" + body);
                 return gson.fromJson(body, type);
