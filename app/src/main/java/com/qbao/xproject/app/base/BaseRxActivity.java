@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
@@ -62,6 +63,7 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
 //            //将状态栏设成透明，如不想透明可设置其他颜色
 //            window.setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
 //        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         TAG = new StringBuilder().append(getPackageName()).append(".").append(getClass().getSimpleName()).toString();
         CommonUtility.DebugLog.e("BaseRxActivity", TAG);
         activity = this;

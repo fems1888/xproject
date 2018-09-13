@@ -31,14 +31,18 @@
                         android:layout_width="300dp"
                         android:layout_height="430dp"
                         android:background="@mipmap/bet_bg" />
-
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_red"
+                        android:layout_width="160dp"
+                        android:layout_height="201dp"
+                        android:layout_centerInParent="true" />
                     <TextView
                         style="@style/textStyleWhiteColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="350dp"
-                        android:text="@string/choose_three_num"
+                        android:layout_marginTop="366dp"
+                        android:text="@string/choose_three_one"
                         android:textColor="@color/text_bet_color"
                         android:textSize="@dimen/size_sp_26" />
                 </RelativeLayout>
@@ -71,6 +75,7 @@
                             android:text="1" />
 
                         <TextView
+                            android:id="@+id/text_sure"
                             style="@style/textStyleSeconderColor"
                             android:layout_width="@dimen/size_dp_118"
                             android:layout_height="@dimen/size_dp_30"

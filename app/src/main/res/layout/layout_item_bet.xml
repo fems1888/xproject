@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_dp_2">
+        <TextView
+            android:id="@+id/text_ball"
+            style="@style/textStyleWhiteColor"
+            android:textSize="@dimen/size_dp_20"
+            android:text="2"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/blue_chose_num_bg"
+            android:layout_width="@dimen/size_dp_44"
+            android:gravity="center"
+            android:layout_height="@dimen/size_dp_44" />
+    </RelativeLayout>
+</layout>

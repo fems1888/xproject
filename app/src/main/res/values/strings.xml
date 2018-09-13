@@ -26,5 +26,8 @@
     <string name="detail_see">详细参考</string>
     <string name="arena_rule"><![CDATA[<竞技场规则>]]></string>
     <string name="choose_three_num">请选择三个号</string>
+    <string name="sure_pay">确认支付</string>
+    <string name="text_product_information">商品信息</string>
+    <string name="choose_three_one">请选择一个号</string>
 </resources>
 
