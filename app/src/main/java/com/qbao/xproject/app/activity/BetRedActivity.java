@@ -31,6 +31,7 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bet);
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
+        setToolBarTitle(getString(R.string.bet));
     }
     public static void goBetActivity(Context context){
         Intent intent = new Intent(context,BetRedActivity.class);

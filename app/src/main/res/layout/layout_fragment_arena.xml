@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_dp_16"
                 android:layout_marginRight="@dimen/size_dp_16"
-                android:layout_marginTop="@dimen/size_dp_100"
+                android:layout_marginTop="@dimen/size_dp_60"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/size_dp_8"
                 app:cardUseCompatPadding="true">

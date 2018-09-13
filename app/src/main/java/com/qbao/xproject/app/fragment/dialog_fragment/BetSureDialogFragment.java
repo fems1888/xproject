@@ -62,11 +62,18 @@ public class BetSureDialogFragment extends AppCompatDialogFragment implements Vi
                 break;
             case R.id.button_sure:
                 dismiss();
+                if (clickListener!=null){
+                    clickListener.onClick(null);
+                }
                 break;
             default:
                 break;
         }
     }
 
+    private View.OnClickListener clickListener;
 
+    public void setClickListener(View.OnClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 }

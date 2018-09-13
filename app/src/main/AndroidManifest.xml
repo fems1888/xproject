@@ -22,7 +22,8 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.NewUserRegisterActivity" />
         <activity android:name=".activity.BetRedActivity" />
-        <activity android:name=".activity.BetBlueActivity"></activity>
+        <activity android:name=".activity.BetBlueActivity" />
+        <activity android:name=".activity.BetResultActivity"></activity>
     </application>
 
 </manifest>

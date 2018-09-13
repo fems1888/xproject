@@ -29,5 +29,8 @@
     <string name="sure_pay">确认支付</string>
     <string name="text_product_information">商品信息</string>
     <string name="choose_three_one">请选择一个号</string>
+    <string name="bet_result">投注结果</string>
+    <string name="bet">投注</string>
+    <string name="done">完成</string>
 </resources>
 
