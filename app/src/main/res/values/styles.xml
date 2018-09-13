@@ -58,7 +58,7 @@
               when running on API 21, but not on older versions of
               Android, so this is only necessary to support older
               Android versions.-->
-        <item name="actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextColor">@color/text_main_color</item>
         <!-- android:textColorSecondary is the color of the menu
              overflow icon (three vertical dots) -->
         <item name="android:textColorSecondary">@color/white</item>
@@ -79,6 +79,7 @@
         <item name="android:textSize">@dimen/size_sp_18</item>
         <item name="android:textColor">@color/text_main_color</item>
         <item name="android:singleLine">true</item>
+
     </style>
 
     <style name="textStyleMainColor" parent="TextAppearance.AppCompat.Body1">

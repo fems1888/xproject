@@ -32,5 +32,7 @@
     <string name="bet_result">投注结果</string>
     <string name="bet">投注</string>
     <string name="done">完成</string>
+    <string name="pay_fail">支付失败</string>
+    <string name="no_balance">余额不足</string>
 </resources>
 
