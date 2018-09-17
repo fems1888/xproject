@@ -1,4 +1,4 @@
-package manager;
+package com.qbao.xproject.app.manager;
 
 import android.content.Context;
 

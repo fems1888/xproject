@@ -1,4 +1,4 @@
-package com.qbao.xproject.app.Utility;
+package com.qbao.xproject.app.utility;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

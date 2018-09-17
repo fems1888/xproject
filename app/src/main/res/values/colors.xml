@@ -15,4 +15,5 @@
     <color name="text_ball_color_red">#FFB5B5</color>
     <color name="text_bet_color">#C9C1FF</color>
     <color name="bar_one_color">#351871</color>
+    <color name="activity_bg">#F6F6F7</color>
 </resources>

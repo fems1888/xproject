@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/agentweb_library/agentweb_library.iml" filepath="$PROJECT_DIR$/agentweb_library/agentweb_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pictureSelector_library/pictureSelector_library.iml" filepath="$PROJECT_DIR$/pictureSelector_library/pictureSelector_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ucrop/ucrop.iml" filepath="$PROJECT_DIR$/ucrop/ucrop.iml" />
       <module fileurl="file://$PROJECT_DIR$/xproject.iml" filepath="$PROJECT_DIR$/xproject.iml" />
     </modules>
   </component>

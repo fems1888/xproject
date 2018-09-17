@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/include_tool_bar" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_bar_layout"
+            android:layout_marginLeft="@dimen/size_sp_16"
+            android:layout_marginRight="@dimen/size_dp_16"
+            android:layout_marginTop="@dimen/size_dp_16"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/size_dp_8"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_70"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:text="@string/address"
+                        android:textSize="@dimen/size_sp_16" />
+
+                    <EditText
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_6"
+                        android:background="@null"
+                        android:hint="@string/input_withdraw_address"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="@dimen/size_sp_16" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_0_5"
+                    android:background="@color/text_hint_color" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_70"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_coin_class"
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:text="@string/coin_class"
+                        android:textSize="@dimen/size_sp_16" />
+
+                    <TextView
+                        android:id="@+id/text_coin_name"
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:layout_toRightOf="@id/text_coin_class"
+                        android:text="@string/coin_class"
+                        android:textSize="@dimen/size_sp_16" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/size_sp_16"
+                        app:srcCompat="@drawable/ic_gray_back" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_0_5"
+                    android:background="@color/text_hint_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_70"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:text="@string/amount"
+                        android:textSize="@dimen/size_sp_16" />
+
+                    <EditText
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_6"
+                        android:background="@null"
+                        android:hint="@string/can_use_balance"
+                        android:textColorHint="@color/text_hint_color"
+                        android:textSize="@dimen/size_sp_16" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_0_5"
+                    android:background="@color/text_hint_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_70"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:text="@string/fee"
+                        android:textSize="@dimen/size_sp_16" />
+
+                    <TextView
+                        style="@style/textStyleMainColor"
+                        android:layout_marginLeft="@dimen/size_dp_16"
+                        android:text="@string/fee"
+                        android:textSize="@dimen/size_sp_16" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            style="@style/textStyleSeconderColor"
+            android:layout_below="@id/card"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/size_dp_20"
+            android:text="@string/withdraw_tip" />
+
+        <Button
+            android:id="@+id/button_withdraw"
+            android:layout_width="267dp"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/size_dp_20"
+            android:background="@drawable/button_red_selector"
+            android:text="@string/withdraw"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_sp_14" />
+
+    </RelativeLayout>
+</layout>

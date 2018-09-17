@@ -1,4 +1,4 @@
-package com.aether.coder.qbao.manager;
+package com.qbao.xproject.app.http;
 
 import java.util.HashMap;
 import java.util.Map;

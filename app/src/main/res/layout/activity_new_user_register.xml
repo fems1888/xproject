@@ -39,7 +39,7 @@
                 app:srcCompat="@drawable/ic_register_icon" />
 
             <EditText
-                android:id="@+id/edit_phone"
+                android:id="@+id/edit_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -48,6 +48,7 @@
                 android:background="@null"
                 android:hint="@string/input_verify_code"
                 android:singleLine="true"
+                android:text="BV58HW"
                 android:textColor="@color/text_main_color"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="@dimen/size_sp_14" />
@@ -68,10 +69,9 @@
             android:layout_marginLeft="@dimen/size_dp_50"
             android:layout_marginRight="@dimen/size_dp_50"
             android:layout_marginTop="@dimen/size_dp_100"
-            android:background="@drawable/gray_round_shape"
+            android:background="@drawable/button_red_selector"
             android:gravity="center"
             android:padding="@dimen/size_dp_12"
-            android:text="@string/register"
-            android:textColor="@color/text_seconder_color" />
+            android:text="@string/register" />
     </LinearLayout>
 </layout>

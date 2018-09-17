@@ -1,35 +1,21 @@
 package com.qbao.xproject.app.base;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowInsets;
 
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.CommonUtility;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 /**
  * @author Created by jackieyao on 2018/9/11 下午6:04.

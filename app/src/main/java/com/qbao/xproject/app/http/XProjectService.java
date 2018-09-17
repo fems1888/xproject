@@ -3,6 +3,7 @@ package com.qbao.xproject.app.http;
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.http.converter.JsonConverterFactory;
+import com.qbao.xproject.app.http.interceptor.EncryptionInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -33,8 +36,9 @@ public class XProjectService {
     private JsonConverterFactory mJsonConverterFactory;
     private HttpHeadInterceptor headInterceptor;
     private XProjectServiceApi mServiceApi;
+    private EncryptionInterceptor mEncryptionInterceptor;
     public static XProjectService newInstance() {
-        return XProjectHolder.XPROJECT_INSTANCE;
+        return XProjectHolder.XPROJECT_INSTANCE.setEncrypt(true);
     }
 
     public static final class XProjectHolder {
@@ -42,6 +46,11 @@ public class XProjectService {
     }
 
 
+    public XProjectService setEncrypt(boolean encrypt) {
+        mEncryptionInterceptor.setEncrypt(encrypt);
+        mJsonConverterFactory.setDecrypt(encrypt);
+        return this;
+    }
     private XProjectService() {
         initXProject();
     }
@@ -65,6 +74,7 @@ public class XProjectService {
         mServiceApi = retrofit.create(XProjectServiceApi.class);
     }
     public OkHttpClient getClient() {
+        mEncryptionInterceptor = new EncryptionInterceptor();
         File httpCacheDirectory = new File(XProjectApplication.getInstance().getCacheDir(), "responses");
         int cacheSize = 50 * 1024 * 1024; // 50 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
@@ -76,6 +86,8 @@ public class XProjectService {
                 .addInterceptor(new HttpLoggingInterceptor("ChainService").setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(headInterceptor)
                 .addInterceptor(new NoNetInterceptor())
+                //参数加密拦截器
+                .addInterceptor(mEncryptionInterceptor)
                 .addNetworkInterceptor(new NetInterceptor())
                 .cache(cache);
 
@@ -83,10 +95,10 @@ public class XProjectService {
     }
 
 
-    public Observable<Object> userLogin(UserLoginRequest request) {
+    public Observable<Response<ResponseBody>> userLogin(UserLoginRequest request) {
         return mServiceApi.userLogin(request);
     }
-    public Observable<Object> getVerifyCode(String phone) {
-        return mServiceApi.getVerifyCode(phone);
+    public Observable<Object> getVerifyCode(String phone,String countryId) {
+        return mServiceApi.getVerifyCode(phone,countryId);
     }
 }

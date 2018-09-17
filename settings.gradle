@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':agentweb_library', ':ucrop', ':pictureSelector_library'

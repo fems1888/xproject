@@ -3,7 +3,8 @@ package com.qbao.xproject.app.http.converter;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.qbao.xproject.app.Utility.CommonUtility;
+import com.qbao.xproject.app.utility.AESUtil;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +52,8 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                     JSONObject jsonObject = new JSONObject(body);
                     String resultJson = jsonObject.getString("result");
                     if (!CommonUtility.isNull(resultJson)) {
-                        CommonUtility.DebugLog.e(TAG, "result = " + resultJson);
+                        String result = AESUtil.decrypt(resultJson,AESUtil.KEY);//解密
+                        CommonUtility.DebugLog.e(TAG, "result = " + result);
 //                        return gson.fromJson(resultJson, type);
                     }
                 } catch (JSONException e) {

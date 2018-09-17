@@ -1,10 +1,9 @@
-package com.aether.coder.qbao.http.utils;
+package com.qbao.xproject.app.http;
 
 import android.content.res.Resources;
 
-import com.aether.coder.qbao.R;
 import com.google.gson.JsonParseException;
-import com.qbao.library.utility.CommonUtility;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +44,7 @@ public class ExceptionHandle {
                     try {
                         String errorBody = ((HttpException) e).response().errorBody().string();
                         CommonUtility.DebugLog.e(TAG, "errorBody = " + errorBody);
-                        if (!CommonUtility.Utility.isNull(errorBody)) {
+                        if (!CommonUtility.isNull(errorBody)) {
                             JSONObject jsonObject = new JSONObject(errorBody);
                             String message = jsonObject.optString("message");
                             CommonUtility.DebugLog.e(TAG, "message = " + message);
@@ -54,7 +53,7 @@ public class ExceptionHandle {
                             ex.message = message;
                         } else {
                             ex.errorCode = BAD_REQUEST;
-                            ex.message = resources.getString(R.string.failed);
+                            ex.message = "失败";
                         }
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -70,26 +69,26 @@ public class ExceptionHandle {
                     break;
                 case FORBIDDEN:
                 case NOT_FOUND:
-                    ex.message = resources.getString(R.string.http_request_error);
+                    ex.message = "";
                     break;
                 case REQUEST_TIMEOUT:
-                    ex.message = resources.getString(R.string.http_request_read_time_out);
+                    ex.message = "";
                     break;
                 case INTERNAL_SERVER_ERROR:
                 case BAD_GATEWAY:
                 case SERVICE_UNAVAILABLE:
                 case GATEWAY_TIMEOUT:
-                    ex.message = resources.getString(R.string.server_error_tips);
+                    ex.message = "";
                     break;
                 default:
                     //ex.code = httpException.code();
-                    ex.message = resources.getString(R.string.server_error_tips);
+                    ex.message = "";
                     break;
             }
             return ex;
         } else if (e instanceof SocketTimeoutException) {
             ex = new ResponseThrowable(e.getMessage(), REQUEST_TIMEOUT);
-            ex.message = resources.getString(R.string.request_time_out_tips);
+            ex.message = "";
             return ex;
         } else {
             if (e instanceof ResponseThrowable) {
@@ -109,15 +108,15 @@ public class ExceptionHandle {
                     || e instanceof JSONException
                 /*|| e instanceof ParseException*/) {
                 ex = new ResponseThrowable(e.getMessage(), ERROR.PARSE_ERROR);
-                ex.message = resources.getString(R.string.parse_the_error);
+//                ex.message = resources.getString(R.string.parse_the_error);
                 return ex;
             } else if (e instanceof ConnectException) {
                 ex = new ResponseThrowable(e.getMessage(), ERROR.NETWORD_ERROR);
-                ex.message = resources.getString(R.string.connection_failed);
+//                ex.message = resources.getString(R.string.connection_failed);
                 return ex;
             } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
                 ex = new ResponseThrowable(e.getMessage(), ERROR.SSL_ERROR);
-                ex.message = resources.getString(R.string.certificate_failed);
+//                ex.message = resources.getString(R.string.certificate_failed);
                 return ex;
             } else {
                 ex = new ResponseThrowable(e.getMessage(), ERROR.UNKNOWN);

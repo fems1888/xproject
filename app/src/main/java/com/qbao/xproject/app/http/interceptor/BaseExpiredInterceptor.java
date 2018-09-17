@@ -1,4 +1,4 @@
-package com.qbao.library.http.interceptor;
+package com.qbao.xproject.app.http.interceptor;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

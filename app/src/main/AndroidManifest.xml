@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.qbao.xproject.app">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 查看 Wi-Fi 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 查看网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".XProjectApplication"
@@ -11,6 +22,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        tools:replace="android:theme"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".activity.MainActivity">
             <intent-filter>
@@ -24,7 +36,14 @@
         <activity android:name=".activity.BetRedActivity" />
         <activity android:name=".activity.BetBlueActivity" />
         <activity android:name=".activity.BetResultActivity" />
-        <activity android:name=".activity.PayFailActivity"></activity>
+        <activity android:name=".activity.PayFailActivity" />
+        <activity android:name=".activity.AccelerateActivity" />
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.MyWalletActivity" />
+        <activity android:name=".activity.WithdrawActivity" />
+        <activity android:name=".activity.BillActivity" />
+        <activity android:name=".activity.ReceiveAirDropActivity" />
+        <activity android:name=".activity.FeedbackActivity"></activity>
     </application>
 
 </manifest>

@@ -1,13 +1,12 @@
-package com.aether.coder.qbao.http.utils;
+package com.qbao.xproject.app.utility;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Looper;
 
-import com.aether.coder.qbao.R;
-import com.aether.coder.qbao.manager.RxManager;
-import com.qbao.library.utility.CommonUtility;
-import com.qbao.library.widget.LoadingView;
+
+import com.qbao.xproject.app.http.ExceptionHandle;
+import com.qbao.xproject.app.http.RxManager;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -90,9 +89,9 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
         if (checkNetwork) {
             //接下来可以检查网络连接等操作
             if (!CheckNetwork.isNetworkConnected(context)) {
-                showTips(context.getString(R.string.http_net_error));
+                showTips("网络错误");
                 hideLoading();
-                onError(new ExceptionHandle.ResponseThrowable(context.getString(R.string.http_net_error), ExceptionHandle.ERROR.NETWORD_ERROR));
+                onError(new ExceptionHandle.ResponseThrowable("网络错误", ExceptionHandle.ERROR.NETWORD_ERROR));
                 // 一定要主动调用下面这一句,取消本次Subscriber订阅
                 d.dispose();
                 return;
@@ -121,9 +120,7 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
         showTipsMessage(message1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(message -> {
-                    if (!CommonUtility.Utility.isNull(message) && !message.contains("HTTP 401")) {
-                        if (showToast)
-                            CommonUtility.UIUtility.toast(context, message);
+                    if (!CommonUtility.isNull(message) && !message.contains("HTTP 401")) {
                     }
                 }, throwable ->
                         throwable.printStackTrace());
@@ -134,12 +131,9 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
-                        LoadingView.show(context);
                     } else {
-                        LoadingView.hide(context);
                     }
                 }, throwable -> {
-                    LoadingView.hide(context);
                     throwable.printStackTrace();
                 });
     }
@@ -152,7 +146,7 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
     }
 
     protected Observable<String> showTipsMessage(String message) {
-        if (showTips && context instanceof Activity && !CommonUtility.Utility.isNull(message)) {
+        if (showTips && context instanceof Activity && !CommonUtility.isNull(message)) {
             return Observable.just(message);
         }
         return Observable.just("");

@@ -1,11 +1,10 @@
-package com.aether.coder.qbao.http.interceptor;
+package com.qbao.xproject.app.http.interceptor;
 
 
 import android.support.annotation.NonNull;
 
-import com.qbao.library.http.HttpsUtility;
-import com.qbao.library.utility.AESUtil;
-import com.qbao.library.utility.CommonUtility;
+import com.qbao.xproject.app.utility.AESUtil;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +25,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
 
-import static com.qbao.library.http.interceptor.BaseExpiredInterceptor.UTF8;
+import static com.qbao.xproject.app.http.interceptor.BaseExpiredInterceptor.UTF8;
 
 
 /**
@@ -45,7 +44,7 @@ public class EncryptionInterceptor implements Interceptor {
         HttpUrl httpUrl = request.url();
         if (isEncrypt()) {
             RequestBody oldBody = request.body();
-            if (!CommonUtility.Utility.isNull(oldBody)) {
+            if (!CommonUtility.isNull(oldBody)) {
                 Buffer buffer = new Buffer();
                 assert oldBody != null;
                 oldBody.writeTo(buffer);
@@ -83,7 +82,7 @@ public class EncryptionInterceptor implements Interceptor {
         }
         //拼装新的参数
         LinkedHashMap<String, String> newParams = dynamic(oldParams);
-        HttpsUtility.checkNotNull(newParams, "newParams==null");
+//        HttpsUtility.checkNotNull(newParams, "newParams==null");
         httpUrl = HttpUrl.parse(parseUrl(request.url().url().toString()));
         assert httpUrl != null;
         HttpUrl.Builder newBuilder = httpUrl.newBuilder();
@@ -110,13 +109,13 @@ public class EncryptionInterceptor implements Interceptor {
 
             //拼装新的参数
             LinkedHashMap<String, String> newParams = dynamic(oldParams);
-            HttpsUtility.checkNotNull(newParams, "newParams==null");
+//            HttpsUtility.checkNotNull(newParams, "newParams==null");
             for (Map.Entry<String, String> entry : newParams.entrySet()) {
                 String value = URLDecoder.decode(entry.getValue(), UTF8.name());
                 bodyBuilder.addEncoded(entry.getKey(), value);
             }
-            String url = HttpsUtility.createUrlFromParams(httpUrl.url().toString(), newParams);
-            CommonUtility.DebugLog.e(TAG, "url = " + url);
+//            String url = HttpsUtility.createUrlFromParams(httpUrl.url().toString(), newParams);
+//            CommonUtility.DebugLog.e(TAG, "url = " + url);
             formBody = bodyBuilder.build();
             request = request.newBuilder().post(formBody).build();
         } else if (request.body() instanceof MultipartBody) {

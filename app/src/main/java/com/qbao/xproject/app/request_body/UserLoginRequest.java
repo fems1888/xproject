@@ -7,6 +7,9 @@ package com.qbao.xproject.app.request_body;
 public class UserLoginRequest {
     private String phone;
     private String captchaCode;
+    /**
+     * 注册接口使用  运维给的   我们不用管
+     */
     private String registerCode;
 
     public String getPhone() {

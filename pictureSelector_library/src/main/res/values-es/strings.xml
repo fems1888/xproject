@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="picture_camera_roll">Rollo fotográfico</string>
+    <string name="picture_cancel">Cancelar</string>
+    <string name="picture_take_picture">Tomar foto</string>
+    <string name="picture_rule">No es posible seleccionar imágenes y videos</string>
+    <string name="picture_message_max_num">Puede seleccionar un máximo de %1$s imágenes </string>
+    <string name="picture_min_video_num">Debe seleccionar una cantidad mínima de %1$s video(s) </string>
+    <string name="picture_message_video_max_num"> Puede seleccionar un máximo de %1$s videos </string>
+    <string name="picture_preview">Vista previa</string>
+    <string name="picture_please">Por favor espere...</string>
+    <string name="picture_done_front_num">%1$d/%2$d finalizado</string>
+    <string name="picture_completed">Completado</string>
+    <string name="picture_done">Hecho</string>
+    <string name="picture_please_select">Seleccione</string>
+    <string name="picture_empty_title">Sin fotos o videos\n</string>
+    <string name="picture_empty_audio_title">Sin archivos de audio\n</string>
+    <string name="picture_empty">Puede tomar una foto o video con su cámara</string>
+    <string name="picture_audio_empty">Puede grabar un audio con la grabadora de voz predeterminada en su dispositivo</string>
+    <string name="picture_min_img_num"> Debe seleccionar una cantidad mínima de %1$s video(s) </string>
+    <string name="gif_tag">GIF</string>
+    <string name="picture_jurisdiction">Permiso denegado, almacenamiento </string>
+    <string name="picture_camera"> Permiso denegado, cámara</string>
+    <string name="picture_audio"> Permiso denegado, grabadora de voz</string>
+    <string name="picture_video_toast"> El video no se puede previsualizar</string>
+    <string name="picture_record_video">Grabar video</string>
+    <string name="picture_photograph">Tomar foto</string>
+    <string name="picture_long_chart">Fotografía larga</string>
+    <string name="picture_warning"> Sin archivos multimedia </string>
+    <string name="picture_prompt">Aviso</string>
+    <string name="picture_prompt_content">¿Desea guardar la imagen？</string>
+    <string name="picture_save_error"> Error al guardar la imagen </string>
+    <string name="picture_save_success"> Imagen guardada en</string>
+    <string name="picture_all_audio">Todo los archivos de audios</string>
+    <string name="picture_tape">Grabar</string>
+    <string name="picture_play_audio">Reproducir</string>
+    <string name="picture_stop_audio">Detener</string>
+    <string name="picture_quit_audio">Salir</string>
+    <string name="picture_pause_audio">Pausar</string>
+    <string name="picture_error">Error de imagen</string>
+    <string name="picture_video_error">Error de video</string>
+    <string name="picture_audio_error">Error de audio</string>
+    <string name="picture_confirm">Confirmar</string>
+</resources>

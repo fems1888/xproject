@@ -2,14 +2,14 @@ package com.qbao.xproject.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.StatusBarUtils;
+import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityPayFailBinding;
 
@@ -19,7 +19,7 @@ public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_fail);
-        StatusBarUtils.setWindowStatusBarColor(activity,R.color.white,StatusBarUtils.GRAY);
+        StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
         setToolBarTitle(getString(R.string.pay_fail));
     }
     public static void goPayFailActivity(Context context){

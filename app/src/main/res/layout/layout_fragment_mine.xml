@@ -70,34 +70,7 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/relative_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="@dimen/size_dp_10"
-        android:background="?attr/selectableItemBackground"
-        android:paddingLeft="@dimen/size_dp_16"
-        android:paddingRight="@dimen/size_dp_16">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/image_feedback"
-            android:layout_alignParentLeft="true"
-            style="@style/mine_image_style"
-            android:src="@drawable/ic_vector_mine_space" />
-
-        <TextView
-            android:id="@+id/text_feedback"
-            style="@style/textStyleMainColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/text_feedback"
-            android:layout_marginLeft="@dimen/size_dp_10"
-            android:layout_toRightOf="@+id/image_feedback" />
-
-
-        <include layout="@layout/include_right_image" />
-    </RelativeLayout>
 
 
     <RelativeLayout
@@ -128,6 +101,33 @@
 
         <include layout="@layout/include_right_image" />
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relative_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/size_dp_10"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/size_dp_16"
+        android:paddingRight="@dimen/size_dp_16">
 
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_feedback"
+            android:layout_alignParentLeft="true"
+            style="@style/mine_image_style"
+            android:src="@drawable/ic_vector_mine_space" />
+
+        <TextView
+            android:id="@+id/text_feedback"
+            style="@style/textStyleMainColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_feedback"
+            android:layout_marginLeft="@dimen/size_dp_10"
+            android:layout_toRightOf="@+id/image_feedback" />
+
+
+        <include layout="@layout/include_right_image" />
+    </RelativeLayout>
 </LinearLayout>
 </layout>

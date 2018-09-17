@@ -1,18 +1,26 @@
 package com.qbao.xproject.app.activity;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.RxSchedulers;
+import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityLoginBinding;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
+import com.qbao.xproject.app.widget.UITipDialog;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +42,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
         setContentView(R.layout.activity_login);
     }
 
@@ -45,7 +54,57 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     @Override
     protected void initData() {
         super.initData();
-        viewModel = new LoginViewModel(activity.getApplication());
+        bindingView.textGetCode.setEnabled(false);
+        bindingView.textLogin.setEnabled(false);
+        viewModel = new LoginViewModel(activity.getApplication(),TAG);
+        bindingView.editPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (bindingView.editPhone.getText().toString().length() == 11){
+                    bindingView.textGetCode.setEnabled(true);
+                    if (bindingView.editCode.getText().toString().length() == 6){
+                        bindingView.textLogin.setEnabled(true);
+                    }else {
+                        bindingView.textLogin.setEnabled(false);
+                    }
+                }else {
+                    bindingView.textGetCode.setEnabled(false);
+                    bindingView.textLogin.setEnabled(false);
+                }
+
+            }
+        });
+
+        bindingView.editCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (bindingView.editCode.getText().toString().length() == 6&&bindingView.editPhone.getText().toString().length() == 11){
+                    bindingView.textLogin.setEnabled(true);
+                }else {
+                    bindingView.textLogin.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -84,6 +143,11 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     }
 
     private void Login() {
+
+
+//        NewUserRegisterActivity.goNewUserRegisterActivity(activity,bindingView.editCode.getText().toString(),bindingView.editPhone.getText().toString());
+        UITipDialog dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
+        dialog.show();
         UserLoginRequest request = new UserLoginRequest();
         request.setPhone(bindingView.editPhone.getText().toString());
         request.setCaptchaCode(bindingView.editCode.getText().toString());
@@ -91,7 +155,17 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        //返回给你们的errorCode是-10002，说明是新的用户，把页面迁移到注册页面。
+                        dialog.dismiss();
 
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d("ddd", throwable.getMessage());
+                        dialog.dismiss();
+                        Toast.makeText(activity,throwable.getMessage(),Toast.LENGTH_LONG).show();
+                        NewUserRegisterActivity.goNewUserRegisterActivity(activity,bindingView.editCode.getText().toString(),bindingView.editPhone.getText().toString());
                     }
                 });
     }
@@ -101,13 +175,22 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
      */
     private void getVerifyCode() {
         mCountDownTimer.start();
+        UITipDialog dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
+        dialog.show();
         //调用获取验证码接口
-        viewModel.getVerifyCode(bindingView.editPhone.getText().toString())
+        viewModel.getVerifyCode(bindingView.editPhone.getText().toString(),"+86")
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-
+                        dialog.dismiss();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d("ddd", throwable.getMessage());
+                        dialog.dismiss();
+                        Toast.makeText(activity,throwable.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
     }

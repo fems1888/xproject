@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
@@ -13,8 +12,8 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.RxSchedulers;
-import com.qbao.xproject.app.Utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.RxSchedulers;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.adapter.BetBlueBallAdapter;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetRedBinding;

@@ -1,4 +1,4 @@
-package com.qbao.library.widget;
+package com.qbao.xproject.app.base;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.just.agentweb.IWebLayout;
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
-import com.qbao.library.R;
+import com.qbao.xproject.app.R;
 
 /**
  * Created by cenxiaozhong on 2017/7/1.

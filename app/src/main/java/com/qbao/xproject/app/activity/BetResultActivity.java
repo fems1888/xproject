@@ -2,15 +2,12 @@ package com.qbao.xproject.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.RxSchedulers;
-import com.qbao.xproject.app.Utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.base.BaseRxActivity;
-import com.qbao.xproject.app.databinding.ActivityBetRedBinding;
 import com.qbao.xproject.app.databinding.ActivityBetResultBinding;
 
 import java.util.concurrent.TimeUnit;

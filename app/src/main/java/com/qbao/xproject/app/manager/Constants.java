@@ -1,4 +1,4 @@
-package manager;
+package com.qbao.xproject.app.manager;
 
 /**
  * @author Created by jackieyao on 2018/9/14 上午10:31.

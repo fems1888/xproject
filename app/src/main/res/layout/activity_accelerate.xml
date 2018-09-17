@@ -1,10 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.qbao.xproject.app.activity.AccelerateActivity">
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/include_tool_bar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_dp_80"
+        android:padding="@dimen/size_dp_16">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_one"
+            android:layout_width="@dimen/size_dp_40"
+            android:layout_height="@dimen/size_dp_40"
+            app:srcCompat="@drawable/ic_join_activity"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/image_one"
+            android:layout_marginLeft="@dimen/size_dp_16"
+            android:gravity="center|left">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleMainColor"
+                android:text="@string/day_login"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleSeconderColor"
+                android:textColor="@color/main_selected_color"
+                android:text="@string/day_login"
+                android:drawableLeft="@drawable/ic_rocket_icon"
+                android:drawablePadding="@dimen/size_dp_4"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textStyleSeconderColor"
+            android:text="已完成"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_dp_80"
+        android:padding="@dimen/size_dp_16">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_two"
+            android:layout_width="@dimen/size_dp_40"
+            android:layout_height="@dimen/size_dp_40"
+            app:srcCompat="@drawable/ic_join_activity"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/image_two"
+            android:layout_marginLeft="@dimen/size_dp_16"
+            android:gravity="center|left">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleMainColor"
+                android:text="@string/arena_activity"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleSeconderColor"
+                android:textColor="@color/main_selected_color"
+                android:text="@string/day_login"
+                android:drawableLeft="@drawable/ic_rocket_icon"
+                android:drawablePadding="@dimen/size_dp_4"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textStyleSeconderColor"
+            android:text="已完成"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_dp_80"
+        android:padding="@dimen/size_dp_16">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_thr"
+            android:layout_width="@dimen/size_dp_40"
+            android:layout_height="@dimen/size_dp_40"
+            app:srcCompat="@drawable/ic_join_activity"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/image_thr"
+            android:layout_marginLeft="@dimen/size_dp_16"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleMainColor"
+                android:text="@string/join_activity"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/textStyleSeconderColor"
+                android:textColor="@color/main_selected_color"
+                android:text="@string/day_login"
+                android:drawableLeft="@drawable/ic_rocket_icon"
+                android:drawablePadding="@dimen/size_dp_4"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/textStyleSeconderColor"
+            android:text="已完成"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+</LinearLayout>
+</layout>

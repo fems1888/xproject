@@ -2,7 +2,9 @@ package com.qbao.xproject.app.fragment;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.activity.AccelerateActivity;
 import com.qbao.xproject.app.activity.LoginActivity;
+import com.qbao.xproject.app.activity.WebViewActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentCoinMineBinding;
@@ -29,6 +31,14 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                     @Override
                     public void accept(Object o) throws Exception {
                         LoginActivity.goLoginActivity(activity);
+//                        WebViewActivity.goOpenIn(activity,"http:baidu.com");
+                    }
+                });
+        RxView.clicks(bindingView.textAccelerate).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        AccelerateActivity.goAccelerateActivity(activity);
                     }
                 });
     }

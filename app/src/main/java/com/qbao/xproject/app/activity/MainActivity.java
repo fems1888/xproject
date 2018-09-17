@@ -1,5 +1,7 @@
 package com.qbao.xproject.app.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
@@ -9,14 +11,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.CommonUtility;
-import com.qbao.xproject.app.Utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.fragment.ArenaFragment;
@@ -90,7 +93,10 @@ public class MainActivity extends BaseRxActivity {
         }
     };
 
-
+    public static void go(Context context){
+        Intent intent = new Intent(context,MainActivity.class);
+        context.startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

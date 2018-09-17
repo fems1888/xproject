@@ -1,4 +1,4 @@
-package com.aether.coder.qbao.base;
+package com.qbao.xproject.app.base;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -8,11 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.aether.coder.qbao.R;
-import com.aether.coder.qbao.http.utils.ExceptionHandle;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.qbao.library.utility.CommonUtility;
+import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
 
     protected RecyclerView mRecyclerView;
 
-    protected ImageView mImageViewEmpty;
 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -47,10 +45,8 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     protected void initViews() {
         super.initViews();
         mRecyclerView = findViewById(R.id.recycler_view);
-        mImageViewEmpty = findViewById(R.id.image_empty);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         mAdapter = initAdapter();
-        mSwipeRefreshLayout.setColorSchemeColors(getColorByAttributeId(R.attr.colorPrimary));
         mRecyclerView.setLayoutManager(initLayoutManager());
         if (openAnimation()) {
             mAdapter.openLoadAnimation(openLoadAnimation());
@@ -156,14 +152,6 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
         return false;
     }
 
-    /**
-     * 空数据的UI
-     *
-     * @return
-     */
-    protected int getEmptyView() {
-        return R.layout.view_nothing;
-    }
 
 
     /**
@@ -225,7 +213,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         B bean = (B) adapter.getItem(position);
-        if (!CommonUtility.Utility.isNull(bean)) {
+        if (!CommonUtility.isNull(bean)) {
             onRecyclerViewItemClick(bean);
             onRecyclerViewItemClick(bean, position);
         }
@@ -234,7 +222,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     @Override
     public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
         B bean = (B) adapter.getItem(position);
-        if (!CommonUtility.Utility.isNull(bean)) {
+        if (!CommonUtility.isNull(bean)) {
             onRecyclerViewItemLongClick(bean);
             onRecyclerViewItemLongClick(bean, position);
         }
@@ -247,14 +235,11 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
      * @param list
      */
     protected void loadDataComplete(List<B> list) {
-        if (mImageViewEmpty != null) {
-            mImageViewEmpty.setVisibility(View.GONE);
-        }
+
         mSwipeRefreshLayout.setRefreshing(false);
         CommonUtility.DebugLog.e(TAG, "size = " + list.size());
         if (page == 0) {
             if (list.size() == 0) {
-                mAdapter.setEmptyView(getEmptyView());
             }
             mAdapter.setNewData(list);
             if (list.size() < size) {
@@ -278,20 +263,6 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
      * @param throwable
      */
     protected void loadDataFailed(Throwable throwable) {
-        if (mImageViewEmpty != null) {
-            mImageViewEmpty.setVisibility(View.VISIBLE);
-            try {
-                if (throwable instanceof ExceptionHandle.ResponseThrowable){
-                    if (((ExceptionHandle.ResponseThrowable) throwable).code == ExceptionHandle.ERROR.NETWORD_ERROR){
-                        mImageViewEmpty.setImageResource(R.drawable.no_net_web_image);
-                    }else {
-                        mImageViewEmpty.setImageResource(R.drawable.net_request_error_image);
-                    }
-                }
-            }catch (Exception e){
-
-            }
-        }
         mSwipeRefreshLayout.setRefreshing(false);
         //加载失败
         mAdapter.loadMoreFail();

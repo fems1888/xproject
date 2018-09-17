@@ -1,4 +1,4 @@
-package com.qbao.xproject.app.Utility;
+package com.qbao.xproject.app.utility;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

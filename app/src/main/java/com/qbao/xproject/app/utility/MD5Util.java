@@ -1,4 +1,4 @@
-package com.qbao.library.utility;
+package com.qbao.xproject.app.utility;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

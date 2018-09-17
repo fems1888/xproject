@@ -5,4 +5,5 @@ package com.qbao.xproject.app.entity;
  */
 
 public class UserLoginEntity {
+    private String errorCode;
 }

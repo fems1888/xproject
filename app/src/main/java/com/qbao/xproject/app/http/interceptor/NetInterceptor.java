@@ -1,7 +1,7 @@
 package com.qbao.xproject.app.http.interceptor;
 
-import com.qbao.xproject.app.Utility.CheckNetwork;
-import com.qbao.xproject.app.Utility.CommonUtility;
+import com.qbao.xproject.app.utility.CheckNetwork;
+import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.XProjectApplication;
 
 import java.io.IOException;

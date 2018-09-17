@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.Utility.CommonUtility;
+import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.XProjectApplication;
 
 import java.util.Objects;
