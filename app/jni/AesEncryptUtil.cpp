@@ -804,9 +804,9 @@ Java_com_qbao_xproject_app_utility_AESUtil_formatString(JNIEnv *env, jclass type
     strcpy(out, arg1);
     strcat(out, SALT_ONE);
     strcat(out, arg2);
+    strcat(out, arg4);
     strcat(out, SALT_TWO);
     strcat(out, arg3);
-    strcat(out, arg4);
 
     env->ReleaseStringUTFChars(arg1_, arg1);
     env->ReleaseStringUTFChars(arg2_, arg2);
