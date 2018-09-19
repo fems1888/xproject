@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.fragment.ArenaFragment;
 import com.qbao.xproject.app.fragment.CoinMineFragment;
 import com.qbao.xproject.app.fragment.MineFragment;
+import com.umeng.commonsdk.UMConfigure;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -132,7 +134,7 @@ public class MainActivity extends BaseRxActivity {
         super.initData();
         initJpushTag();
         initJpushAlias();
-
+        Log.e(TAG, "initData: "+UMConfigure.getUMIDString(activity) );
     }
 
     /**
