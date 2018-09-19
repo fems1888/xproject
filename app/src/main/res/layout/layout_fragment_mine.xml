@@ -29,13 +29,11 @@
             />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/size_sp_14"
+            android:id="@+id/text_name"
+            style="@style/textStyleWhiteColor"
             android:layout_marginBottom="@dimen/size_dp_50"
             android:layout_gravity="center_horizontal|bottom"
-            android:textColor="@color/white"
-            android:text="木七"
+            android:text=""
             />
 
     </FrameLayout>
@@ -125,6 +123,35 @@
             android:text="@string/text_feedback"
             android:layout_marginLeft="@dimen/size_dp_10"
             android:layout_toRightOf="@+id/image_feedback" />
+
+
+        <include layout="@layout/include_right_image" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_set"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/size_dp_10"
+        android:background="?attr/selectableItemBackground"
+        android:paddingLeft="@dimen/size_dp_16"
+        android:paddingRight="@dimen/size_dp_16">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_set"
+            android:layout_alignParentLeft="true"
+            style="@style/mine_image_style"
+            android:src="@drawable/ic_set_icon" />
+
+        <TextView
+            android:id="@+id/text_set"
+            style="@style/textStyleMainColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_set"
+            android:layout_marginLeft="@dimen/size_dp_10"
+            android:layout_toRightOf="@+id/image_set" />
 
 
         <include layout="@layout/include_right_image" />

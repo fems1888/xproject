@@ -2,6 +2,8 @@ package com.qbao.xproject.app.http;
 
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.XProjectApplication;
+import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.Account;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
@@ -11,9 +13,11 @@ import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -43,7 +47,6 @@ public class XProjectService {
     public static XProjectService newInstance() {
         return XProjectHolder.XPROJECT_INSTANCE.setEncrypt(true);
     }
-
 
 
 
@@ -111,15 +114,25 @@ public class XProjectService {
     public Observable<MyWalletResponse> getMyWallet(String accountNo) {
         return mServiceApi.getMyWallet(accountNo);
     }
-    public Observable<Object> refreshToken(UserLoginRequest request) {
+    public Observable<Account> refreshToken(UserLoginRequest request) {
         return mServiceApi.refreshToken(request);
     }
 
-    public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop(String accountNo) {
-        return mServiceApi.findAllUnReceivedAirDrop(accountNo);
+    public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop() {
+        return mServiceApi.findAllUnReceivedAirDrop();
     }
     public Observable<NextAirDropTimeEntity> getNextAirDropTime() {
         return mServiceApi.getNextAirDropTime();
+    }
+    public Observable<Object> loginOut(UserLoginOutRequest accountNo) {
+        return mServiceApi.loginOut(accountNo);
+    }
+
+    public Observable<Object> receiveAirDrop() {
+        return mServiceApi.receiveAirDrop();
+    }
+    public Observable<List<AccelerateFactorEntity>> findAllSpeedLog() {
+        return mServiceApi.findAllSpeedLog();
     }
 }
 

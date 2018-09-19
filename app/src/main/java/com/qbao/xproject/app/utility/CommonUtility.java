@@ -16,7 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -502,5 +506,30 @@ public class CommonUtility {
         public static <T> T clone(T t) {
             return (T) GSON.fromJson(GSON.toJson(t), t.getClass());
         }
+    }
+
+    /**
+     * 根据时间获取时间戳
+     *
+     * @param time
+     * @return
+     */
+    public static long byTimeGetMillis(String time) {
+        //Date或者String转化为时间戳
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = format.parse(time);
+        } catch (ParseException e) {
+            return System.currentTimeMillis();
+        }
+        return date.getTime();
+    }
+
+    public static String getFormatDouble(double value){
+        return new BigDecimal(value).setScale(6,BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString();
+    }
+    public static String getFormatDoubleTwo(double value){
+        return new BigDecimal(value).setScale(2,BigDecimal.ROUND_HALF_UP).toPlainString();
     }
 }

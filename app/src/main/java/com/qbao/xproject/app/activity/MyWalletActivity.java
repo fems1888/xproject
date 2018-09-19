@@ -2,18 +2,16 @@ package com.qbao.xproject.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.adapter.MyWalletAdapter;
 import com.qbao.xproject.app.base.BaseRefreshActivity;
-import com.qbao.xproject.app.callback.WithdrawItemCallback;
+import com.qbao.xproject.app.interf.WithdrawItemCallback;
 import com.qbao.xproject.app.databinding.ActivityMyWalletBinding;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
@@ -22,7 +20,6 @@ import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.functions.Consumer;
 

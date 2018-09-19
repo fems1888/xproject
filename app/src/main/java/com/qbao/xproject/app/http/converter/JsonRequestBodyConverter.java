@@ -3,6 +3,7 @@ package com.qbao.xproject.app.http.converter;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
+import com.qbao.xproject.app.utility.CommonUtility;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -37,6 +38,7 @@ public class JsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
         JsonWriter jsonWriter = gson.newJsonWriter(writer);
         adapter.write(jsonWriter, value);
         jsonWriter.close();
+        CommonUtility.DebugLog.e( "请求的原始body：" , buffer.toString());
         return RequestBody.create(MEDIA_TYPE, buffer.readByteString());
     }
 }

@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -20,19 +21,27 @@ import android.widget.Toast;
 
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.entity.Account;
+import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.receiver.TagAliasOperatorHelper;
+import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.fragment.ArenaFragment;
 import com.qbao.xproject.app.fragment.CoinMineFragment;
 import com.qbao.xproject.app.fragment.MineFragment;
+import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
 import com.umeng.commonsdk.UMConfigure;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import io.reactivex.functions.Consumer;
 
 import static com.qbao.xproject.app.receiver.TagAliasOperatorHelper.ACTION_SET;
 import static com.qbao.xproject.app.receiver.TagAliasOperatorHelper.TagAliasBean;
@@ -81,7 +90,7 @@ public class MainActivity extends BaseRxActivity {
                     } else {
                         transaction.show(mFragmentCompetition);
                     }
-
+                    StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_two_color);
                     break;
                 case R.id.navigation_mine:
                     if (mFragmentMine == null) {
@@ -132,9 +141,36 @@ public class MainActivity extends BaseRxActivity {
     @Override
     protected void initData() {
         super.initData();
+        //每次进入先判断上次登录的时间是否和现在差一天  如果差一天就重新刷新token
+        String time = AccountManager.getInstance().getAccountEntity().getLoginTime();
+        long loginTime = TextUtils.isEmpty(time)?System.currentTimeMillis():CommonUtility.byTimeGetMillis(time);
+        if (System.currentTimeMillis() - loginTime> Constants.A_DAY_MILLS){
+            refreshToken();
+        }
+
         initJpushTag();
         initJpushAlias();
-        Log.e(TAG, "initData: "+UMConfigure.getUMIDString(activity) );
+        Log.e(TAG, "initData: "+UMConfigure.getUMIDString(activity));
+    }
+
+    private void refreshToken() {
+        UserLoginRequest request = new UserLoginRequest();
+        request.setPhone("");
+        RefreshTokenViewModel viewModel = new RefreshTokenViewModel(activity.getApplication(),TAG);
+        viewModel.refreshToken(request)
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<Account>() {
+                    @Override
+                    public void accept(Account account) throws Exception {
+                        AccountManager.getInstance().cleanAccount();
+                        AccountManager.getInstance().saveAccount(account);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(activity,"error22",Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     /**

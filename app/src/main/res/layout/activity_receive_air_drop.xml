@@ -1,102 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
-    <include layout="@layout/include_tool_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_tool_bar" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="270dp"
-            android:orientation="vertical"
+            android:background="@drawable/ic_airdrop_bg"
             android:gravity="center"
-            android:background="@drawable/ic_airdrop_bg">
+            android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/linear_has_airdrop"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_dp_100"
+                android:gravity="center"
                 android:orientation="vertical">
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/size_dp_100"/>
+                    android:layout_height="wrap_content"
+                    />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linear_no_airdrop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
+
                 <TextView
                     style="@style/textStyleWhiteColor"
-                    android:textStyle="bold"
-                    android:text="@string/no_airdrop_receive"/>
+                    android:text="@string/no_airdrop_receive"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_next"
                     style="@style/textStyleWhiteColor"
-                    android:text="@string/next_airdrop_time"
-                    android:layout_marginTop="@dimen/size_dp_10"/>
+                    android:layout_marginTop="@dimen/size_dp_10"
+                    android:text="@string/next_airdrop_time" />
+
                 <TextView
                     android:id="@+id/text_next_time"
                     style="@style/textStyleWhiteColor"
                     android:text="2018-09-10 10:10:00" />
             </LinearLayout>
+
             <Button
+                android:id="@+id/button_receive_air_drop"
                 android:layout_width="267dp"
                 android:layout_height="@dimen/size_dp_44"
+                android:layout_marginTop="@dimen/size_dp_40"
                 android:background="@drawable/button_white_selector"
                 android:text="@string/right_receive"
-                android:layout_marginTop="@dimen/size_dp_40"
-                android:textColor="@color/white_bg_text_selector"/>
+                android:textColor="@color/white_bg_text_selector" />
         </LinearLayout>
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/size_dp_5"
-        app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="@color/activity_bg"
-        android:layout_marginLeft="@dimen/size_dp_16"
-        android:layout_marginRight="@dimen/size_dp_16">
-        <LinearLayout
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/size_dp_16"
-            android:paddingRight="@dimen/size_dp_16"
-            android:paddingTop="@dimen/size_dp_20"
-            android:paddingBottom="@dimen/size_dp_20"
-            android:orientation="vertical">
-            <TextView
-                style="@style/textStyleMainColor"
-                android:textSize="@dimen/size_sp_16"
-                android:text="@string/rule"
-                android:drawableLeft="@drawable/ic_rule_icon"
-                android:gravity="center_vertical"
-                android:drawablePadding="@dimen/size_dp_6"/>
-            <TextView
-                style="@style/textStyleMainColor"
-                android:textSize="@dimen/size_sp_14"
-                android:text="@string/airdrop_rule_one"
-                android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/size_dp_16"/>
-            <TextView
-                style="@style/textStyleMainColor"
-                android:textSize="@dimen/size_sp_14"
-                android:text="@string/airdrop_rule_two"
-                android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/size_dp_8"/>
-            <TextView
-                style="@style/textStyleMainColor"
-                android:textSize="@dimen/size_sp_14"
-                android:text="@string/airdrop_rule_three"
-                android:gravity="center_vertical"
-                android:layout_marginTop="@dimen/size_dp_8"/>
-            
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</LinearLayout>
+            android:layout_marginLeft="@dimen/size_dp_16"
+            android:layout_marginRight="@dimen/size_dp_16"
+            app:cardBackgroundColor="@color/activity_bg"
+            app:cardCornerRadius="@dimen/size_dp_5"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/size_dp_20"
+                android:paddingLeft="@dimen/size_dp_16"
+                android:paddingRight="@dimen/size_dp_16"
+                android:paddingTop="@dimen/size_dp_20">
+
+                <TextView
+                    style="@style/textStyleMainColor"
+                    android:drawableLeft="@drawable/ic_rule_icon"
+                    android:drawablePadding="@dimen/size_dp_6"
+                    android:gravity="center_vertical"
+                    android:text="@string/rule"
+                    android:textSize="@dimen/size_sp_16" />
+
+                <TextView
+                    style="@style/textStyleMainColor"
+                    android:layout_marginTop="@dimen/size_dp_16"
+                    android:gravity="center_vertical"
+                    android:text="@string/airdrop_rule_one"
+                    android:textSize="@dimen/size_sp_14" />
+
+                <TextView
+                    style="@style/textStyleMainColor"
+                    android:layout_marginTop="@dimen/size_dp_8"
+                    android:gravity="center_vertical"
+                    android:text="@string/airdrop_rule_two"
+                    android:textSize="@dimen/size_sp_14" />
+
+                <TextView
+                    style="@style/textStyleMainColor"
+                    android:layout_marginTop="@dimen/size_dp_8"
+                    android:gravity="center_vertical"
+                    android:text="@string/airdrop_rule_three"
+                    android:textSize="@dimen/size_sp_14" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 </layout>

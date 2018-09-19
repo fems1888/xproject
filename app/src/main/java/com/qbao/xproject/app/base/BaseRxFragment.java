@@ -112,8 +112,11 @@ public abstract class BaseRxFragment<SV extends ViewDataBinding> extends Fragmen
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        CommonUtility.DebugLog.e(TAG, "BaseRxFragment setUserVisibleHint");
         super.setUserVisibleHint(isVisibleToUser);
-        this.isVisibleToUser = isVisibleToUser;
+
+        this.isVisibleToUser = getUserVisibleHint();
         prepareFetchData();
     }
 

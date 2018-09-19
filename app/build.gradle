@@ -4,7 +4,6 @@ apply plugin: 'org.greenrobot.greendao'
 //应用 Bugtags 插件
 apply plugin: 'com.bugtags.library.plugin'
 
-
 //Bugtags 插件配置git
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考帮助中心->符号表->Android 符号表->配置自动上传符号表
@@ -61,8 +60,8 @@ android {
 
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
-            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
+            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
+//            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
             debuggable true
         }
     }

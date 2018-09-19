@@ -102,6 +102,8 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
 
                         Glide.with(activity.getApplication()).load(mImageSeletedPath).into(bindingView.imageAddPhone);
 
+                        //包括裁剪和压缩后的缓存，要在上传成功后调用，注意：需要系统sd卡权限
+//                        PictureFileUtils.deleteCacheDirFile(MainActivity.this);
                     }
                     break;
                     default:

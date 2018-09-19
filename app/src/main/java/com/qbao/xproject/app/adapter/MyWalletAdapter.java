@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.callback.WithdrawItemCallback;
+import com.qbao.xproject.app.interf.WithdrawItemCallback;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 
 import java.util.List;

@@ -1,10 +1,15 @@
 package com.qbao.xproject.app.http;
 
+import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.Account;
 import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
+import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -29,7 +34,7 @@ public interface XProjectServiceApi {
     Observable<Object> getVerifyCode(@Query("phone") String phone,@Query("countryId") String countryId);
 
     @POST("/security/account/refreshToken")
-    Observable<Object> refreshToken(@Body UserLoginRequest request);
+    Observable<Account> refreshToken(@Body UserLoginRequest request);
 
 
     @GET("/core/myWallet/getWallet")
@@ -37,17 +42,46 @@ public interface XProjectServiceApi {
 
     /**
      * 获得未领取的空投的List
-     * @param accountNo
      * @return
      */
-    @GET("/airDrop/findAllUnReceivedAirDrop")
-    Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop(@Query("accountNo") String accountNo);
+    @GET("/core/airDrop/findAllUnReceivedAirDrop")
+    Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop();
 
     /**
      * 当没有空投时  获取下一次空投时间
      * @return
      */
-    @GET("/airDrop/getNextAirDropActivity")
+    @GET("/core/airDrop/getNextAirDropActivity")
     Observable<NextAirDropTimeEntity> getNextAirDropTime();
 
+    /**
+     * 注销
+     * @param accountNo
+     * @return
+     */
+    @POST("/security/account/clearToken")
+    Observable<Object> loginOut(@Body UserLoginOutRequest accountNo);
+
+    /**
+     * 领取空投
+     * @return
+     */
+    @GET("/core/airDrop/receiveAllAirDrop")
+    Observable<Object> receiveAirDrop();
+
+    /**
+     * 获取加速因子
+     *
+     * @return
+     */
+    @GET("/core/mine/findAllSpeedLog")
+    Observable<List<AccelerateFactorEntity>> findAllSpeedLog();
+
+    /**
+     * 获取加速因子
+     *
+     * @return
+     */
+    @GET("/core/mine/findAllTaskCompleteList")
+    Observable<List<AccelerateFactorEntity>> findAllTaskCompleteList();
 }

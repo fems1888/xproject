@@ -13,6 +13,7 @@ import com.qbao.xproject.app.http.XProjectService;
 import com.qbao.xproject.app.manager.AccessTokenManager;
 import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.manager.Constants;
+import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.AESUtil;
 import com.qbao.xproject.app.utility.CommonUtility;
@@ -44,10 +45,10 @@ public class LoginViewModel extends BaseViewModel {
 
     public Observable<String> userLogin(UserLoginRequest request) {
         return Observable.create(e -> XProjectService.newInstance().userLogin(request)
-                .subscribe(new Rx2Subscriber<Response<ResponseBody>>(application,TAG) {
+                .subscribe(new Rx2Subscriber<Response<ResponseBody>>(application, TAG) {
                     @Override
                     public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
-                            responseThrowable.printStackTrace();
+                        responseThrowable.printStackTrace();
                     }
 
                     @Override
@@ -68,7 +69,8 @@ public class LoginViewModel extends BaseViewModel {
                                     String result = AESUtil.decrypt(resultJson, AESUtil.KEY);//解密
                                     CommonUtility.DebugLog.e(TAG, "responseBodyJson = " + result);
                                     if (!CommonUtility.isNull(result) && !CommonUtility.isNull(qbaoToken)) {
-                                        Account account = CommonUtility.JSONObjectUtility.convertJSONObject2Obj(resultJson, Account.class);
+                                        Account account = CommonUtility.JSONObjectUtility.convertJSONObject2Obj(result, Account.class);
+                                        CommonUtility.DebugLog.e(TAG, "loginTime = " + account.getLoginTime());
                                         //保存Token 到本地
                                         AccessTokenManager.getInstance().saveAccessToken(qbaoToken);
                                         if (!CommonUtility.isNull(account)) {
@@ -78,12 +80,12 @@ public class LoginViewModel extends BaseViewModel {
                                             e.onComplete();
 
                                         }
-                                    }else {
+                                    } else {
                                         e.onNext(application.getString(R.string.failed));
                                         e.onComplete();
                                     }
 
-                                }else {
+                                } else {
                                     e.onNext(application.getString(R.string.failed));
                                     e.onComplete();
                                 }
@@ -93,12 +95,11 @@ public class LoginViewModel extends BaseViewModel {
                                 JSONObject jsonObject = new JSONObject(errorBody);
                                 String errorCode = jsonObject.optString("errorCode");
                                 CommonUtility.DebugLog.e(TAG, "errorCode = " + errorCode);
-                                if (errorCode.equals(Constants.REGISTER_CODE_IS_NULL)){
+                                if (errorCode.equals(Constants.REGISTER_CODE_IS_NULL)) {
                                     e.onNext(errorCode);
-                                }else {
+                                } else {
                                     e.onNext(jsonObject.optString("message"));
                                 }
-
                             }
                             e.onComplete();
                         } catch (Exception e1) {
@@ -121,5 +122,22 @@ public class LoginViewModel extends BaseViewModel {
                 e.onNext(value);
             }
         }));
+    }
+
+    public Observable<Object> loginOut(UserLoginOutRequest request) {
+        return Observable.create(e -> {
+            XProjectService.newInstance().loginOut(request)
+                    .subscribe(new Rx2Subscriber<Object>(application, TAG) {
+                        @Override
+                        public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                            e.onError(responseThrowable);
+                        }
+
+                        @Override
+                        public void onNext(Object value) {
+                            e.onNext(value);
+                        }
+                    });
+        });
     }
 }

@@ -10,10 +10,10 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qbao.xproject.app.R;
-import com.qbao.xproject.app.callback.WithdrawItemCallback;
-import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
+import com.qbao.xproject.app.utility.CommonUtility;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,7 +29,8 @@ public class UnReceiveAirDropAdapter extends BaseQuickAdapter<UnReceiveAirDropEn
 
     @Override
     protected void convert(UnReceiveAirDropAdapter.UnReceiveAirDropViewHolder helper, UnReceiveAirDropEntity.UnReceiveAirDrop item) {
-
+        ((TextView)helper.getView(R.id.text_amount)).setText(CommonUtility.getFormatDouble(item.getAmount()));
+        ((TextView)helper.getView(R.id.text_coin_name)).setText(item.getUnitName());
     }
 
 

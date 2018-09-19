@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.adapter.UnReceiveAirDropAdapter;
 import com.qbao.xproject.app.base.BaseRefreshActivity;
@@ -24,6 +25,7 @@ import com.qbao.xproject.app.viewmodel.ReceiveAirDropViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
@@ -48,15 +50,14 @@ public class ReceiveAirDropActivity extends BaseRxActivity<ActivityReceiveAirDro
     @Override
     protected void initData() {
         super.initData();
+        bindingView.buttonReceiveAirDrop.setEnabled(false);
         getUnReceiveAirDrop();
+//        viewModel = new ReceiveAirDropViewModel(activity.getApplication(),TAG);
+//        getNextAirDropTime();
     }
 
     private void getUnReceiveAirDrop() {
         List<UnReceiveAirDropEntity.UnReceiveAirDrop> list = new ArrayList<>();
-        for (int i = 0 ; i < 2 ;i++){
-            UnReceiveAirDropEntity.UnReceiveAirDrop unReceiveAirDrop = new UnReceiveAirDropEntity.UnReceiveAirDrop();
-            list.add(unReceiveAirDrop);
-        }
 
         UnReceiveAirDropAdapter airDropAdapter = new UnReceiveAirDropAdapter(R.layout.layout_item_unreceive_air_drop,list);
 
@@ -64,21 +65,20 @@ public class ReceiveAirDropActivity extends BaseRxActivity<ActivityReceiveAirDro
         airDropAdapter.bindToRecyclerView(bindingView.recyclerView);
 
         viewModel = new ReceiveAirDropViewModel(activity.getApplication(),TAG);
-        viewModel.findAllUnReceivedAirDrop("103")
+        viewModel.findAllUnReceivedAirDrop()
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<UnReceiveAirDropEntity>() {
                     @Override
                     public void accept(UnReceiveAirDropEntity unReceiveAirDropEntity) throws Exception {
                         if (unReceiveAirDropEntity.getResult().size()>0){
-
+                            bindingView.buttonReceiveAirDrop.setEnabled(true);
                             airDropAdapter.setNewData(unReceiveAirDropEntity.getResult());
                         }else {
                             bindingView.linearHasAirdrop.setVisibility(View.GONE);
                             bindingView.linearNoAirdrop.setVisibility(View.VISIBLE);
+                            bindingView.buttonReceiveAirDrop.setEnabled(false);
                             getNextAirDropTime();
-
                         }
-
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -93,6 +93,7 @@ public class ReceiveAirDropActivity extends BaseRxActivity<ActivityReceiveAirDro
                 .subscribe(new Consumer<NextAirDropTimeEntity>() {
                     @Override
                     public void accept(NextAirDropTimeEntity nextAirDropTimeEntity) throws Exception {
+
                         bindingView.textNextTime.setText(nextAirDropTimeEntity.getBeginTime());
                     }
                 }, new Consumer<Throwable>() {
@@ -105,4 +106,20 @@ public class ReceiveAirDropActivity extends BaseRxActivity<ActivityReceiveAirDro
                 });
     }
 
+    @Override
+    protected void initListener() {
+        super.initListener();
+        RxView.clicks(bindingView.buttonReceiveAirDrop).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(o -> receiveAirDrop());
+    }
+
+    private void receiveAirDrop() {
+        viewModel.receiveAirDrop()
+                .compose(RxSchedulers.io_main())
+                .subscribe(o -> {
+                    bindingView.buttonReceiveAirDrop.setEnabled(false);
+                }, throwable -> {
+
+                });
+    }
 }

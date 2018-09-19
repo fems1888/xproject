@@ -21,4 +21,7 @@ public class Constants {
     public static final String ACCOUNT = "ACCOUNT";//账号
 
     public static final String SUCCESS = "success";
+
+    public static final int A_DAY_MILLS = 24*60*60*1000;
+
 }

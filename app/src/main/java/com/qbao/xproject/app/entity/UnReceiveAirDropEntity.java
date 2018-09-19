@@ -31,8 +31,10 @@ public class UnReceiveAirDropEntity {
 
         private int id;
         private String accountNo;
-        private int amount;
+        private String unitName;
+        private double amount;
         private int activityId;
+        private int unit;
         private boolean received;
         private boolean avialable;
 
@@ -50,14 +52,6 @@ public class UnReceiveAirDropEntity {
 
         public void setAccountNo(String accountNo) {
             this.accountNo = accountNo;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        public void setAmount(int amount) {
-            this.amount = amount;
         }
 
         public int getActivityId() {
@@ -82,6 +76,30 @@ public class UnReceiveAirDropEntity {
 
         public void setAvialable(boolean avialable) {
             this.avialable = avialable;
+        }
+
+        public String getUnitName() {
+            return unitName;
+        }
+
+        public void setUnitName(String unitName) {
+            this.unitName = unitName;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
+
+        public int getUnit() {
+            return unit;
+        }
+
+        public void setUnit(int unit) {
+            this.unit = unit;
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.qbao.xproject.app.utility;
 
-import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -57,5 +58,25 @@ public class MaterialDialogUtility {
                 alert.dismiss();
             }
         });
+    }
+
+    /**
+     * 退出登录dialog
+     * @param context
+     */
+    public static void showLoginOutDialog(Context context, View.OnClickListener outListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.login_out));
+        builder.setMessage(R.string.login_out_flag);
+        builder.setNegativeButton(context.getString(R.string.pic_cancel),null);
+        builder.setPositiveButton(context.getString(R.string.login_out_dialog), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (outListener!=null){
+                    outListener.onClick(null);
+                }
+            }
+        });
+        builder.show();
     }
 }

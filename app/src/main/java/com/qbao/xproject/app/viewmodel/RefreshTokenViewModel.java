@@ -3,6 +3,7 @@ package com.qbao.xproject.app.viewmodel;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import com.qbao.xproject.app.entity.Account;
 import com.qbao.xproject.app.http.ExceptionHandle;
 import com.qbao.xproject.app.http.XProjectService;
 import com.qbao.xproject.app.manager.AccessTokenManager;
@@ -24,17 +25,17 @@ public class RefreshTokenViewModel extends BaseViewModel {
     public RefreshTokenViewModel(@NonNull Application application, String tag) {
         super(application, tag);
     }
-    public Observable<Object> refreshToken(UserLoginRequest request){
+    public Observable<Account> refreshToken(UserLoginRequest request){
         return Observable.create(e -> {
             XProjectService.newInstance().refreshToken(request)
-                    .subscribe(new Rx2Subscriber<Object>(application,TAG) {
+                    .subscribe(new Rx2Subscriber<Account>(application,TAG) {
                         @Override
                         public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
                             e.onError(responseThrowable);
                         }
 
                         @Override
-                        public void onNext(Object value) {
+                        public void onNext(Account value) {
                                 e.onNext(value);
                         }
                     });

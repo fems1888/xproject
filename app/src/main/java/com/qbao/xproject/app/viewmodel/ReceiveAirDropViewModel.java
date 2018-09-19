@@ -22,42 +22,46 @@ public class ReceiveAirDropViewModel extends BaseViewModel {
         super(application, tag);
     }
 
-    public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop(String accountNo) {
-        return Observable.create(new ObservableOnSubscribe<UnReceiveAirDropEntity>() {
-            @Override
-            public void subscribe(ObservableEmitter<UnReceiveAirDropEntity> e) throws Exception {
-                XProjectService.newInstance().findAllUnReceivedAirDrop(accountNo)
-                        .subscribe(new Rx2Subscriber<UnReceiveAirDropEntity>(application, TAG) {
-                            @Override
-                            public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
-                                e.onError(responseThrowable);
-                            }
-
-                            @Override
-                            public void onNext(UnReceiveAirDropEntity value) {
-                                e.onNext(value);
-                            }
-                        });
-            }
-        });
-    }
-
-    public Observable<NextAirDropTimeEntity> getNextAirDropTime() {
-        return Observable.create(new ObservableOnSubscribe<NextAirDropTimeEntity>() {
-            @Override
-            public void subscribe(ObservableEmitter<NextAirDropTimeEntity> e) throws Exception {
-                XProjectService.newInstance().getNextAirDropTime().subscribe(new Rx2Subscriber<NextAirDropTimeEntity>(application, TAG) {
+    public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop() {
+        return Observable.create(e -> XProjectService.newInstance().findAllUnReceivedAirDrop()
+                .subscribe(new Rx2Subscriber<UnReceiveAirDropEntity>(application, TAG) {
                     @Override
                     public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
                         e.onError(responseThrowable);
                     }
 
                     @Override
-                    public void onNext(NextAirDropTimeEntity value) {
+                    public void onNext(UnReceiveAirDropEntity value) {
                         e.onNext(value);
                     }
-                });
+                }));
+    }
+
+    public Observable<NextAirDropTimeEntity> getNextAirDropTime() {
+        return Observable.create(e -> XProjectService.newInstance().getNextAirDropTime().subscribe(new Rx2Subscriber<NextAirDropTimeEntity>(application, TAG) {
+            @Override
+            public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                e.onError(responseThrowable);
             }
-        });
+
+            @Override
+            public void onNext(NextAirDropTimeEntity value) {
+                e.onNext(value);
+            }
+        }));
+    }
+
+    public Observable<Object> receiveAirDrop() {
+        return Observable.create(e -> XProjectService.newInstance().receiveAirDrop().subscribe(new Rx2Subscriber<Object>(application,TAG) {
+            @Override
+            public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                e.onError(responseThrowable);
+            }
+
+            @Override
+            public void onNext(Object value) {
+                e.onNext(value);
+            }
+        }));
     }
 }

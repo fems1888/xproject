@@ -6,6 +6,7 @@ import com.qbao.xproject.app.activity.BetRedActivity;
 import com.qbao.xproject.app.activity.LoginActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
+import com.qbao.xproject.app.manager.AccessTokenManager;
 
 import java.util.concurrent.TimeUnit;
 

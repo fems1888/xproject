@@ -5,9 +5,11 @@ import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.activity.FeedbackActivity;
 import com.qbao.xproject.app.activity.MyWalletActivity;
 import com.qbao.xproject.app.activity.ReceiveAirDropActivity;
+import com.qbao.xproject.app.activity.SetActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentMineBinding;
+import com.qbao.xproject.app.manager.AccountManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +23,12 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
     @Override
     public int setContent() {
         return R.layout.layout_fragment_mine;
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        bindingView.textName.setText(AccountManager.getInstance().getAccountEntity().getAccountName());
     }
 
     @Override
@@ -45,6 +53,13 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                     @Override
                     public void accept(Object o) throws Exception {
                         FeedbackActivity.go(activity);
+                    }
+                });
+        RxView.clicks(bindingView.relativeSet).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        SetActivity.go(activity);
                     }
                 });
     }

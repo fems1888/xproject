@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.entity.Account;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;

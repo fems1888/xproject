@@ -47,23 +47,23 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
     public T convert(@NonNull ResponseBody responseBody) throws IOException {
         if (responseBody.contentType() != null && isPlaintext(responseBody.contentType())) {
             String body = responseBody.string();
-//            if (isDecrypt) {
+            if (isDecrypt) {
                 try {
                     JSONObject jsonObject = new JSONObject(body);
                     String resultJson = jsonObject.getString("result");
                     if (!CommonUtility.isNull(resultJson)) {
                         String result = AESUtil.decrypt(resultJson,AESUtil.KEY);//解密
                         CommonUtility.DebugLog.e(TAG, "result = " + result);
-//                        return gson.fromJson(resultJson, type);
+                        return gson.fromJson(result, type);
                     }
                 } catch (Exception e) {
                     CommonUtility.DebugLog.e(TAG, "Exception" );
                     e.printStackTrace();
                 }
-//            } else {
+            } else {
                 CommonUtility.DebugLog.e(TAG, "不用解密 服务器返回数据：" + body);
                 return gson.fromJson(body, type);
-//            }
+            }
         } else {
             CommonUtility.DebugLog.log("\tbody: maybe [file part] , too large too print , ignored!");
         }
