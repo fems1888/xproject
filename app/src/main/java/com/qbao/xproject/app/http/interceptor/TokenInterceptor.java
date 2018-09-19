@@ -1,28 +1,22 @@
-package com.aether.coder.qbao.http.interceptor;
+package com.qbao.xproject.app.http.interceptor;
 
 import android.content.Context;
 
-import com.aether.coder.qbao.QbaoApplication;
-import com.aether.coder.qbao.datastorage.QtumSharedPreference;
-import com.aether.coder.qbao.http.ApiResult;
-import com.aether.coder.qbao.http.QbaoService;
-import com.aether.coder.qbao.http.utils.ExceptionHandle;
-import com.aether.coder.qbao.manager.AccessTokenManager;
-import com.aether.coder.qbao.manager.AccountManager;
-import com.aether.coder.qbao.model.entity.Account;
-import com.aether.coder.qbao.model.request.GetQbaoTokenRequest;
 import com.google.gson.Gson;
-import com.qbao.library.http.APIBodyData;
-import com.qbao.library.http.interceptor.BaseExpiredInterceptor;
-import com.qbao.library.utility.AESUtil;
-import com.qbao.library.utility.BCrypt;
-import com.qbao.library.utility.CommonUtility;
+import com.qbao.xproject.app.XProjectApplication;
+import com.qbao.xproject.app.entity.http.ApiResult;
+import com.qbao.xproject.app.http.ExceptionHandle;
+import com.qbao.xproject.app.manager.AccessTokenManager;
+import com.qbao.xproject.app.utility.AESUtil;
+import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.MD5Util;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,7 +24,6 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.qbao.library.utility.CommonUtility.getAppMetaData;
 
 /**
  * Created by hubert on 2018/1/11.
@@ -45,8 +38,8 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
         try {
             JSONObject jsonObject = new JSONObject(bodyString);
             String resultJson = jsonObject.getString("result");
-            if (!CommonUtility.Utility.isNull(resultJson)) {
-                String result = AESUtil.decryptSign(resultJson);//解密
+            if (!CommonUtility.isNull(resultJson)) {
+                String result = AESUtil.decrypt(resultJson,AESUtil.KEY);//解密
                 apiResult = new Gson().fromJson(result, ApiResult.class);
                 if (apiResult != null) {
                     int code = apiResult.getStatus();
@@ -74,7 +67,7 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
             if (lock.tryLock()) {
                 try {
                     CommonUtility.DebugLog.e(TAG, "获取Token中...，持有lock》》》");
-                    token = refreshQbaToken();
+                    token = refreshToken();
                     return processError(chain, chain.request());
                 } catch (Exception e) {
                     lock.unlock();
@@ -100,7 +93,7 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
      * @throws IOException
      */
     private Response processError(Chain chain, Request request) {
-        Context context = QbaoApplication.getInstance().getApplicationContext();
+        Context context = XProjectApplication.getInstance().getApplicationContext();
         String token = AccessTokenManager.getInstance().getAccessToken();
         Request.Builder builder = request.newBuilder();
         HttpUrl httpUrl = request.url();
@@ -109,10 +102,10 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
             decodeUrl = URLDecoder.decode(httpUrl.toString(), "UTF-8");
             String timeStamp = String.valueOf(System.currentTimeMillis());
             int randomValue = (int) ((Math.random() * 9 + 1) * 1000);
-            String signNative = BCrypt.hashpw(AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token), BCrypt.gensalt());
+            String signNative = MD5Util.encodeMD5(AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token));
 
-            String buildName = getAppMetaData(context, "UMENG_CHANNEL");
-            CommonUtility.DebugLog.e(TAG, "buildName = " + buildName);
+//            String buildName = getAppMetaData(context, "UMENG_CHANNEL");
+//            CommonUtility.DebugLog.e(TAG, "buildName = " + buildName);
             builder.addHeader("X-S", signNative)
                     .addHeader("X-T", token)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
@@ -121,11 +114,11 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
                     .addHeader("Accept", "*/*")
                     .addHeader("User-Agent", "Android Phone")
                     .addHeader("Device-Type", "Android")
-                    .addHeader("APP-VersionName", CommonUtility.UIUtility.getVersionName(context))
-                    .addHeader("APP-Version", CommonUtility.UIUtility.getVersionName(context).substring(0, 3))
-                    .addHeader("APP-Code", CommonUtility.UIUtility.getVersionCode(context) + "")
-                    .addHeader("Source-Type", buildName)
-                    .addHeader("Accept-Language", QtumSharedPreference.getInstance().getLanguage(context))
+                    .addHeader("APP-VersionName", "XProject")
+                    .addHeader("APP-Version", "1.0")
+                    .addHeader("APP-Code", "100")
+                    .addHeader("Source-Type", "")
+                    .addHeader("Accept-Language", "zh")
                     .addHeader("X-TS", timeStamp)
                     .addHeader("X-R", CommonUtility.formatString(randomValue));
             request = builder.build();
@@ -134,27 +127,29 @@ public class TokenInterceptor extends BaseExpiredInterceptor {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     private Lock lock = new ReentrantLock();
 
-    private String refreshQbaToken() {
-        Account account = AccountManager.getInstance().getAccountEntity();
-        String accountNo = account.getAccountNo();
-        if (!CommonUtility.Utility.isNull(accountNo)) {
-            GetQbaoTokenRequest getQbaoTokenRequest = new GetQbaoTokenRequest(accountNo, account.getAddresses());
-            APIBodyData apiBodyData = null;
-            try {
-                apiBodyData = QbaoService.newInstance().getQbaoToken(getQbaoTokenRequest).execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            CommonUtility.DebugLog.e(TAG, "获取到新的Token = " + apiBodyData.getResult());
-            AccessTokenManager.getInstance().saveAccessToken(apiBodyData.getResult());
-            return apiBodyData.getResult();
-        }
+    private String refreshToken() {
+//        Account account = AccountManager.getInstance().getAccountEntity();
+//        String accountNo = account.getAccountNo();
+//        if (!CommonUtility.Utility.isNull(accountNo)) {
+//            GetQbaoTokenRequest getQbaoTokenRequest = new GetQbaoTokenRequest(accountNo, account.getAddresses());
+//            APIBodyData apiBodyData = null;
+//            try {
+//                apiBodyData = QbaoService.newInstance().getQbaoToken(getQbaoTokenRequest).execute().body();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            CommonUtility.DebugLog.e(TAG, "获取到新的Token = " + apiBodyData.getResult());
+//            AccessTokenManager.getInstance().saveAccessToken(apiBodyData.getResult());
+//            return apiBodyData.getResult();
+//        }
         return null;
     }
 }

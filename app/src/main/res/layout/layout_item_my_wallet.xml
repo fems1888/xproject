@@ -30,6 +30,7 @@
                     app:srcCompat="@drawable/ic_bet_blue_ball" />
 
                 <TextView
+                    android:id="@+id/text_coin_name"
                     style="@style/textStyleMainColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -48,6 +49,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/text_coin_account"
                         style="@style/textStyleMainColor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

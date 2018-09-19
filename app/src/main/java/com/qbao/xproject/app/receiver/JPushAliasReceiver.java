@@ -1,4 +1,4 @@
-package com.aether.coder.qbao.receiver;
+package com.qbao.xproject.app.receiver;
 
 import android.content.Context;
 

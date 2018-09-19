@@ -17,7 +17,9 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.receiver.TagAliasOperatorHelper;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.XProjectApplication;
@@ -27,7 +29,12 @@ import com.qbao.xproject.app.fragment.CoinMineFragment;
 import com.qbao.xproject.app.fragment.MineFragment;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import static com.qbao.xproject.app.receiver.TagAliasOperatorHelper.ACTION_SET;
+import static com.qbao.xproject.app.receiver.TagAliasOperatorHelper.TagAliasBean;
+import static com.qbao.xproject.app.receiver.TagAliasOperatorHelper.sequence;
 /**
  * @author Created by jackieyao on 2018/9/12 下午5:10
  */
@@ -120,6 +127,50 @@ public class MainActivity extends BaseRxActivity {
     }
 
 
+    @Override
+    protected void initData() {
+        super.initData();
+        initJpushTag();
+        initJpushAlias();
+
+    }
+
+    /**
+     * 极光别名
+     */
+    private void initJpushAlias() {
+
+        int action = ACTION_SET;
+
+        TagAliasBean tagAliasBean = new TagAliasBean();
+        tagAliasBean.action = action;
+        sequence++;
+        tagAliasBean.alias = "demo";
+        tagAliasBean.isAliasAction = true;
+        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(),sequence,tagAliasBean);
+    }
+
+    /**
+     * 极光标签
+     */
+    private void initJpushTag() {
+        String language = null;
+        if (BuildConfig.BUILD_TYPE.equals("release")) {
+            language = "zh";
+        } else {
+            language = "zh_test";
+        }
+        int action = ACTION_SET;
+        TagAliasBean tagAliasBean = new TagAliasBean();
+        tagAliasBean.action = action;
+        sequence++;
+        Set<String> tagSet = new LinkedHashSet<String>();
+        tagSet.add(language);
+        tagAliasBean.tags = tagSet;
+        tagAliasBean.isAliasAction = false;
+        TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(), sequence, tagAliasBean);
+    }
+
     @ColorInt
     protected int getColorByAttributeId(@AttrRes int attrIdForColor) {
         TypedValue typedValue = new TypedValue();
@@ -134,7 +185,8 @@ public class MainActivity extends BaseRxActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exitBy2Click();
+//            exitBy2Click();
+            finish();
         }
         return false;
     }

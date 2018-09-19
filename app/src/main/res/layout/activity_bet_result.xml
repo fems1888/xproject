@@ -72,8 +72,8 @@
                     android:text="1" />
             </LinearLayout>
             
-            <TextView
-                android:id="@+id/text_done"
+            <Button
+                android:id="@+id/button_done"
                 android:layout_width="246dp"
                 android:layout_height="@dimen/size_dp_40"
                 style="@style/textStyleWhiteColor"

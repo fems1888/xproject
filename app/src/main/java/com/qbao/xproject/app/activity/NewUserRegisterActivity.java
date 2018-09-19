@@ -7,10 +7,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.MaterialDialogUtility;
@@ -19,6 +21,7 @@ import com.qbao.xproject.app.databinding.ActivityNewUserRegisterBinding;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
+import com.qbao.xproject.app.widget.UITipDialog;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,29 +32,26 @@ import io.reactivex.functions.Consumer;
  */
 
 public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegisterBinding> {
-    public static final String VERIFY_CODE = "verifyCode";
     public static final String PHONE = "phone";
-    private String mVerifyCode;
     private String mPhone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user_register);
-        StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
+        StatusBarUtils.setWindowStatusBarColor(activity, R.color.white, StatusBarContentColor.GRAY);
         setToolBarTitle(getString(R.string.invitation_register));
     }
 
-    public static void goNewUserRegisterActivity(Context context,String verifyCode,String phone){
-        Intent intent = new Intent(context,NewUserRegisterActivity.class);
-        intent.putExtra(VERIFY_CODE,verifyCode);
-        intent.putExtra(PHONE,phone);
+    public static void goNewUserRegisterActivity(Context context, String phone) {
+        Intent intent = new Intent(context, NewUserRegisterActivity.class);
+        intent.putExtra(PHONE, phone);
         context.startActivity(intent);
     }
 
     @Override
     protected void getIntentData() {
         super.getIntentData();
-        mVerifyCode = getIntent().getStringExtra(VERIFY_CODE);
         mPhone = getIntent().getStringExtra(PHONE);
 
     }
@@ -70,21 +70,29 @@ public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegis
     }
 
     private void register() {
-        LoginViewModel viewModel = new LoginViewModel(activity.getApplication(),TAG);
+        UITipDialog dialog = new UITipDialog.CustomBuilder(activity, false).setContent(R.layout.view_loading).create();
+        dialog.show();
+        LoginViewModel viewModel = new LoginViewModel(activity.getApplication(), TAG);
         UserLoginRequest request = new UserLoginRequest();
-        request.setPhone(/*mPhone*/"13023151465");
+        request.setPhone(mPhone);
 //        request.setCaptchaCode(mVerifyCode);
         request.setRegisterCode(bindingView.editCode.getText().toString());
         viewModel.userLogin(request).compose(RxSchedulers.io_main())
-                .subscribe(new Consumer<Object>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(Object o) throws Exception {
-
+                    public void accept(String str) throws Exception {
+                        dialog.dismiss();
+                        if (str.equals(Constants.SUCCESS)) {
+                            MainActivity.go(activity);
+                        } else {
+                            Toast.makeText(activity, str, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d("ddd", throwable.getMessage());
+                        dialog.dismiss();
                     }
                 });
     }
@@ -106,9 +114,9 @@ public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegis
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!CommonUtility.isNull(bindingView.editCode.getText().toString())&&bindingView.editCode.getText().toString().length()>=6){
+                if (!CommonUtility.isNull(bindingView.editCode.getText().toString()) && bindingView.editCode.getText().toString().length() >= 6) {
                     bindingView.textRegister.setEnabled(true);
-                }else {
+                } else {
                     bindingView.textRegister.setEnabled(false);
                 }
             }

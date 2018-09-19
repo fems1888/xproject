@@ -17,4 +17,8 @@ public class Constants {
 
     //Token
     public static final String ACCESS_TOKEN = "accessToken";
+
+    public static final String ACCOUNT = "ACCOUNT";//账号
+
+    public static final String SUCCESS = "success";
 }

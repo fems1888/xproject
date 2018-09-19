@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -99,10 +100,13 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
                             mImageSeletedPath = media.getPath();
                         }
 
-
+                        Glide.with(activity.getApplication()).load(mImageSeletedPath).into(bindingView.imageAddPhone);
 
                     }
                     break;
+                    default:
+
+                        break;
             }
         }
     }

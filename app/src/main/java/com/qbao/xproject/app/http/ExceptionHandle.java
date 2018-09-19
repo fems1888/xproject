@@ -21,7 +21,7 @@ import retrofit2.HttpException;
  */
 
 public class ExceptionHandle {
-    private static final int BAD_REQUEST = 400;//服务器不理解请求的语法。
+    public static final int BAD_REQUEST = 400;//服务器不理解请求的语法。
     public static final int UNAUTHORIZED = 401;//请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应
     private static final int FORBIDDEN = 403;//服务器拒绝请求
     private static final int NOT_FOUND = 404;//服务器找不到请求的网页

@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/activity_bg">
 
-        <include layout="@layout/include_tool_bar_transparent"/>
+        <include layout="@layout/include_tool_bar"/>
 
         <include layout="@layout/include_swipe_refresh" />
     </android.support.design.widget.CoordinatorLayout>

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.base.BaseRxActivity;
@@ -25,6 +26,7 @@ import com.qbao.xproject.app.widget.UITipDialog;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
+import retrofit2.Response;
 
 /**
  * @author Created by jackieyao on 2018/9/12 下午5:10
@@ -110,6 +112,15 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     @Override
     protected void initListener() {
         super.initListener();
+
+        RxView.clicks(bindingView.image).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        MainActivity.go(activity);
+
+                    }
+                });
         RxView.clicks(bindingView.textGetCode).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
@@ -152,20 +163,28 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
         request.setPhone(bindingView.editPhone.getText().toString());
         request.setCaptchaCode(bindingView.editCode.getText().toString());
         viewModel.userLogin(request).compose(RxSchedulers.io_main())
-                .subscribe(new Consumer<Object>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(Object o) throws Exception {
+                    public void accept(String str) throws Exception {
                         //返回给你们的errorCode是-10002，说明是新的用户，把页面迁移到注册页面。
                         dialog.dismiss();
-
+                        if (str.equals(Constants.SUCCESS)){
+                            MainActivity.go(activity);
+                        }else {
+                            if (str.equals(Constants.REGISTER_CODE_IS_NULL)){
+                                NewUserRegisterActivity.goNewUserRegisterActivity(activity,bindingView.editPhone.getText().toString());
+                            }else {
+                                Toast.makeText(activity,str,Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d("ddd", throwable.getMessage());
                         dialog.dismiss();
-                        Toast.makeText(activity,throwable.getMessage(),Toast.LENGTH_LONG).show();
-                        NewUserRegisterActivity.goNewUserRegisterActivity(activity,bindingView.editCode.getText().toString(),bindingView.editPhone.getText().toString());
+//                        Toast.makeText(activity,throwable.getMessage(),Toast.LENGTH_LONG).show();
+//                        NewUserRegisterActivity.goNewUserRegisterActivity(activity,bindingView.editCode.getText().toString(),bindingView.editPhone.getText().toString());
                     }
                 });
     }

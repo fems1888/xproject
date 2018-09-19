@@ -2,6 +2,9 @@ package com.qbao.xproject.app.http;
 
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.XProjectApplication;
+import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
+import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.http.converter.JsonConverterFactory;
 import com.qbao.xproject.app.http.interceptor.EncryptionInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
@@ -40,6 +43,9 @@ public class XProjectService {
     public static XProjectService newInstance() {
         return XProjectHolder.XPROJECT_INSTANCE.setEncrypt(true);
     }
+
+
+
 
     public static final class XProjectHolder {
         private static XProjectService XPROJECT_INSTANCE = new XProjectService();
@@ -83,7 +89,7 @@ public class XProjectService {
                 .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
-                .addInterceptor(new HttpLoggingInterceptor("ChainService").setLevel(HttpLoggingInterceptor.Level.BODY))
+                .addInterceptor(new HttpLoggingInterceptor("XProjectService").setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(headInterceptor)
                 .addInterceptor(new NoNetInterceptor())
                 //参数加密拦截器
@@ -101,4 +107,19 @@ public class XProjectService {
     public Observable<Object> getVerifyCode(String phone,String countryId) {
         return mServiceApi.getVerifyCode(phone,countryId);
     }
+
+    public Observable<MyWalletResponse> getMyWallet(String accountNo) {
+        return mServiceApi.getMyWallet(accountNo);
+    }
+    public Observable<Object> refreshToken(UserLoginRequest request) {
+        return mServiceApi.refreshToken(request);
+    }
+
+    public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop(String accountNo) {
+        return mServiceApi.findAllUnReceivedAirDrop(accountNo);
+    }
+    public Observable<NextAirDropTimeEntity> getNextAirDropTime() {
+        return mServiceApi.getNextAirDropTime();
+    }
 }
+

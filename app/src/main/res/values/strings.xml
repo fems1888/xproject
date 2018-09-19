@@ -75,5 +75,6 @@
     <string name="pic_choose">请选择</string>
     <string name="pic_completed">已完成</string>
     <string name="pic_crop">裁剪</string>
+    <string name="failed">失败</string>
 </resources>
 

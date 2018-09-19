@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.callback.WithdrawItemCallback;
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 
 import java.util.List;
 
@@ -20,24 +21,15 @@ import java.util.List;
  */
 
 
-public class MyWalletAdapter extends BaseQuickAdapter<MyWalletResponse.MyWalletList, MyWalletAdapter.WalletViewHolder> {
+public class UnReceiveAirDropAdapter extends BaseQuickAdapter<UnReceiveAirDropEntity.UnReceiveAirDrop, UnReceiveAirDropAdapter.UnReceiveAirDropViewHolder> {
 
-    public MyWalletAdapter(int layoutResId, @Nullable List<MyWalletResponse.MyWalletList> data) {
+    public UnReceiveAirDropAdapter(int layoutResId, @Nullable List<UnReceiveAirDropEntity.UnReceiveAirDrop> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(MyWalletAdapter.WalletViewHolder helper, MyWalletResponse.MyWalletList item) {
-        ((TextView)helper.getView(R.id.text_coin_name)).setText(item.getUnitName());
-        ((TextView)helper.getView(R.id.text_coin_account)).setText(String.valueOf(item.getAmount()));
-        helper.getView(R.id.text_withdraw).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (callback!=null){
-                    callback.withdraw();
-                }
-            }
-        });
+    protected void convert(UnReceiveAirDropAdapter.UnReceiveAirDropViewHolder helper, UnReceiveAirDropEntity.UnReceiveAirDrop item) {
+
     }
 
 
@@ -52,8 +44,8 @@ public class MyWalletAdapter extends BaseQuickAdapter<MyWalletResponse.MyWalletL
         return view;
     }
 
-    public static class WalletViewHolder extends BaseViewHolder {
-        public WalletViewHolder(View view) {
+    public static class UnReceiveAirDropViewHolder extends BaseViewHolder {
+        public UnReceiveAirDropViewHolder(View view) {
             super(view);
         }
 
@@ -61,11 +53,5 @@ public class MyWalletAdapter extends BaseQuickAdapter<MyWalletResponse.MyWalletL
             return (ViewDataBinding) itemView.getTag(R.id.BaseQuickAdapter_databinding_support);
         }
     }
-
-    public void setCallback(WithdrawItemCallback callback) {
-        this.callback = callback;
-    }
-
-    private WithdrawItemCallback callback;
 
 }

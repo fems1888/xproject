@@ -9,7 +9,17 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.qbao.xproject.app.BuildConfig;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Created by jackieyao on 2018/9/11 上午11:18.
@@ -368,5 +378,129 @@ public class CommonUtility {
             Log.wtf(className, createLog(message));
         }
 
+    }
+    public static final class JSONObjectUtility {
+
+        public static final Gson GSON = new Gson();
+
+        public static String optString(JSONObject object, String key) {
+            try {
+                String text = object.optString(key);
+                return isNull(text) ? null : text;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public static <T> ArrayList<T> convertJSONArray2Array(JSONArray jsonArray, Class<T> c) {
+            ArrayList<T> objects = new ArrayList<>();
+            if (!CommonUtility.isNull(jsonArray)) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    objects.add(convertJSONObject2Obj(jsonArray.optJSONObject(i), c));
+                }
+            }
+            return objects;
+        }
+
+        public static <T> ArrayList<T> convertJSONArray2Array(JSONArray jsonArray, Class<T> c, String addKey, String addValueKey) {
+            ArrayList<T> objects = new ArrayList<>();
+            if (!CommonUtility.isNull(jsonArray)) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    objects.add(convertJSONObject2Obj(jsonArray.optJSONObject(i), c, addKey, addValueKey));
+                }
+            }
+            return objects;
+        }
+
+        /**
+         * @param jsonArray
+         * @param c
+         * @param <T>
+         * @return
+         */
+        public static <T> ArrayList<T> convertJSONArray2ArrayReflect(JSONArray jsonArray, Class<T> c) {
+            ArrayList<T> objects = new ArrayList<>();
+            if (!CommonUtility.isNull(jsonArray)) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    objects.add(convertJSONObject2ObjReflect(jsonArray.optJSONObject(i), c));
+                }
+            }
+            return objects;
+        }
+
+        public static <T> T convertJSONObject2Obj(JSONObject jsonObject, Class<T> c) {
+            return convertJSONObject2Obj(jsonObject.toString(), c);
+        }
+
+        public static <T> T convertJSONObject2Obj(String jsonStr, Class<T> c) {
+            if (!isNull(jsonStr)) {
+                try {
+                    return GSON.fromJson(jsonStr.toString(), c);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                return c.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public static <T> T convertJSONObject2Obj(JSONObject jsonObject, Class<T> c, String addKey, String addValueKey) {
+            if (!isNull(addKey) && !isNull(addValueKey)) {
+                try {
+                    jsonObject.put(addKey, jsonObject.optString(addValueKey));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return GSON.fromJson(jsonObject.toString(), c);
+        }
+
+        public static <T> T convertJSONObject2ObjReflect(JSONObject jsonObject, Class<T> c) {
+
+            T o = null;
+            try {
+                o = c.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (!isNull(jsonObject)) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field field : fields) {
+                    String fieldName = field.getName();
+                    if (!fieldName.equals("serialVersionUID") && !fieldName.equals("_id")) {
+                        field.setAccessible(true);
+                        String fieldValue = jsonObject.optString(fieldName);
+                        try {
+                            field.set(o, fieldValue);
+                        } catch (Exception e) {
+                            DebugLog.log(fieldName + "==========error");
+                        }
+                    }
+                }
+            }
+            return o;
+        }
+
+        public static String map2JSONObject(HashMap<String, Object> params) {
+            StringBuilder builder = new StringBuilder();
+            for (Iterator it = params.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, Object> entry = (Map.Entry<String, Object>) it.next();
+                if (!isNull(entry.getValue())) {
+                    builder.append(entry.getKey()).append(entry.getValue());
+                }
+            }
+            return builder.toString();
+        }
+
+        public static <T> T clone(T t) {
+            return (T) GSON.fromJson(GSON.toJson(t), t.getClass());
+        }
     }
 }

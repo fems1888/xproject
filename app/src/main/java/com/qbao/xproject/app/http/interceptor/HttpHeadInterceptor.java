@@ -1,6 +1,7 @@
 package com.qbao.xproject.app.http.interceptor;
 
 import android.content.Context;
+import android.util.Log;
 
 
 import com.qbao.xproject.app.utility.AESUtil;
@@ -22,8 +23,6 @@ import okhttp3.Response;
  */
 
 public class HttpHeadInterceptor implements Interceptor {
-    public static final String SIGN_IV_ONE = "YedHW2jy&F^bd1jPPc8dUwWY";
-    public static final String SIGN_IV_TWO = "7sBswhEkL6Ryq&ad#@U0Y0^tlv";
     private final String TAG = HttpHeadInterceptor.class.getSimpleName();
 
     private Context mContext;
@@ -57,6 +56,7 @@ public class HttpHeadInterceptor implements Interceptor {
 //        builder.addHeader("X-S", signNative);
         try {
             signNative = MD5Util.encodeMD5(AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token));
+            Log.e("签名之前==",AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token));
             builder.addHeader("X-S", signNative);
             builder
                     .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")

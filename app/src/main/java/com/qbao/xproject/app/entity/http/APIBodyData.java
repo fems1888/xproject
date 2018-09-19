@@ -1,4 +1,4 @@
-package com.qbao.xproject.app.entity;
+package com.qbao.xproject.app.entity.http;
 
 /**
  * Created by hubert on 2018/1/10.

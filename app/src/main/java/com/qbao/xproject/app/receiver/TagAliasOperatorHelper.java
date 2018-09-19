@@ -1,4 +1,4 @@
-package com.aether.coder.qbao.receiver;
+package com.qbao.xproject.app.receiver;
 
 import android.content.Context;
 import android.os.Handler;
@@ -6,7 +6,8 @@ import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.aether.coder.qbao.utils.ExampleUtil;
+
+import com.qbao.xproject.app.utility.ExampleUtil;
 
 import java.util.Locale;
 import java.util.Set;

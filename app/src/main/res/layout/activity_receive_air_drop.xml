@@ -19,36 +19,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        style="@style/textStyleWhiteColor"
-                        android:textSize="@dimen/size_dp_30"
-                        android:textStyle="bold"
-                        android:text="0.07"/>
-                    <TextView
-                        style="@style/textStyleWhiteColor"
-                        android:layout_marginLeft="@dimen/size_dp_4"
-                        android:textSize="@dimen/size_dp_18"
-                        android:text="eth"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        style="@style/textStyleWhiteColor"
-                        android:textSize="@dimen/size_dp_30"
-                        android:textStyle="bold"
-                        android:text="0.07"/>
-                    <TextView
-                        style="@style/textStyleWhiteColor"
-                        android:layout_marginLeft="@dimen/size_dp_4"
-                        android:textSize="@dimen/size_dp_18"
-                        android:text="eth"/>
-                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_dp_100"/>
+
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/linear_no_airdrop"
@@ -62,12 +37,14 @@
                     android:textStyle="bold"
                     android:text="@string/no_airdrop_receive"/>
                 <TextView
+                    android:id="@+id/text_next"
                     style="@style/textStyleWhiteColor"
                     android:text="@string/next_airdrop_time"
                     android:layout_marginTop="@dimen/size_dp_10"/>
                 <TextView
+                    android:id="@+id/text_next_time"
                     style="@style/textStyleWhiteColor"
-                    android:text="2018-09-10 10:0:00" />
+                    android:text="2018-09-10 10:10:00" />
             </LinearLayout>
             <Button
                 android:layout_width="267dp"

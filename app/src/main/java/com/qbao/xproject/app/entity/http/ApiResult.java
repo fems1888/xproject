@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.qbao.xproject.app.entity;
+package com.qbao.xproject.app.entity.http;
 
 /**
  * <p>描述：提供的默认的标注返回api</p>

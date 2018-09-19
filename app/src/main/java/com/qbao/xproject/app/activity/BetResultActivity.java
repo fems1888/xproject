@@ -19,7 +19,6 @@ import io.reactivex.functions.Consumer;
  */
 
 public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +38,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
     @Override
     protected void initListener() {
         super.initListener();
-        RxView.clicks(bindingView.textDone).throttleFirst(1, TimeUnit.SECONDS)
+        RxView.clicks(bindingView.buttonDone).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {

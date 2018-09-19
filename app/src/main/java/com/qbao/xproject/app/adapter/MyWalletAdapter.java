@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.callback.WithdrawItemCallback;
+import com.qbao.xproject.app.entity.MyWalletResponse;
 
 import java.util.List;
 
@@ -19,14 +20,16 @@ import java.util.List;
  */
 
 
-public class MyWalletAdapter extends BaseQuickAdapter<String, MyWalletAdapter.WalletViewHolder> {
+public class MyWalletAdapter extends BaseQuickAdapter<MyWalletResponse.MyWalletList, MyWalletAdapter.WalletViewHolder> {
 
-    public MyWalletAdapter(int layoutResId, @Nullable List<String> data) {
+    public MyWalletAdapter(int layoutResId, @Nullable List<MyWalletResponse.MyWalletList> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(MyWalletAdapter.WalletViewHolder helper, String item) {
+    protected void convert(MyWalletAdapter.WalletViewHolder helper, MyWalletResponse.MyWalletList item) {
+        ((TextView)helper.getView(R.id.text_coin_name)).setText(item.getUnitName());
+        ((TextView)helper.getView(R.id.text_coin_account)).setText(String.valueOf(item.getAmount()));
         helper.getView(R.id.text_withdraw).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+
+//应用 Bugtags 插件
+apply plugin: 'com.bugtags.library.plugin'
+
+
+//Bugtags 插件配置git
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考帮助中心->符号表->Android 符号表->配置自动上传符号表
+    appKey "6e5d9857f0491ab54ed999854146a704"  //这里是你的 appKey
+    appSecret "89f494530ee42c2d3b37e03afeab9ee3"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled true
+}
 android {
     compileSdkVersion parent.ext.compileSdkVersion
     defaultConfig {
@@ -13,6 +28,17 @@ android {
         ndk {
             abiFilters "x86", "armeabi-v7a", "armeabi"
         }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "424c3e3b61ed111f0a8bf69b", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+    }
+
+    packagingOptions {
+        doNotStrip '*/mips/*.so'
+        doNotStrip '*/mips64/*.so'
     }
     sourceSets {
         main {
@@ -35,8 +61,8 @@ android {
 
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
-//            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
+//            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
+            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
             debuggable true
         }
     }
@@ -60,6 +86,27 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    flavorDimensions "default"
+    productFlavors {
+        GooglePlay {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "GooglePlay"]
+        }
+        OfficialWebsite {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "OfficialWebsite"]
+        }
+        XIAOMI {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "XiaoMi"]
+        }
+        BaiDu {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "BaiDu"]
+        }
+        Vivo {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Vivo"]
+        }
+        Oppo {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Oppo"]
+        }
     }
     buildToolsVersion parent.ext.buildToolsVersion
 }
@@ -103,4 +150,10 @@ dependencies {
     implementation project(':agentweb_library')
     implementation project(':pictureSelector_library')
     implementation project(':ucrop')
+    //bugTags
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+    compile 'cn.jiguang.sdk:jpush:3.1.6'
+    // 此处以JPush 3.1.6 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.2.5'
+    // 此处以JCore 1.2.5 版本为例。
 }

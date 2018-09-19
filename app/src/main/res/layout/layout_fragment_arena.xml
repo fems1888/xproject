@@ -185,6 +185,7 @@
                         style="@style/textStyleSeconderColor"
                         android:layout_width="@dimen/size_dp_118"
                         android:layout_height="@dimen/size_dp_30"
+                        android:foreground="?attr/selectableItemBackground"
                         android:layout_marginTop="@dimen/size_dp_12"
                         android:background="@drawable/red_round_shape_stroke"
                         android:gravity="center"

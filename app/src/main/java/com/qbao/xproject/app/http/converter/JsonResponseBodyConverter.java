@@ -56,9 +56,8 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
                         CommonUtility.DebugLog.e(TAG, "result = " + result);
 //                        return gson.fromJson(resultJson, type);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
+                    CommonUtility.DebugLog.e(TAG, "Exception" );
                     e.printStackTrace();
                 }
 //            } else {
