@@ -7,6 +7,7 @@ import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
+import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
@@ -36,7 +37,7 @@ public interface XProjectServiceApi {
     Observable<Object> getVerifyCode(@Query("phone") String phone,@Query("countryId") String countryId);
 
     @POST("/security/account/refreshToken")
-    Observable<Account> refreshToken(@Body UserLoginRequest request);
+    Observable<Response<ResponseBody>> refreshToken(@Body UserLoginRequest request);
 
 
     @GET("/core/myWallet/getWallet")
@@ -102,4 +103,13 @@ public interface XProjectServiceApi {
      */
     @GET("/core/mine/findAllUnReceivedMine")
     Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine();
+
+    /**
+     * 领取矿石
+     *
+     * @return
+     * @param request
+     */
+    @GET("/core/mine/receiveMine")
+    Observable<UnReceiveMineEntity> receiveMine(@Body ReceiveMineRequest request);
 }

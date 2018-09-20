@@ -159,16 +159,13 @@ public class MainActivity extends BaseRxActivity {
         RefreshTokenViewModel viewModel = new RefreshTokenViewModel(activity.getApplication(),TAG);
         viewModel.refreshToken(request)
                 .compose(RxSchedulers.io_main())
-                .subscribe(new Consumer<Account>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void accept(Account account) throws Exception {
-                        AccountManager.getInstance().cleanAccount();
-                        AccountManager.getInstance().saveAccount(account);
+                    public void accept(String str) throws Exception {
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(activity,"error22",Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -223,8 +220,7 @@ public class MainActivity extends BaseRxActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            exitBy2Click();
-            finish();
+            exitBy2Click();
         }
         return false;
     }
@@ -247,5 +243,14 @@ public class MainActivity extends BaseRxActivity {
     private void exitApp() {
         finish();
         XProjectApplication.getInstance().exit(0);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("==>>22","onStop");
+        if (mFragmentCompetition!=null){
+            ((CoinMineFragment)mFragmentCompetition).stopAnima();
+        }
     }
 }

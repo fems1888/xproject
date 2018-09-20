@@ -14,6 +14,7 @@ import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
@@ -120,7 +121,7 @@ public class XProjectService {
         return mServiceApi.getMyWallet(accountNo);
     }
 
-    public Observable<Account> refreshToken(UserLoginRequest request) {
+    public Observable<Response<ResponseBody>> refreshToken(UserLoginRequest request) {
         return mServiceApi.refreshToken(request);
     }
 
@@ -154,6 +155,10 @@ public class XProjectService {
 
     public Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine() {
         return mServiceApi.findAllUnReceivedMine();
+    }
+
+    public Observable<UnReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
+        return mServiceApi.receiveMine(request);
     }
 }
 

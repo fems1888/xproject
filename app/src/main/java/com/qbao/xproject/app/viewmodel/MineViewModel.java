@@ -7,6 +7,7 @@ import com.qbao.xproject.app.entity.AccelerateFactorEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.ExceptionHandle;
 import com.qbao.xproject.app.http.XProjectService;
+import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.utility.Rx2Subscriber;
 
@@ -90,6 +91,22 @@ public class MineViewModel extends BaseViewModel {
                             e.onNext(value);
                         }
                     });
+        });
+    }
+
+    public Observable<UnReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
+        return Observable.create(e -> {
+            XProjectService.newInstance().receiveMine(request).subscribe(new Rx2Subscriber<UnReceiveMineEntity>(application, TAG) {
+                @Override
+                public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                    e.onError(responseThrowable);
+                }
+
+                @Override
+                public void onNext(UnReceiveMineEntity value) {
+                    e.onNext(value);
+                }
+            });
         });
     }
 }

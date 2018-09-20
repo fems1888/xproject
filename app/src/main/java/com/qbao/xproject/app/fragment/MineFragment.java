@@ -34,6 +34,7 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
     @Override
     protected void initListener() {
         super.initListener();
+
         RxView.clicks(bindingView.relativeWallet).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override

@@ -55,6 +55,7 @@ public class HttpHeadInterceptor implements Interceptor {
 //        CommonUtility.DebugLog.e(TAG, "buildName = " + buildName);
 //        builder.addHeader("X-S", signNative);
         try {
+            Log.e("token==", token);
             signNative = MD5Util.encodeMD5(AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token));
             Log.e("签名之前==",AESUtil.formatString(timeStamp, decodeUrl, CommonUtility.formatString(randomValue), token));
             builder.addHeader("X-S", signNative);
