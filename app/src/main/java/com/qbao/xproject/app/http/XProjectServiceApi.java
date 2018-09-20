@@ -6,6 +6,7 @@ import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
+import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
@@ -92,5 +93,13 @@ public interface XProjectServiceApi {
      * @return
      */
     @POST("/core/mine/receiveSpeed")
-    Observable<Object> receiveSpeed(@Body ReceiveSpeedRequest receiveSpeedRequest);
+    Observable<AccelerateFactorEntity> receiveSpeed(@Body ReceiveSpeedRequest receiveSpeedRequest);
+
+    /**
+     * 获取未领取的矿石
+     *
+     * @return
+     */
+    @GET("/core/mine/findAllUnReceivedMine")
+    Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine();
 }

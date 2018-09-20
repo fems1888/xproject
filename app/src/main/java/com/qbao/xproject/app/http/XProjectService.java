@@ -7,6 +7,7 @@ import com.qbao.xproject.app.entity.Account;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
+import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.converter.JsonConverterFactory;
 import com.qbao.xproject.app.http.interceptor.EncryptionInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
@@ -147,8 +148,12 @@ public class XProjectService {
         return mServiceApi.findAllTaskCompleteList();
     }
 
-    public Observable<Object> receiveSpeed(ReceiveSpeedRequest receiveSpeedRequest) {
+    public Observable<AccelerateFactorEntity> receiveSpeed(ReceiveSpeedRequest receiveSpeedRequest) {
         return mServiceApi.receiveSpeed(receiveSpeedRequest);
+    }
+
+    public Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine() {
+        return mServiceApi.findAllUnReceivedMine();
     }
 }
 

@@ -3,6 +3,7 @@ package com.qbao.xproject.app.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
@@ -10,6 +11,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityAccelerateBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
@@ -104,8 +106,6 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                 mCanReceiveLoginSpeed = true;
                 bindingView.buttonLogin.setText(R.string.right_receive);
                 bindingView.buttonLogin.setEnabled(true);
-                bindingView.buttonLogin.setBackgroundResource(R.drawable.red_round_shape_stroke);
-                bindingView.buttonLogin.setTextColor(getResources().getColor(R.color.main_selected_color));
                 bindingView.textLoginFactor.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entities.get(loginIndex).getSpeedExpect())));
             }else {
             }
@@ -119,15 +119,11 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                 mActivityStatus = RIGHT_RECEIVE;
                 bindingView.buttonActivity.setText(R.string.right_receive);
                 bindingView.buttonActivity.setEnabled(true);
-                bindingView.buttonActivity.setBackgroundResource(R.drawable.red_round_shape_stroke);
-                bindingView.buttonActivity.setTextColor(getResources().getColor(R.color.main_selected_color));
                 bindingView.textActivityFactor.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entities.get(index).getSpeedExpect())));
             }else {
                 mActivityStatus = GO_DONE;
                 bindingView.buttonActivity.setText(R.string.go_done);
                 bindingView.buttonActivity.setEnabled(true);
-                bindingView.buttonActivity.setBackgroundResource(R.drawable.red_round_shape_stroke);
-                bindingView.buttonActivity.setTextColor(getResources().getColor(R.color.main_selected_color));
                 bindingView.textActivityFactor.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entities.get(index).getSpeedExpect())));
             }
         }
@@ -142,7 +138,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                     public void accept(Object o) throws Exception {
                         if (mLoginStatus == RIGHT_RECEIVE){
 
-                            receiveSpeed();
+                            receiveSpeed(GO_DONE);
                         }
                     }
                 });
@@ -152,7 +148,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                     public void accept(Object o) throws Exception {
                         if (mActivityStatus == RIGHT_RECEIVE){
 
-                            receiveSpeed();
+                            receiveSpeed(RIGHT_RECEIVE);
                         }else {
                             goBet();
                         }
@@ -161,14 +157,35 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
     }
 
     private void goBet() {
-
+        BetRedActivity.goBetActivity(activity);
     }
 
-    private void receiveSpeed() {
+    private void receiveSpeed(int taskType) {
         if (viewModel == null){
             viewModel = new MineViewModel(activity.getApplication(),TAG);
         }
-
+        ReceiveSpeedRequest request = new ReceiveSpeedRequest();
+        request.setTaskType(taskType);
+        viewModel.receiveSpeed(request)
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<AccelerateFactorEntity>() {
+                    @Override
+                    public void accept(AccelerateFactorEntity entity) throws Exception {
+                        Log.e("accept: ", "success");
+                        if (taskType == GO_DONE){
+                            bindingView.buttonLogin.setEnabled(false);
+                            bindingView.textLoginFactor.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entity.getSpeedAdd())));
+                        }else {
+                            bindingView.buttonActivity.setEnabled(false);
+                            bindingView.buttonActivity.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entity.getSpeedAdd())));
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("accept: ", "fail");
+                    }
+                });
     }
 
 }

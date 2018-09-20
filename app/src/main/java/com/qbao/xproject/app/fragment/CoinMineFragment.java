@@ -1,6 +1,9 @@
 package com.qbao.xproject.app.fragment;
 
+import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +17,7 @@ import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentCoinMineBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.XProjectServiceApi;
 import com.qbao.xproject.app.manager.AccessTokenManager;
 import com.qbao.xproject.app.manager.AccountManager;
@@ -77,6 +81,26 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
                     }
                 });
+
+        viewModel.findAllUnReceivedMine()
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<List<UnReceiveMineEntity>>() {
+                    @Override
+                    public void accept(List<UnReceiveMineEntity> unReceiveMineEntities) throws Exception {
+
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+        ImageView imageView = new ImageView(activity);
+        imageView.setBackgroundResource(R.drawable.ic_bet_red_ball);
+        imageView.measure(View.MeasureSpec.makeMeasureSpec(100,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(100,View.MeasureSpec.EXACTLY));
+        imageView.layout(40,100,140,200);
+
     }
 
 }
