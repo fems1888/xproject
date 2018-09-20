@@ -24,11 +24,11 @@ public class MyWalletViewModel extends BaseViewModel {
         super(application, tag);
     }
 
-    public Observable<MyWalletResponse> getMyWallet(String accountNo) {
+    public Observable<MyWalletResponse> getMyWallet( ) {
         return Observable.create(new ObservableOnSubscribe<MyWalletResponse>() {
             @Override
             public void subscribe(ObservableEmitter<MyWalletResponse> e) throws Exception {
-                XProjectService.newInstance().getMyWallet(accountNo)
+                XProjectService.newInstance().getMyWallet( )
                         .subscribe(new Rx2Subscriber<MyWalletResponse>(application, TAG) {
                             @Override
                             public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {

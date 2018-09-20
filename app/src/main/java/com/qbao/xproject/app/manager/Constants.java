@@ -1,5 +1,8 @@
 package com.qbao.xproject.app.manager;
 
+import com.qbao.xproject.app.BuildConfig;
+import com.qbao.xproject.app.utility.CommonUtility;
+
 /**
  * @author Created by jackieyao on 2018/9/14 上午10:31.
  */
@@ -24,4 +27,11 @@ public class Constants {
 
     public static final int A_DAY_MILLS = 24*60*60*1000;
 
+
+    public static String formatHttpUrl(String url) {
+        if (CommonUtility.isNull(url)) {
+            return "";
+        }
+        return CommonUtility.formatString(BuildConfig.URL_API_BASE, "/file/download/icon/", url);
+    }
 }

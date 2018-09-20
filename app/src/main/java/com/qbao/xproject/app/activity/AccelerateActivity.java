@@ -173,9 +173,11 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                     public void accept(AccelerateFactorEntity entity) throws Exception {
                         Log.e("accept: ", "success");
                         if (taskType == GO_DONE){
+                            bindingView.buttonLogin.setText(getString(R.string.received));
                             bindingView.buttonLogin.setEnabled(false);
                             bindingView.textLoginFactor.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entity.getSpeedAdd())));
                         }else {
+                            bindingView.buttonActivity.setText(getString(R.string.received));
                             bindingView.buttonActivity.setEnabled(false);
                             bindingView.buttonActivity.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entity.getSpeedAdd())));
                         }

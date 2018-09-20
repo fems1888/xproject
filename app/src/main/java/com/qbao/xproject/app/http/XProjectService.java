@@ -117,8 +117,8 @@ public class XProjectService {
         return mServiceApi.getVerifyCode(phone, countryId);
     }
 
-    public Observable<MyWalletResponse> getMyWallet(String accountNo) {
-        return mServiceApi.getMyWallet(accountNo);
+    public Observable<MyWalletResponse> getMyWallet( ) {
+        return mServiceApi.getMyWallet( );
     }
 
     public Observable<Response<ResponseBody>> refreshToken(UserLoginRequest request) {

@@ -3,15 +3,18 @@ package com.qbao.xproject.app.adapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.interf.WithdrawItemCallback;
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.manager.Constants;
 
 import java.util.List;
 
@@ -38,6 +41,8 @@ public class MyWalletAdapter extends BaseQuickAdapter<MyWalletResponse.MyWalletL
                 }
             }
         });
+
+        Glide.with(mContext).load(Constants.formatHttpUrl(item.getIcon())).into(((AppCompatImageView)helper.getView(R.id.image_coin)));
     }
 
 

@@ -29,6 +29,7 @@ public class MyWalletResponse {
          */
 
         private String header;
+        private String icon;
         private String accountNo;
         private int unit;
         private double amount;
@@ -81,6 +82,14 @@ public class MyWalletResponse {
 
         public void setUnitName(String unitName) {
             this.unitName = unitName;
+        }
+
+        public String getIcon() {
+            return icon;
+        }
+
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
     }
 }

@@ -62,7 +62,7 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
         if (viewModel == null){
             viewModel = new MyWalletViewModel(activity.getApplication(),TAG);
         }
-        viewModel.getMyWallet("103")
+        viewModel.getMyWallet()
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<MyWalletResponse>() {
                     @Override

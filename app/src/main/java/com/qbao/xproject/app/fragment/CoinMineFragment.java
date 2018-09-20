@@ -22,6 +22,7 @@ import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentCoinMineBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.XProjectServiceApi;
 import com.qbao.xproject.app.manager.AccessTokenManager;
@@ -31,6 +32,7 @@ import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.viewmodel.MineViewModel;
+import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
 
 import java.util.List;
@@ -63,6 +65,8 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     private ObjectAnimator objectAnimator12;
     private PropertyValuesHolder holderX;
     private PropertyValuesHolder holderY;
+    private MyWalletViewModel walletViewModel;
+    private double mineAmount = 0;
     @Override
     public int setContent() {
         return R.layout.layout_fragment_coin_mine;
@@ -178,6 +182,8 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                         @Override
                         public void accept(UnReceiveMineEntity unReceiveMineEntity) throws Exception {
                             setVisibility(appCompatImageView,false);
+                            mineAmount+=unReceiveMineEntity.getAmount();
+                            bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -194,7 +200,8 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
         if (viewModel == null){
             viewModel = new MineViewModel(activity.getApplication(),TAG);
         }
-        setAllClickStatus(true);
+        setAllClickStatus(false);
+        getMineAmount();
         viewModel.findAllSpeedLog().compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<List<AccelerateFactorEntity>>() {
                     @Override
@@ -285,18 +292,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
         }
         objectAnimator.start();
-        objectAnimator1.start();
-        objectAnimator2.start();
-        objectAnimator3.start();
-        objectAnimator4.start();
-        objectAnimator5.start();
-        objectAnimator6.start();
-        objectAnimator7.start();
-        objectAnimator8.start();
-        objectAnimator9.start();
-        objectAnimator10.start();
-        objectAnimator11.start();
-        objectAnimator12.start();
+
         viewModel.findAllUnReceivedMine()
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<List<UnReceiveMineEntity>>() {
@@ -315,11 +311,43 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
     }
 
+    private void getMineAmount() {
+        if (walletViewModel == null){
+
+            walletViewModel = new MyWalletViewModel(activity.getApplication(),TAG);
+        }
+        walletViewModel.getMyWallet()
+                .compose(RxSchedulers.io_main())
+            .subscribe(new Consumer<MyWalletResponse>() {
+        @Override
+        public void accept(MyWalletResponse myWalletResponse) throws Exception {
+            List<MyWalletResponse.MyWalletList> result = myWalletResponse.getResult();
+
+            for (MyWalletResponse.MyWalletList list : result){
+                if (!list.getUnitName().equalsIgnoreCase("eth")){
+                    mineAmount+=list.getAmount();
+                }
+            }
+            bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
+        }
+    }, new Consumer<Throwable>() {
+        @Override
+        public void accept(Throwable throwable) throws Exception {
+            Log.e(TAG,throwable.getMessage());
+        }
+    });
+    }
+
+    /**
+     *
+     */
     private void setMineStatus() {
         if (mineList.size()==1){
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            objectAnimator1.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
             setVisibility(bindingView.appCompatImageView2,false);
             setVisibility(bindingView.appCompatImageView3,false);
             setVisibility(bindingView.appCompatImageView4,false);
@@ -332,8 +360,12 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==2){
-            objectAnimator1.start();
-            objectAnimator2.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -349,9 +381,14 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==3){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -368,10 +405,16 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==4){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -390,11 +433,18 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView12,false);
         }
         else if (mineList.size()==5){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -413,12 +463,20 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==6){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }
 
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
@@ -440,13 +498,22 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==7){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -468,14 +535,24 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==8){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
-            objectAnimator8.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }if (!objectAnimator8.isStarted()){
+                objectAnimator8.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -499,15 +576,26 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView12,false);
         }
         else if (mineList.size()==9){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
-            objectAnimator8.start();
-            objectAnimator9.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }if (!objectAnimator8.isStarted()){
+                objectAnimator8.start();
+            }if (!objectAnimator9.isStarted()){
+                objectAnimator9.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -531,16 +619,28 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==10){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
-            objectAnimator8.start();
-            objectAnimator9.start();
-            objectAnimator10.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }if (!objectAnimator8.isStarted()){
+                objectAnimator8.start();
+            }if (!objectAnimator9.isStarted()){
+                objectAnimator9.start();
+            }if (!objectAnimator10.isStarted()){
+                objectAnimator10.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -565,17 +665,30 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView11,false);
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==11){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
-            objectAnimator8.start();
-            objectAnimator9.start();
-            objectAnimator10.start();
-            objectAnimator11.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }if (!objectAnimator8.isStarted()){
+                objectAnimator8.start();
+            }if (!objectAnimator9.isStarted()){
+                objectAnimator9.start();
+            }if (!objectAnimator10.isStarted()){
+                objectAnimator10.start();
+            }if (!objectAnimator11.isStarted()){
+                objectAnimator11.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -598,21 +711,35 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView10,true);
             bindingView.appCompatImageView10.setTag(mineList.get(9));
             setVisibility(bindingView.appCompatImageView11,true);
-            bindingView.appCompatImageView11.setTag(mineList.get(9));
+            bindingView.appCompatImageView11.setTag(mineList.get(10));
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==12){
-            objectAnimator1.start();
-            objectAnimator2.start();
-            objectAnimator3.start();
-            objectAnimator4.start();
-            objectAnimator5.start();
-            objectAnimator6.start();
-            objectAnimator7.start();
-            objectAnimator8.start();
-            objectAnimator9.start();
-            objectAnimator10.start();
-            objectAnimator11.start();
-            objectAnimator12.start();
+            if (!objectAnimator1.isStarted()){
+                objectAnimator1.start();
+            }
+            if (!objectAnimator2.isStarted()){
+                objectAnimator2.start();
+            }if (!objectAnimator3.isStarted()){
+                objectAnimator3.start();
+            }if (!objectAnimator4.isStarted()){
+                objectAnimator4.start();
+            }if (!objectAnimator5.isStarted()){
+                objectAnimator5.start();
+            }if (!objectAnimator6.isStarted()){
+                objectAnimator6.start();
+            }if (!objectAnimator7.isStarted()){
+                objectAnimator7.start();
+            }if (!objectAnimator8.isStarted()){
+                objectAnimator8.start();
+            }if (!objectAnimator9.isStarted()){
+                objectAnimator9.start();
+            }if (!objectAnimator10.isStarted()){
+                objectAnimator10.start();
+            }if (!objectAnimator11.isStarted()){
+                objectAnimator11.start();
+            }if (!objectAnimator12.isStarted()){
+                objectAnimator12.start();
+            }
             setVisibility(bindingView.appCompatImageView1,true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
             setVisibility(bindingView.appCompatImageView2,true);
@@ -635,9 +762,9 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView10,true);
             bindingView.appCompatImageView10.setTag(mineList.get(9));
             setVisibility(bindingView.appCompatImageView11,true);
-            bindingView.appCompatImageView11.setTag(mineList.get(9));
+            bindingView.appCompatImageView11.setTag(mineList.get(10));
             setVisibility(bindingView.appCompatImageView12,true);
-            bindingView.appCompatImageView12.setTag(mineList.get(9));
+            bindingView.appCompatImageView12.setTag(mineList.get(11));
         }
     }
 

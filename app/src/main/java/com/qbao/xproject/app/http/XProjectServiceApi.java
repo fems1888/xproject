@@ -41,7 +41,7 @@ public interface XProjectServiceApi {
 
 
     @GET("/core/myWallet/getWallet")
-    Observable<MyWalletResponse> getMyWallet(@Query("accountNo") String accountNo);
+    Observable<MyWalletResponse> getMyWallet();
 
     /**
      * 获得未领取的空投的List
@@ -110,6 +110,6 @@ public interface XProjectServiceApi {
      * @return
      * @param request
      */
-    @GET("/core/mine/receiveMine")
+    @POST("/core/mine/receiveMine")
     Observable<UnReceiveMineEntity> receiveMine(@Body ReceiveMineRequest request);
 }
