@@ -13,6 +13,7 @@ import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 
@@ -44,10 +45,10 @@ public class XProjectService {
     private HttpHeadInterceptor headInterceptor;
     private XProjectServiceApi mServiceApi;
     private EncryptionInterceptor mEncryptionInterceptor;
+
     public static XProjectService newInstance() {
         return XProjectHolder.XPROJECT_INSTANCE.setEncrypt(true);
     }
-
 
 
     public static final class XProjectHolder {
@@ -60,6 +61,7 @@ public class XProjectService {
         mJsonConverterFactory.setDecrypt(encrypt);
         return this;
     }
+
     private XProjectService() {
         initXProject();
     }
@@ -82,6 +84,7 @@ public class XProjectService {
 
         mServiceApi = retrofit.create(XProjectServiceApi.class);
     }
+
     public OkHttpClient getClient() {
         mEncryptionInterceptor = new EncryptionInterceptor();
         File httpCacheDirectory = new File(XProjectApplication.getInstance().getCacheDir(), "responses");
@@ -107,13 +110,15 @@ public class XProjectService {
     public Observable<Response<ResponseBody>> userLogin(UserLoginRequest request) {
         return mServiceApi.userLogin(request);
     }
-    public Observable<Object> getVerifyCode(String phone,String countryId) {
-        return mServiceApi.getVerifyCode(phone,countryId);
+
+    public Observable<Object> getVerifyCode(String phone, String countryId) {
+        return mServiceApi.getVerifyCode(phone, countryId);
     }
 
     public Observable<MyWalletResponse> getMyWallet(String accountNo) {
         return mServiceApi.getMyWallet(accountNo);
     }
+
     public Observable<Account> refreshToken(UserLoginRequest request) {
         return mServiceApi.refreshToken(request);
     }
@@ -121,9 +126,11 @@ public class XProjectService {
     public Observable<UnReceiveAirDropEntity> findAllUnReceivedAirDrop() {
         return mServiceApi.findAllUnReceivedAirDrop();
     }
+
     public Observable<NextAirDropTimeEntity> getNextAirDropTime() {
         return mServiceApi.getNextAirDropTime();
     }
+
     public Observable<Object> loginOut(UserLoginOutRequest accountNo) {
         return mServiceApi.loginOut(accountNo);
     }
@@ -131,8 +138,17 @@ public class XProjectService {
     public Observable<Object> receiveAirDrop() {
         return mServiceApi.receiveAirDrop();
     }
+
     public Observable<List<AccelerateFactorEntity>> findAllSpeedLog() {
         return mServiceApi.findAllSpeedLog();
+    }
+
+    public Observable<List<AccelerateFactorEntity>> findAllTaskCompleteList() {
+        return mServiceApi.findAllTaskCompleteList();
+    }
+
+    public Observable<Object> receiveSpeed(ReceiveSpeedRequest receiveSpeedRequest) {
+        return mServiceApi.receiveSpeed(receiveSpeedRequest);
     }
 }
 

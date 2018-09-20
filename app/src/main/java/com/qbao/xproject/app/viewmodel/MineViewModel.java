@@ -40,4 +40,20 @@ public class MineViewModel extends BaseViewModel {
             });
         });
     }
+
+    public Observable<List<AccelerateFactorEntity>> findAllTaskCompleteList() {
+        return Observable.create(e -> {
+            XProjectService.newInstance().findAllTaskCompleteList().subscribe(new Rx2Subscriber<List<AccelerateFactorEntity>>(application, TAG) {
+                @Override
+                public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                    e.onError(responseThrowable);
+                }
+
+                @Override
+                public void onNext(List<AccelerateFactorEntity> value) {
+                    e.onNext(value);
+                }
+            });
+        });
+    }
 }

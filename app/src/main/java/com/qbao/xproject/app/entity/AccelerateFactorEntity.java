@@ -20,6 +20,8 @@ public class AccelerateFactorEntity {
     private String accountNo;
     private int taskType;
     private double speedAdd;
+    private double speedExpect;
+    private boolean canReceive;
 
     public int getId() {
         return id;
@@ -59,5 +61,21 @@ public class AccelerateFactorEntity {
 
     public void setSpeedAdd(double speedAdd) {
         this.speedAdd = speedAdd;
+    }
+
+    public boolean isCanReceive() {
+        return canReceive;
+    }
+
+    public void setCanReceive(boolean canReceive) {
+        this.canReceive = canReceive;
+    }
+
+    public double getSpeedExpect() {
+        return speedExpect;
+    }
+
+    public void setSpeedExpect(double speedExpect) {
+        this.speedExpect = speedExpect;
     }
 }

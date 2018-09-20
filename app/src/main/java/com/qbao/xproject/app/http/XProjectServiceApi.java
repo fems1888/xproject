@@ -6,6 +6,7 @@ import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
+import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 
@@ -78,10 +79,18 @@ public interface XProjectServiceApi {
     Observable<List<AccelerateFactorEntity>> findAllSpeedLog();
 
     /**
-     * 获取加速因子
+     * 获取各任务的加速因子
      *
      * @return
      */
     @GET("/core/mine/findAllTaskCompleteList")
     Observable<List<AccelerateFactorEntity>> findAllTaskCompleteList();
+
+    /**
+     * 领取加速因子
+     *
+     * @return
+     */
+    @POST("/core/mine/receiveSpeed")
+    Observable<Object> receiveSpeed(@Body ReceiveSpeedRequest receiveSpeedRequest);
 }
