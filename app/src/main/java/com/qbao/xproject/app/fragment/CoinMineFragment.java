@@ -184,6 +184,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                             setVisibility(appCompatImageView,false);
                             mineAmount+=unReceiveMineEntity.getAmount();
                             bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
+                            findAllUnReceivedMine();
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -293,6 +294,12 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
         }
         objectAnimator.start();
 
+        findAllUnReceivedMine();
+
+
+    }
+
+    private void findAllUnReceivedMine() {
         viewModel.findAllUnReceivedMine()
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<List<UnReceiveMineEntity>>() {
@@ -307,8 +314,6 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
                     }
                 });
-
-
     }
 
     private void getMineAmount() {

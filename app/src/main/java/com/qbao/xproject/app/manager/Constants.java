@@ -32,6 +32,6 @@ public class Constants {
         if (CommonUtility.isNull(url)) {
             return "";
         }
-        return CommonUtility.formatString(BuildConfig.URL_API_BASE, "/file/download/icon/", url);
+        return CommonUtility.formatString(BuildConfig.URL_API_BASE, "/core/file/download/icon/", url);
     }
 }

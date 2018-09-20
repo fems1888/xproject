@@ -84,7 +84,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
      * @param entities
      */
     private void fetchData(List<AccelerateFactorEntity> entities) {
-        if (entities.size()==2){
+        if (entities.size()>=2){
             if (entities.get(0).getTaskType() == 1){
                 initView(entities,0);
             }else {
