@@ -536,6 +536,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             setVisibility(bindingView.appCompatImageView12,false);
         }else if (mineList.size()==8){
             if (!objectAnimator1.isStarted()){
+
                 objectAnimator1.start();
             }
             if (!objectAnimator2.isStarted()){
