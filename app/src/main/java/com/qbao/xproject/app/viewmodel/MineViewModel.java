@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.ExceptionHandle;
 import com.qbao.xproject.app.http.XProjectService;
@@ -94,16 +95,16 @@ public class MineViewModel extends BaseViewModel {
         });
     }
 
-    public Observable<UnReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
+    public Observable<ReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
         return Observable.create(e -> {
-            XProjectService.newInstance().receiveMine(request).subscribe(new Rx2Subscriber<UnReceiveMineEntity>(application, TAG) {
+            XProjectService.newInstance().receiveMine(request).subscribe(new Rx2Subscriber<ReceiveMineEntity>(application, TAG) {
                 @Override
                 public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
                     e.onError(responseThrowable);
                 }
 
                 @Override
-                public void onNext(UnReceiveMineEntity value) {
+                public void onNext(ReceiveMineEntity value) {
                     e.onNext(value);
                 }
             });

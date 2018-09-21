@@ -22,6 +22,10 @@ import com.qbao.xproject.app.R;
 
 @SuppressLint("ValidFragment")
 public class BetSureDialogFragment extends AppCompatDialogFragment implements View.OnClickListener {
+    private String mGambleNo;
+    public BetSureDialogFragment(String mGambleNo) {
+        this.mGambleNo = mGambleNo;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class BetSureDialogFragment extends AppCompatDialogFragment implements Vi
         View view = inflater.inflate(R.layout.dialog_fragment_bet_sure, container, false);
         view.findViewById(R.id.image_close).setOnClickListener(this);
         view.findViewById(R.id.button_sure).setOnClickListener(this);
+        ((TextView)view.findViewById(R.id.text_info)).setText(String.format(getString(R.string.arena_period),mGambleNo));
         return view;
     }
 

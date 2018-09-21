@@ -13,8 +13,12 @@ import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityPayFailBinding;
 
-public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
+/**
+ * @author Created by jackieyao on 2018/9/21 下午5:27
+ */
 
+public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
+    public static final String FAIL_REASON = "failReason";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,14 +26,22 @@ public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
         setToolBarTitle(getString(R.string.pay_fail));
     }
-    public static void goPayFailActivity(Context context){
+    public static void goPayFailActivity(Context context,String failReason){
         Intent intent = new Intent(context,PayFailActivity.class);
+        intent.putExtra(FAIL_REASON,failReason);
         context.startActivity(intent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sure,menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        String reason = getIntent().getStringExtra(FAIL_REASON);
+        bindingView.textFailReason.setText(reason);
     }
 
     @Override

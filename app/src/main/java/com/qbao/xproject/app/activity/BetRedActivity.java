@@ -26,6 +26,8 @@ import io.reactivex.functions.Consumer;
  */
 
 public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
+    private String mGambleNo;
+    public static final String GAMBLE_NO = "GambleNo";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,19 +35,26 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
         setToolBarTitle(getString(R.string.bet));
     }
-    public static void goBetActivity(Context context){
+    public static void goBetActivity(Context context,String gambleNo){
         Intent intent = new Intent(context,BetRedActivity.class);
+        intent.putExtra(GAMBLE_NO,gambleNo);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void getIntentData() {
+        super.getIntentData();
+        mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        RxView.clicks(bindingView.txtNext).throttleFirst(1, TimeUnit.SECONDS)
+        RxView.clicks(bindingView.buttonNext).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        BetBlueActivity.goBetRedActivity(activity);
+                        BetBlueActivity.goBetRedActivity(activity,bindingView.textBlueBallOne.getText().toString(),bindingView.textBlueBallTwo.getText().toString(),bindingView.textBlueBallThr.getText().toString(),mGambleNo);
                     }
                 });
 
@@ -54,6 +63,7 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
     @Override
     protected void initData() {
         super.initData();
+        bindingView.buttonNext.setEnabled(false);
         String[] array = getResources().getStringArray(R.array.blue_ball);
         int length = array.length;
         List<BetResponseEntity> list = new ArrayList<>();
@@ -98,21 +108,25 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
             }
         }
         if (responseEntityList.size()==0){
+            bindingView.buttonNext.setEnabled(false);
             bindingView.textBlueBallOne.setVisibility(View.INVISIBLE);
             bindingView.textBlueBallTwo.setVisibility(View.INVISIBLE);
             bindingView.textBlueBallThr.setVisibility(View.INVISIBLE);
         }else if (responseEntityList.size()==1){
+            bindingView.buttonNext.setEnabled(false);
             bindingView.textBlueBallOne.setVisibility(View.VISIBLE);
             bindingView.textBlueBallTwo.setVisibility(View.INVISIBLE);
             bindingView.textBlueBallThr.setVisibility(View.INVISIBLE);
             bindingView.textBlueBallOne.setText(responseEntityList.get(0).getNum());
         }else if (responseEntityList.size()==2){
+            bindingView.buttonNext.setEnabled(false);
             bindingView.textBlueBallOne.setVisibility(View.VISIBLE);
             bindingView.textBlueBallTwo.setVisibility(View.VISIBLE);
             bindingView.textBlueBallThr.setVisibility(View.INVISIBLE);
             bindingView.textBlueBallOne.setText(responseEntityList.get(0).getNum());
             bindingView.textBlueBallTwo.setText(responseEntityList.get(1).getNum());
         }else if (responseEntityList.size()==3){
+            bindingView.buttonNext.setEnabled(true);
             bindingView.textBlueBallOne.setVisibility(View.VISIBLE);
             bindingView.textBlueBallTwo.setVisibility(View.VISIBLE);
             bindingView.textBlueBallThr.setVisibility(View.VISIBLE);

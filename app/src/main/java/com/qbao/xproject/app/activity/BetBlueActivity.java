@@ -3,6 +3,7 @@ package com.qbao.xproject.app.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.flexbox.AlignItems;
@@ -12,6 +13,9 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.request_body.BetNextRequest;
+import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.adapter.BetBlueBallAdapter;
@@ -19,6 +23,8 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetRedBinding;
 import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.fragment.dialog_fragment.BetSureDialogFragment;
+import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
+import com.qbao.xproject.app.widget.UITipDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,33 +37,99 @@ import io.reactivex.functions.Consumer;
 
 /**
  * 投注红球界面
+ *
  * @author Created by jackieyao on 2018/9/12 下午6:21
  */
 
 public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> implements View.OnClickListener {
     private BetBlueBallAdapter mAdapter;
+    public static final String BALL_ONE = "Ball_one";
+    public static final String BALL_TWO = "Ball_two";
+    public static final String BALL_THREE = "Ball_three";
+    public static final String GAMBLE_NO = "GambleNo";
+    private String mGambleNo;
+    private String mRedBallOne;
+    private String mRedBallTwo;
+    private String mRedBallThree;
+    private boolean mHasChose;
+    /**
+     * 是否博彩成功
+     */
+    private boolean mIfBetSuccess;
+    private MyWalletViewModel walletViewModel;
+    private UITipDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bet_red);
-        StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
+        StatusBarUtils.setWindowStatusBarColor(activity, R.color.bar_one_color);
         setToolBarTitle(getString(R.string.bet));
     }
-    public  static void goBetRedActivity(Context context){
-        Intent intent = new Intent(context,BetBlueActivity.class);
+
+    public static void goBetRedActivity(Context context, String redBallOne, String redBallTwo, String redBallThree, String mGambleNo) {
+        Intent intent = new Intent(context, BetBlueActivity.class);
+        intent.putExtra(BALL_ONE, redBallOne);
+        intent.putExtra(BALL_TWO, redBallTwo);
+        intent.putExtra(BALL_THREE, redBallThree);
+        intent.putExtra(GAMBLE_NO, mGambleNo);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void getIntentData() {
+        super.getIntentData();
+        mRedBallOne = getIntent().getStringExtra(BALL_ONE);
+        mRedBallTwo = getIntent().getStringExtra(BALL_TWO);
+        mRedBallThree = getIntent().getStringExtra(BALL_THREE);
+        mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        RxView.clicks(bindingView.textSure).throttleFirst(1, TimeUnit.SECONDS)
+        RxView.clicks(bindingView.buttonSure).throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        BetSureDialogFragment dialogFragment = new BetSureDialogFragment();
+                        getMyWallet();
+
+                    }
+                });
+    }
+
+    private void getMyWallet() {
+        dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
+        dialog.show();
+        if (walletViewModel == null) {
+
+            walletViewModel = new MyWalletViewModel(activity.getApplication(), TAG);
+        }
+        walletViewModel.getMyWallet()
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<MyWalletResponse>() {
+                    @Override
+                    public void accept(MyWalletResponse myWalletResponse) throws Exception {
+                        List<MyWalletResponse.MyWalletList> result = myWalletResponse.getResult();
+                        double mineAmount = 0;
+                        for (MyWalletResponse.MyWalletList list : result) {
+                            if (!list.getUnitName().equalsIgnoreCase("eth")) {
+                                mineAmount += list.getAmount();
+                            }
+                        }
+                        if (mineAmount<100){
+                            mIfBetSuccess = false;
+                        }else {
+                            mIfBetSuccess = true;
+                        }
+
+                        BetSureDialogFragment dialogFragment = new BetSureDialogFragment(mGambleNo);
                         dialogFragment.setClickListener(BetBlueActivity.this);
-                        dialogFragment.show(getSupportFragmentManager(),dialogFragment.getClass().getCanonicalName());
+                        dialogFragment.show(getSupportFragmentManager(), dialogFragment.getClass().getCanonicalName());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e(TAG, throwable.getMessage());
                     }
                 });
     }
@@ -65,16 +137,17 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
     @Override
     protected void initData() {
         super.initData();
+        bindingView.buttonSure.setEnabled(false);
         String[] array = getResources().getStringArray(R.array.red_ball);
         int length = array.length;
         List<BetResponseEntity> list = new ArrayList<>();
-        for (int i = 0 ; i < length ; i++){
+        for (int i = 0; i < length; i++) {
             BetResponseEntity entity = new BetResponseEntity();
             entity.setNum(array[i]);
             list.add(entity);
         }
         bindingView.recyclerRed.setHasFixedSize(true);
-        mAdapter = new BetBlueBallAdapter(R.layout.layout_item_bet,list);
+        mAdapter = new BetBlueBallAdapter(R.layout.layout_item_bet, list);
 
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(activity);
         layoutManager.setFlexWrap(FlexWrap.WRAP);
@@ -87,7 +160,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
 
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             bindingView.textBlue.setText(list.get(position).getNum());
-            refresh(list,position);
+            refresh(list, position);
         });
     }
 
@@ -96,10 +169,17 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
             @Override
             public void subscribe(ObservableEmitter<List<BetResponseEntity>> e) throws Exception {
                 int size = list.size();
-                for (int i = 0 ; i < size ; i++){
-                    if (position == i){
-                        list.get(i).setChosed(true);
-                    }else {
+                for (int i = 0; i < size; i++) {
+                    if (position == i) {
+                        if (list.get(i).isChosed()) {
+                            mHasChose = false;
+                            list.get(i).setChosed(false);
+                        } else {
+                            mHasChose = true;
+                            list.get(i).setChosed(true);
+                        }
+                    } else {
+                        mHasChose = false;
                         list.get(i).setChosed(false);
                     }
                 }
@@ -109,12 +189,32 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
             @Override
             public void accept(List<BetResponseEntity> betResponseEntities) throws Exception {
                 mAdapter.setNewData(list);
+                if (mHasChose) {
+                    bindingView.textBlue.setVisibility(View.VISIBLE);
+                    bindingView.buttonSure.setEnabled(true);
+                } else {
+                    bindingView.buttonSure.setEnabled(false);
+                    bindingView.textBlue.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
 
     @Override
     public void onClick(View v) {
-        BetResultActivity.goBetResultActivity(activity);
+        if (mIfBetSuccess){
+
+            betRequest();
+            BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString());
+
+        }else {
+            dialog.dismiss();
+           PayFailActivity.goPayFailActivity(activity,getString(R.string.no_balance));
+        }
+    }
+
+    private void betRequest() {
+        BetNextRequest request = new BetNextRequest();
+        request.se
     }
 }

@@ -4,8 +4,13 @@ import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
 import com.qbao.xproject.app.entity.Account;
+import com.qbao.xproject.app.entity.BetNextResponseEntity;
+import com.qbao.xproject.app.entity.BillResponseEntity;
+import com.qbao.xproject.app.entity.CurrentGambleResult;
+import com.qbao.xproject.app.entity.JoinGambleResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
+import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.converter.JsonConverterFactory;
@@ -14,6 +19,7 @@ import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
@@ -157,8 +163,24 @@ public class XProjectService {
         return mServiceApi.findAllUnReceivedMine();
     }
 
-    public Observable<UnReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
+    public Observable<ReceiveMineEntity> receiveMine(ReceiveMineRequest request) {
         return mServiceApi.receiveMine(request);
+    }
+
+    public Observable<List<BillResponseEntity>> findBillList(int page, int size) {
+        return mServiceApi.findBillList(page, size);
+    }
+
+    public Observable<CurrentGambleResult> getCurrentGambleResult() {
+        return mServiceApi.getCurrentGambleResult();
+    }
+
+    public Observable<List<JoinGambleResponseEntity>> getGambleJoinByGambleId(int id) {
+        return mServiceApi.getGambleJoinByGambleId(id);
+    }
+
+    public Observable<BetNextResponseEntity> betNextGamble(BetNextRequest request) {
+        return mServiceApi.betNextGamble(request);
     }
 }
 

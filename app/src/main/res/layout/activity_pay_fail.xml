@@ -13,15 +13,12 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/size_dp_50"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         style="@style/textStyleMainColor"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/size_dp_30"
         android:text="@string/pay_fail"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+       android:id="@+id/text_fail_reason"
         style="@style/textStyleSeconderColor"
         android:layout_gravity="center_horizontal"
         android:text="@string/no_balance"/>

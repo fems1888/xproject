@@ -5,4 +5,39 @@ package com.qbao.xproject.app.entity;
  */
 
 public class ReceiveMineEntity {
+
+    /**
+     * result : {"id":0,"accountNo":"string","amount":0,"received":false}
+     * systemTime : 1537455908159
+     * nextMineCreateTime : 1537460100000
+     */
+
+    private UnReceiveMineEntity result;
+    private long systemTime;
+    private long nextMineCreateTime;
+
+    public UnReceiveMineEntity getResult() {
+        return result;
+    }
+
+    public void setResult(UnReceiveMineEntity result) {
+        this.result = result;
+    }
+
+    public long getSystemTime() {
+        return systemTime;
+    }
+
+    public void setSystemTime(long systemTime) {
+        this.systemTime = systemTime;
+    }
+
+    public long getNextMineCreateTime() {
+        return nextMineCreateTime;
+    }
+
+    public void setNextMineCreateTime(long nextMineCreateTime) {
+        this.nextMineCreateTime = nextMineCreateTime;
+    }
+
 }

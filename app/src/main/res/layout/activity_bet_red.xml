@@ -75,17 +75,15 @@
                             android:gravity="center"
                             android:text="" />
 
-                        <TextView
-                            android:id="@+id/text_sure"
-                            style="@style/textStyleSeconderColor"
+                        <Button
+                            android:id="@+id/button_sure"
                             android:layout_width="@dimen/size_dp_118"
                             android:layout_height="@dimen/size_dp_30"
                             android:layout_marginTop="@dimen/size_dp_20"
-                            android:foreground="?attr/selectableItemBackground"
-                            android:background="@drawable/red_round_shape_stroke"
+                            android:background="@drawable/selector_red_stroke_gary_bg"
                             android:gravity="center"
                             android:text="@string/sure"
-                            android:textColor="@color/main_selected_color" />
+                            android:textColor="@color/red_gray_selector" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>

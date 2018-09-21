@@ -30,7 +30,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     protected BaseQuickAdapter<B, V> mAdapter;
 
     private int page;
-    private int mPage;
+    protected int mPage;
     protected int size = 10;
 
 

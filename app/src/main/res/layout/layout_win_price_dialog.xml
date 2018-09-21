@@ -1,50 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="300dp"
         android:layout_height="@dimen/size_dp_300"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/win_price"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:src="@mipmap/win_price" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical">
+
         <TextView
+            style="@style/textStyleSeconderColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/textStyleSeconderColor"
-            android:text="@string/win_price"/>
+            android:text="@string/win_price" />
+
         <TextView
+            android:id="@+id/text_award_type"
+            style="@style/textStyleSeconderColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/textStyleSeconderColor"
             android:layout_marginTop="@dimen/size_dp_8"
-            android:textSize="@dimen/size_sp_30"
+            android:text="特等奖"
             android:textColor="@color/main_selected_color"
-            android:text="特等奖"/>
+            android:textSize="@dimen/size_sp_30" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_dp_8"
             style="@style/textStyleSeconderColor"
-            android:text="@string/current_bonus"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_dp_8"
+            android:text="@string/current_bonus" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/size_dp_8"
-            android:layout_height="wrap_content"
+            android:id="@+id/text_price_amount"
             style="@style/textStyleMainColor"
-            android:textSize="@dimen/size_sp_20"
-            android:text="10000 XCoin"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_dp_8"
+            android:text="10000 XCoin"
+            android:textSize="@dimen/size_sp_20" />
     </LinearLayout>
 
     <TextView

@@ -11,8 +11,10 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityAccelerateBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.RxBusManager;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.MineViewModel;
@@ -42,6 +44,10 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
     private int mLoginStatus;
     private int mActivityStatus;
     private MineViewModel viewModel;
+    /**
+     * 是否领取速度因子
+     */
+    private boolean mReceiveSpeed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,6 +187,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                             bindingView.buttonActivity.setEnabled(false);
                             bindingView.buttonActivity.setText(CommonUtility.formatString("+",CommonUtility.getFormatDoubleTwo(entity.getSpeedAdd())));
                         }
+                        RxBus.getDefault().post(new RxBusManager.EventSpeedFactor(entity.getSpeedAdd()));
                     }
                 }, new Consumer<Throwable>() {
                     @Override

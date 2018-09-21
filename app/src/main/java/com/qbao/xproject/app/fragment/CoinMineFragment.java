@@ -3,6 +3,7 @@ package com.qbao.xproject.app.fragment;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
@@ -23,13 +24,16 @@ import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentCoinMineBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.XProjectServiceApi;
 import com.qbao.xproject.app.manager.AccessTokenManager;
 import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.manager.RxBusManager;
 import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.viewmodel.MineViewModel;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
@@ -67,6 +71,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     private PropertyValuesHolder holderY;
     private MyWalletViewModel walletViewModel;
     private double mineAmount = 0;
+    private double mSpeedFactor = 0;
     @Override
     public int setContent() {
         return R.layout.layout_fragment_coin_mine;
@@ -78,8 +83,6 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        AccountManager.getInstance().getAccountEntity().setAccountName("123");
-                        AccountManager.getInstance().saveAccount(AccountManager.getInstance().getAccountEntity());
                         AccelerateActivity.goAccelerateActivity(activity);
                     }
                 });
@@ -178,13 +181,17 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
             request.setId(entity.getId());
             viewModel.receiveMine(request)
                     .compose(RxSchedulers.io_main())
-                    .subscribe(new Consumer<UnReceiveMineEntity>() {
+                    .subscribe(new Consumer<ReceiveMineEntity>() {
                         @Override
-                        public void accept(UnReceiveMineEntity unReceiveMineEntity) throws Exception {
+                        public void accept(ReceiveMineEntity receiveMineEntity) throws Exception {
                             setVisibility(appCompatImageView,false);
+                            UnReceiveMineEntity unReceiveMineEntity = receiveMineEntity.getResult();
                             mineAmount+=unReceiveMineEntity.getAmount();
                             bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
-                            findAllUnReceivedMine();
+                            if (receiveMineEntity.getNextMineCreateTime() <= receiveMineEntity.getSystemTime()){
+
+                                findAllUnReceivedMine();
+                            }
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -207,11 +214,10 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<List<AccelerateFactorEntity>>() {
                     @Override
                     public void accept(List<AccelerateFactorEntity> entities) throws Exception {
-                        double allFactor = 0;
                         for (AccelerateFactorEntity entity : entities){
-                            allFactor+=entity.getSpeedAdd();
+                            mSpeedFactor+=entity.getSpeedAdd();
                         }
-                        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor)," ",CommonUtility.getFormatDoubleTwo(allFactor)));
+                        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor)," ",CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -296,7 +302,17 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
         findAllUnReceivedMine();
 
+        RxBus.getDefault().toFlowable(RxBusManager.EventSpeedFactor.class)
+                .toObservable()
+                .compose(RxSchedulers.io_main())
+                .subscribe(eventUnReadCount -> {
+                    initSpeed(eventUnReadCount.getCount());
+                }, Throwable::printStackTrace);
+    }
 
+    private void initSpeed(double count) {
+        mSpeedFactor+=count;
+        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor)," ",CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
     }
 
     private void findAllUnReceivedMine() {
@@ -801,5 +817,11 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
     public void stopAnima() {
 //        objectAnimator.pause();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(activity,"ss",Toast.LENGTH_LONG).show();
     }
 }

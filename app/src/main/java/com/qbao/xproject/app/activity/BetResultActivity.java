@@ -19,20 +19,51 @@ import io.reactivex.functions.Consumer;
  */
 
 public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> {
+    public static final String BALL_ONE = "Ball_one";
+    public static final String BALL_TWO = "Ball_two";
+    public static final String BALL_THREE = "Ball_three";
+    public static final String BALL_FOUR = "Ball_Four";
+    private String mBlueOne;
+    private String mRedBallOne;
+    private String mRedBallTwo;
+    private String mRedBallThree;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bet_result);
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
     }
-    public static void goBetResultActivity(Context context){
+    public static void goBetResultActivity(Context context, String mRedBallOne, String mRedBallTwo, String mRedBallThree, String mBlueBall){
         Intent intent = new Intent(context,BetResultActivity.class);
+        intent.putExtra(BALL_ONE,mRedBallOne);
+        intent.putExtra(BALL_TWO,mRedBallTwo);
+        intent.putExtra(BALL_THREE,mRedBallThree);
+        intent.putExtra(BALL_FOUR,mBlueBall);
         context.startActivity(intent);
     }
+
+    @Override
+    protected void getIntentData() {
+        super.getIntentData();
+        mBlueOne = getIntent().getStringExtra(BALL_FOUR);
+        mRedBallOne = getIntent().getStringExtra(BALL_ONE);
+        mRedBallTwo = getIntent().getStringExtra(BALL_TWO);
+        mRedBallThree = getIntent().getStringExtra(BALL_THREE);
+    }
+
     @Override
     protected void initViews() {
         super.initViews();
         setToolBarTitle(getString(R.string.bet_result));
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        bindingView.textRedOne.setText(mRedBallOne);
+        bindingView.textRedTwo.setText(mRedBallTwo);
+        bindingView.textRedThree.setText(mRedBallThree);
+        bindingView.textRedFour.setText(mBlueOne);
     }
 
     @Override
