@@ -73,7 +73,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        PayFailActivity.goPayFailActivity(activity);
+                        PayFailActivity.goPayFailActivity(activity,"");
                     }
                 });
     }

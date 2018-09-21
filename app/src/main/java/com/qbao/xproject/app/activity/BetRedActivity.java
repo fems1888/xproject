@@ -27,7 +27,9 @@ import io.reactivex.functions.Consumer;
 
 public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
     private String mGambleNo;
+    private int mNextgambleId;
     public static final String GAMBLE_NO = "GambleNo";
+    public static final String NEXT_GAMBLE_ID = "mNextgambleId";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +37,10 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
         setToolBarTitle(getString(R.string.bet));
     }
-    public static void goBetActivity(Context context,String gambleNo){
+    public static void goBetActivity(Context context,String gambleNo,int nextGambleId){
         Intent intent = new Intent(context,BetRedActivity.class);
         intent.putExtra(GAMBLE_NO,gambleNo);
+        intent.putExtra(NEXT_GAMBLE_ID,nextGambleId);
         context.startActivity(intent);
     }
 
@@ -45,6 +48,7 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
     protected void getIntentData() {
         super.getIntentData();
         mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
+        mNextgambleId = getIntent().getIntExtra(NEXT_GAMBLE_ID,-1);
     }
 
     @Override
@@ -54,7 +58,7 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        BetBlueActivity.goBetRedActivity(activity,bindingView.textBlueBallOne.getText().toString(),bindingView.textBlueBallTwo.getText().toString(),bindingView.textBlueBallThr.getText().toString(),mGambleNo);
+                        BetBlueActivity.goBetRedActivity(activity,bindingView.textBlueBallOne.getText().toString(),bindingView.textBlueBallTwo.getText().toString(),bindingView.textBlueBallThr.getText().toString(),mGambleNo,mNextgambleId);
                     }
                 });
 

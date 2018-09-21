@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.entity.Account;
+import com.qbao.xproject.app.entity.CurrentGambleResult;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.receiver.TagAliasOperatorHelper;
@@ -252,5 +254,13 @@ public class MainActivity extends BaseRxActivity {
         if (mFragmentCompetition!=null){
             ((CoinMineFragment)mFragmentCompetition).stopAnima();
         }
+    }
+
+    public CurrentGambleResult getmCurrentGambleResult() {
+        return ((ArenaFragment)mFragmentWallet).getmCurrentGambleResult();
+    }
+
+    public NextGambleResponseEntity getmNextGambleResponseEntity() {
+        return ((ArenaFragment)mFragmentWallet).getmNextGambleResponseEntity();
     }
 }

@@ -3,10 +3,13 @@ package com.qbao.xproject.app.viewmodel;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import com.qbao.xproject.app.entity.BetNextResponseEntity;
 import com.qbao.xproject.app.entity.CurrentGambleResult;
 import com.qbao.xproject.app.entity.JoinGambleResponseEntity;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.http.ExceptionHandle;
 import com.qbao.xproject.app.http.XProjectService;
+import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.utility.Rx2Subscriber;
 
 import java.util.List;
@@ -53,6 +56,41 @@ public class ArenaViewModel extends BaseViewModel {
                     e.onNext(value);
                 }
             });
+        });
+    }
+
+    public Observable<NextGambleResponseEntity> getNextGambleInfo() {
+
+        return Observable.create(e -> {
+            XProjectService.newInstance().getNextGambleInfo()
+                    .subscribe(new Rx2Subscriber<NextGambleResponseEntity>(application, TAG) {
+                        @Override
+                        public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                            e.onError(responseThrowable);
+                        }
+
+                        @Override
+                        public void onNext(NextGambleResponseEntity value) {
+                            e.onNext(value);
+                        }
+                    });
+        });
+    }
+
+    public Observable<BetNextResponseEntity> betNextGamble(BetNextRequest request) {
+        return Observable.create(e -> {
+            XProjectService.newInstance().betNextGamble(request)
+                    .subscribe(new Rx2Subscriber<BetNextResponseEntity>(application, TAG) {
+                        @Override
+                        public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                            e.onError(responseThrowable);
+                        }
+
+                        @Override
+                        public void onNext(BetNextResponseEntity value) {
+                            e.onNext(value);
+                        }
+                    });
         });
     }
 }

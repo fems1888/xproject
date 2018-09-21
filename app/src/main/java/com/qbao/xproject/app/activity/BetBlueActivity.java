@@ -2,6 +2,7 @@ package com.qbao.xproject.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,9 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.entity.BetNextResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
@@ -23,6 +26,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetRedBinding;
 import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.fragment.dialog_fragment.BetSureDialogFragment;
+import com.qbao.xproject.app.viewmodel.ArenaViewModel;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 import com.qbao.xproject.app.widget.UITipDialog;
 
@@ -47,6 +51,8 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
     public static final String BALL_TWO = "Ball_two";
     public static final String BALL_THREE = "Ball_three";
     public static final String GAMBLE_NO = "GambleNo";
+    public static final String NEXT_GAMBLE_ID = "mNextgambleId";
+    private int mNextgambleId;
     private String mGambleNo;
     private String mRedBallOne;
     private String mRedBallTwo;
@@ -66,12 +72,13 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
         setToolBarTitle(getString(R.string.bet));
     }
 
-    public static void goBetRedActivity(Context context, String redBallOne, String redBallTwo, String redBallThree, String mGambleNo) {
+    public static void goBetRedActivity(Context context, String redBallOne, String redBallTwo, String redBallThree, String mGambleNo, int mNextgambleId) {
         Intent intent = new Intent(context, BetBlueActivity.class);
         intent.putExtra(BALL_ONE, redBallOne);
         intent.putExtra(BALL_TWO, redBallTwo);
         intent.putExtra(BALL_THREE, redBallThree);
         intent.putExtra(GAMBLE_NO, mGambleNo);
+        intent.putExtra(NEXT_GAMBLE_ID, mNextgambleId);
         context.startActivity(intent);
     }
 
@@ -82,6 +89,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
         mRedBallTwo = getIntent().getStringExtra(BALL_TWO);
         mRedBallThree = getIntent().getStringExtra(BALL_THREE);
         mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
+        mNextgambleId = getIntent().getIntExtra(NEXT_GAMBLE_ID,-1);
     }
 
     @Override
@@ -137,6 +145,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
     @Override
     protected void initData() {
         super.initData();
+        bindingView.textBlue.setVisibility(View.INVISIBLE);
         bindingView.buttonSure.setEnabled(false);
         String[] array = getResources().getStringArray(R.array.red_ball);
         int length = array.length;
@@ -179,7 +188,6 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                             list.get(i).setChosed(true);
                         }
                     } else {
-                        mHasChose = false;
                         list.get(i).setChosed(false);
                     }
                 }
@@ -203,9 +211,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
     @Override
     public void onClick(View v) {
         if (mIfBetSuccess){
-
             betRequest();
-            BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString());
 
         }else {
             dialog.dismiss();
@@ -215,6 +221,27 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
 
     private void betRequest() {
         BetNextRequest request = new BetNextRequest();
-        request.se
+        request.setGambleId(mNextgambleId);
+        request.setAccountNo(AccountManager.getInstance().getAccountEntity().getAccountNo());
+        request.setRedBallFirst(mRedBallOne);
+        request.setRedBallSecond(mRedBallTwo);
+        request.setRedBallThird(mRedBallThree);
+        request.setBlueBallEnd(bindingView.textBlue.getText().toString());
+        ArenaViewModel viewModel = new ArenaViewModel(activity.getApplication(), TAG);
+        viewModel.betNextGamble(request)
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<BetNextResponseEntity>() {
+                    @Override
+                    public void accept(BetNextResponseEntity betNextResponseEntity) throws Exception {
+                        dialog.dismiss();
+                        BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
+                        PayFailActivity.goPayFailActivity(activity,throwable.getMessage());
+                    }
+                });
     }
 }

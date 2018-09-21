@@ -10,6 +10,7 @@ import com.qbao.xproject.app.entity.CurrentGambleResult;
 import com.qbao.xproject.app.entity.JoinGambleResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
@@ -181,6 +182,10 @@ public class XProjectService {
 
     public Observable<BetNextResponseEntity> betNextGamble(BetNextRequest request) {
         return mServiceApi.betNextGamble(request);
+    }
+
+    public Observable<NextGambleResponseEntity> getNextGambleInfo() {
+        return mServiceApi.getNextGambleInfo();
     }
 }
 

@@ -18,12 +18,15 @@ import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.activity.AccelerateActivity;
 import com.qbao.xproject.app.activity.LoginActivity;
+import com.qbao.xproject.app.activity.MainActivity;
 import com.qbao.xproject.app.activity.WebViewActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentCoinMineBinding;
 import com.qbao.xproject.app.entity.AccelerateFactorEntity;
+import com.qbao.xproject.app.entity.CurrentGambleResult;
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.XProjectServiceApi;
@@ -83,7 +86,9 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        AccelerateActivity.goAccelerateActivity(activity);
+                        CurrentGambleResult currentGambleResult = ((MainActivity) getActivity()).getmCurrentGambleResult();
+                        NextGambleResponseEntity nextGambleResponseEntity = ((MainActivity) getActivity()).getmNextGambleResponseEntity();
+                        AccelerateActivity.goAccelerateActivity(activity,String.valueOf(currentGambleResult.getGambleNo()),nextGambleResponseEntity.getId());
                     }
                 });
 

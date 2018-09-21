@@ -10,6 +10,9 @@ import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.databinding.LayoutFragmentMineBinding;
 import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.request_body.UserLoginRequest;
+import com.qbao.xproject.app.utility.RxSchedulers;
+import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +42,22 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        MyWalletActivity.goOpenIn(activity);
+//                        MyWalletActivity.goOpenIn(activity);
+
+                        UserLoginRequest request = new UserLoginRequest();
+                        request.setPhone("");
+                        RefreshTokenViewModel viewModel = new RefreshTokenViewModel(activity.getApplication(),TAG);
+                        viewModel.refreshToken(request)
+                                .compose(RxSchedulers.io_main())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String str) throws Exception {
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                    }
+                                });
                     }
                 });
         RxView.clicks(bindingView.relativeSpace).throttleFirst(1, TimeUnit.SECONDS)

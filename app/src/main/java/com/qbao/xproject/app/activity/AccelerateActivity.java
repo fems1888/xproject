@@ -29,6 +29,10 @@ import io.reactivex.functions.Consumer;
  */
 
 public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding> {
+    private String mGambleNo;
+    private int mNextgambleId;
+    public static final String GAMBLE_NO = "GambleNo";
+    public static final String NEXT_GAMBLE_ID = "mNextgambleId";
     /**
      * 能否领取登录速度因子  能的话就调领取速度因子的接口
      */
@@ -59,6 +63,19 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
     public static void goAccelerateActivity(Context context){
         Intent intent = new Intent(context,AccelerateActivity.class);
         context.startActivity(intent);
+    }
+    public static void goAccelerateActivity(Context context,String gambleNo,int nextGambleId){
+        Intent intent = new Intent(context,BetRedActivity.class);
+        intent.putExtra(GAMBLE_NO,gambleNo);
+        intent.putExtra(NEXT_GAMBLE_ID,nextGambleId);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void getIntentData() {
+        super.getIntentData();
+        mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
+        mNextgambleId = getIntent().getIntExtra(NEXT_GAMBLE_ID,-1);
     }
 
     @Override
@@ -163,7 +180,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
     }
 
     private void goBet() {
-        BetRedActivity.goBetActivity(activity);
+        BetRedActivity.goBetActivity(activity,mGambleNo,mNextgambleId);
     }
 
     private void receiveSpeed(int taskType) {

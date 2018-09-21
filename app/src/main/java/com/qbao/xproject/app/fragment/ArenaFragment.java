@@ -9,12 +9,15 @@ import android.text.style.ForegroundColorSpan;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.activity.BetRedActivity;
+import com.qbao.xproject.app.activity.BetResultActivity;
 import com.qbao.xproject.app.activity.LoginActivity;
 import com.qbao.xproject.app.base.BaseRxFragment;
 import com.qbao.xproject.app.databinding.LayoutFragmentArenaBinding;
 import com.qbao.xproject.app.entity.CurrentGambleResult;
 import com.qbao.xproject.app.entity.JoinGambleResponseEntity;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.manager.AccessTokenManager;
+import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.MaterialDialogUtility;
@@ -42,10 +45,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
      */
     private boolean mCurrentWinner;
 
-    /**
-     * 当天完全没有开奖  四个球都没有出
-     */
-    private boolean mAbsoluteNoAward;
+    private NextGambleResponseEntity mNextGambleResponseEntity;
     @Override
     public int setContent() {
         return R.layout.layout_fragment_arena;
@@ -63,7 +63,16 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        BetRedActivity.goBetActivity(activity,String.valueOf(mCurrentGambleResult.getGambleNo()));
+                        //已投注下一期，点击【下一期】进入投注结果页面
+                        if (mNextGambleResponseEntity!=null&&mNextGambleResponseEntity.getGambleJoinList().size()>0){
+//                            BetResultActivity.goBetResultActivity(activity,mNextGambleResponseEntity.getGambleJoinList().get(0).getRedBallFirst(),mNextGambleResponseEntity.getGambleJoinList().get(0).getRedBallSecond()
+//                                    ,mNextGambleResponseEntity.getGambleJoinList().get(0).getRedBallThird(),mNextGambleResponseEntity.getGambleJoinList().get(0).getBlueBallEnd());
+                            BetRedActivity.goBetActivity(activity,String.valueOf(mCurrentGambleResult.getGambleNo()),mNextGambleResponseEntity.getId());
+                        }else if (mNextGambleResponseEntity!=null&&mNextGambleResponseEntity.getGambleJoinList().size()==0){
+                            //进入投注第一个页面
+
+                            BetRedActivity.goBetActivity(activity,String.valueOf(mCurrentGambleResult.getGambleNo()),mNextGambleResponseEntity.getId());
+                        }
                     }
                 });
     }
@@ -74,7 +83,29 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
         if (viewModel == null){
             viewModel = new ArenaViewModel(activity.getApplication(),TAG);
         }
-        getCurrentGambleResult();
+        String time = AccountManager.getInstance().getAccountEntity().getLoginTime();
+        long loginTime = TextUtils.isEmpty(time)?System.currentTimeMillis():CommonUtility.byTimeGetMillis(time);
+        if (System.currentTimeMillis() - loginTime<= Constants.A_DAY_MILLS){
+            getCurrentGambleResult();
+            getNextGambleInfo();
+        }
+
+    }
+
+    private void getNextGambleInfo() {
+        viewModel.getNextGambleInfo()
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<NextGambleResponseEntity>() {
+                    @Override
+                    public void accept(NextGambleResponseEntity nextGambleResponseEntity) throws Exception {
+                        mNextGambleResponseEntity = nextGambleResponseEntity;
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
     }
 
     private void getCurrentGambleResult() {
@@ -93,6 +124,14 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
 
                     }
                 });
+    }
+
+    public CurrentGambleResult getmCurrentGambleResult() {
+        return mCurrentGambleResult;
+    }
+
+    public NextGambleResponseEntity getmNextGambleResponseEntity() {
+        return mNextGambleResponseEntity;
     }
 
     private void fillData(boolean requestJoin) {
@@ -138,12 +177,6 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                                     break;
                                 }
                             }
-//                            if (TextUtils.isEmpty(mCurrentGambleResult.getRedBallFirst())&&TextUtils.isEmpty(mCurrentGambleResult.getRedBallSecond())
-//                                    &&TextUtils.isEmpty(mCurrentGambleResult.getRedBallThird())&&TextUtils.isEmpty(mCurrentGambleResult.getBlueBallEnd())){
-//                                mAbsoluteNoAward = true;
-//                            }else {
-//                                mAbsoluteNoAward = false;
-//                            }
                           return   Observable.just(true);
                         })
                 .compose(RxSchedulers.io_main())

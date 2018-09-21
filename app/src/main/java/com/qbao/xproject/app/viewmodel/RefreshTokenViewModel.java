@@ -57,7 +57,7 @@ public class RefreshTokenViewModel extends BaseViewModel {
                                     String responseBodyJson = null;
                                     responseBodyJson = responseBody.string();
                                     JSONObject jsonObject = new JSONObject(responseBodyJson);
-                                    String resultJson = jsonObject.optString(" refreshToken result");
+                                    String resultJson = jsonObject.optString("result");
                                     if (!CommonUtility.isNull(resultJson)) {
                                         String result = AESUtil.decrypt(resultJson, AESUtil.KEY);//解密
                                         CommonUtility.DebugLog.e(TAG, "refreshToken responseBodyJson = " + result);

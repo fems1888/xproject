@@ -9,6 +9,7 @@ import com.qbao.xproject.app.entity.CurrentGambleResult;
 import com.qbao.xproject.app.entity.JoinGambleResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.entity.NextAirDropTimeEntity;
+import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
@@ -143,6 +144,14 @@ public interface XProjectServiceApi {
      */
     @GET("/core/getGambleJoinByGambleId")
     Observable<List<JoinGambleResponseEntity>> getGambleJoinByGambleId(@Query("gambleId")int id);
+
+    /**
+     * 获取下一期竞猜情报
+     *
+     * @return
+     */
+    @GET("/core/getNextGambleDefination")
+    Observable<NextGambleResponseEntity> getNextGambleInfo();
 
     /**
      * 用户提交参与下一期竞猜
