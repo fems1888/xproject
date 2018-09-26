@@ -27,6 +27,7 @@ import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.FeedbackViewModel;
 
 import java.util.List;
@@ -62,6 +63,7 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1012));
                         pickPhoto();
                     }
                 });
@@ -93,6 +95,7 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1013));
                         commitFeedback();
                     }
                 });

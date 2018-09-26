@@ -35,6 +35,7 @@ public class MaterialDialogUtility {
         view.findViewById(R.id.text_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                XProjectUtil.eventReport(context,context.getString(R.string.event_id_1036));
                 alert.dismiss();
             }
         });
@@ -60,6 +61,7 @@ public class MaterialDialogUtility {
         view.findViewById(R.id.text_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                XProjectUtil.eventReport(context,context.getString(R.string.event_id_1036));
                 alert.dismiss();
             }
         });
@@ -73,10 +75,16 @@ public class MaterialDialogUtility {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.login_out));
         builder.setMessage(R.string.login_out_flag);
-        builder.setNegativeButton(context.getString(R.string.pic_cancel),null);
+        builder.setNegativeButton(context.getString(R.string.pic_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                XProjectUtil.eventReport(context,context.getString(R.string.event_id_1015));
+            }
+        });
         builder.setPositiveButton(context.getString(R.string.login_out_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                XProjectUtil.eventReport(context,context.getString(R.string.event_id_1016));
                 if (outListener!=null){
                     outListener.onClick(null);
                 }

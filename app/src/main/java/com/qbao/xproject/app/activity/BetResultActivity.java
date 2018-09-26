@@ -10,6 +10,7 @@ import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetResultBinding;
+import com.qbao.xproject.app.utility.XProjectUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -74,6 +75,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1068));
                         finish();
                     }
                 });
@@ -81,6 +83,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1069));
                         WebViewActivity.goOpenIn(activity, Constants.getArenaRuleUrl());
                     }
                 });

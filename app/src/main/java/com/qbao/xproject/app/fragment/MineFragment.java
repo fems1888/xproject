@@ -12,6 +12,7 @@ import com.qbao.xproject.app.databinding.LayoutFragmentMineBinding;
 import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.RxSchedulers;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +43,7 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1004));
                         MyWalletActivity.goOpenIn(activity);
 
 //                        UserLoginRequest request = new UserLoginRequest();
@@ -64,6 +66,7 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1005));
                         ReceiveAirDropActivity.go(activity);
                     }
                 });
@@ -71,6 +74,7 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1006));
                         FeedbackActivity.go(activity);
                     }
                 });
@@ -78,6 +82,7 @@ public class MineFragment extends BaseRxFragment<LayoutFragmentMineBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1007));
                         SetActivity.go(activity);
                     }
                 });

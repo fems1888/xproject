@@ -23,6 +23,7 @@ import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class WithdrawActivity extends BaseRxActivity<ActivityWithdrawBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1010));
                         withDraw();
                     }
                 });
@@ -95,7 +97,7 @@ public class WithdrawActivity extends BaseRxActivity<ActivityWithdrawBinding> {
 
                         Toast.makeText(activity, R.string.withdraw_success,Toast.LENGTH_LONG).show();
                         RxBus.getDefault().post(new RxBusManager.EventWalletRefresh());
-                        finish();
+//                        finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

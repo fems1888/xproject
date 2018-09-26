@@ -40,6 +40,7 @@ import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.MineViewModel;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
@@ -91,6 +92,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1017));
                         CurrentGambleResult currentGambleResult = ((MainActivity) getActivity()).getmCurrentGambleResult();
                         NextGambleResponseEntity nextGambleResponseEntity = ((MainActivity) getActivity()).getmNextGambleResponseEntity();
                         AccelerateActivity.goAccelerateActivity(activity, String.valueOf(currentGambleResult.getGambleNo()), nextGambleResponseEntity.getId());
@@ -101,6 +103,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1019));
                         receiveMine(bindingView.appCompatImageView1);
                     }
                 });
@@ -108,6 +111,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1020));
                         receiveMine(bindingView.appCompatImageView2);
                     }
                 });
@@ -115,6 +119,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1021));
                         receiveMine(bindingView.appCompatImageView3);
                     }
                 });
@@ -122,6 +127,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1022));
                         receiveMine(bindingView.appCompatImageView4);
                     }
                 });
@@ -129,6 +135,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1023));
                         receiveMine(bindingView.appCompatImageView5);
                     }
                 });
@@ -136,6 +143,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1024));
                         receiveMine(bindingView.appCompatImageView6);
                     }
                 });
@@ -143,6 +151,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1025));
                         receiveMine(bindingView.appCompatImageView7);
                     }
                 });
@@ -150,6 +159,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1026));
                         receiveMine(bindingView.appCompatImageView8);
                     }
                 });
@@ -157,6 +167,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1027));
                         receiveMine(bindingView.appCompatImageView9);
                     }
                 });
@@ -164,6 +175,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1028));
                         receiveMine(bindingView.appCompatImageView10);
                     }
                 });
@@ -171,6 +183,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1029));
                         receiveMine(bindingView.appCompatImageView11);
                     }
                 });
@@ -178,6 +191,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1030));
                         receiveMine(bindingView.appCompatImageView12);
                     }
                 });
@@ -185,6 +199,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1018));
                         WebViewActivity.goOpenIn(activity, Constants.getStrategyUrl());
                     }
                 });

@@ -27,6 +27,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetRedBinding;
 import com.qbao.xproject.app.entity.BetResponseEntity;
 import com.qbao.xproject.app.fragment.dialog_fragment.BetSureDialogFragment;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.ArenaViewModel;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 import com.qbao.xproject.app.widget.UITipDialog;
@@ -100,6 +101,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1064));
                         getMyWallet();
 
                     }
@@ -171,6 +173,27 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             bindingView.textBlue.setText(list.get(position).getNum());
             refresh(list, position);
+            if (position == 0){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1054));
+            }else if (position == 1){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1055));
+            }else if (position == 2){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1056));
+            }else if (position == 3){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1057));
+            }else if (position == 4){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1058));
+            }else if (position == 5){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1059));
+            }else if (position == 6){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1060));
+            }else if (position == 7){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1061));
+            }else if (position == 8){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1062));
+            }else if (position == 9){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1063));
+            }
         });
     }
 
@@ -244,6 +267,8 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                     public void accept(Throwable throwable) throws Exception {
                         dialog.dismiss();
                         PayFailActivity.goPayFailActivity(activity,throwable.getMessage());
+                        XProjectApplication.getInstance().finishActivity(BetRedActivity.class);
+                        finish();
                     }
                 });
     }

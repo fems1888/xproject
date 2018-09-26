@@ -13,6 +13,7 @@ import com.qbao.xproject.app.adapter.BetRedBallAdapter;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetBinding;
 import com.qbao.xproject.app.entity.BetResponseEntity;
+import com.qbao.xproject.app.utility.XProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1053));
                         BetBlueActivity.goBetRedActivity(activity,bindingView.textBlueBallOne.getText().toString(),bindingView.textBlueBallTwo.getText().toString(),bindingView.textBlueBallThr.getText().toString(),mGambleNo,mNextgambleId);
                     }
                 });
@@ -99,6 +101,40 @@ public class BetRedActivity extends BaseRxActivity<ActivityBetBinding> {
             }
             mAdapter.setNewData(list);
             setChosedShow(list);
+
+            if (position == 0){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1037));
+            }else if (position == 1){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1038));
+            }else if (position == 2){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1039));
+            }else if (position == 3){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1040));
+            }else if (position == 4){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1041));
+            }else if (position == 5){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1042));
+            }else if (position == 6){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1043));
+            }else if (position == 7){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1044));
+            }else if (position == 8){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1045));
+            }else if (position == 9){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1046));
+            }else if (position == 10){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1047));
+            }else if (position == 11){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1048));
+            }else if (position == 12){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1049));
+            }else if (position == 13){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1050));
+            }else if (position == 14){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1051));
+            }else if (position == 15){
+                XProjectUtil.eventReport(activity,getString(R.string.event_id_1052));
+            }
 
         });
 

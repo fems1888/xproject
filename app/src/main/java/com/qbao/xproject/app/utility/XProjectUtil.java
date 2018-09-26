@@ -16,6 +16,7 @@ public class XProjectUtil {
      * @desc 仅统计事件的次数
      */
     public static void eventReport(Context context, String eventName) {
-        MobclickAgent.onEvent(context, eventName);//添加umeng统计做备份处理
+        //添加umeng统计
+        MobclickAgent.onEvent(context.getApplicationContext(), eventName);
     }
 }

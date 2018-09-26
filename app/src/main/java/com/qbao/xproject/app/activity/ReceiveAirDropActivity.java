@@ -21,6 +21,7 @@ import com.qbao.xproject.app.interf.StatusBarContentColor;
 import com.qbao.xproject.app.manager.AccountManager;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.ReceiveAirDropViewModel;
 
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class ReceiveAirDropActivity extends BaseRxActivity<ActivityReceiveAirDro
     }
 
     private void receiveAirDrop() {
+        XProjectUtil.eventReport(activity,getString(R.string.event_id_1011));
         viewModel.receiveAirDrop()
                 .compose(RxSchedulers.io_main())
                 .subscribe(o -> {

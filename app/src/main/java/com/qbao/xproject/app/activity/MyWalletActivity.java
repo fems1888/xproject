@@ -19,6 +19,7 @@ import com.qbao.xproject.app.manager.RxBusManager;
 import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 
 import java.util.ArrayList;
@@ -120,6 +121,7 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sure){
+            XProjectUtil.eventReport(activity,getString(R.string.event_id_1008));
             BillActivity.go(activity);
             return true;
         }
@@ -128,6 +130,7 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
 
     @Override
     public void withdraw() {
+        XProjectUtil.eventReport(activity,getString(R.string.event_id_1009));
         WithdrawActivity.go(activity,mCoinList);
     }
 }

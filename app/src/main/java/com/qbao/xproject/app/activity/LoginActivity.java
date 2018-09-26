@@ -22,6 +22,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityLoginBinding;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
 import com.qbao.xproject.app.widget.UITipDialog;
 
@@ -128,6 +129,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1001));
                         getVerifyCode();
 
                     }
@@ -136,6 +138,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1002));
                         Login();
 
                     }

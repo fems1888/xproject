@@ -17,6 +17,7 @@ import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.MineViewModel;
 
 import java.util.List;
@@ -160,7 +161,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                     @Override
                     public void accept(Object o) throws Exception {
                         if (mLoginStatus == RIGHT_RECEIVE){
-
+                            XProjectUtil.eventReport(activity,getString(R.string.event_id_1031));
                             receiveSpeed(GO_DONE);
                         }
                     }
@@ -170,9 +171,10 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
                     @Override
                     public void accept(Object o) throws Exception {
                         if (mActivityStatus == RIGHT_RECEIVE){
-
+                            XProjectUtil.eventReport(activity,getString(R.string.event_id_1033));
                             receiveSpeed(RIGHT_RECEIVE);
                         }else {
+                            XProjectUtil.eventReport(activity,getString(R.string.event_id_1032));
                             goBet();
                         }
                     }

@@ -19,6 +19,7 @@ import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.utility.MaterialDialogUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
 import com.umeng.analytics.MobclickAgent;
 
@@ -50,6 +51,7 @@ public class SetActivity extends BaseRxActivity<ActivitySetBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1014));
                         loginOut();
                     }
                 });

@@ -15,6 +15,17 @@ bugtags {
     trackingNetworkEnabled true
 }
 android {
+
+    signingConfigs {
+        release {
+            keyAlias 'xproject'
+            keyPassword '##xproject##'
+            storeFile file('/Users/jackieyao/xproject.jks')
+            storePassword '##xproject##'
+        }
+        debug {
+        }
+    }
     compileSdkVersion parent.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.qbao.xproject.app"
@@ -23,7 +34,8 @@ android {
         versionCode parent.ext.versionCode
         versionName parent.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        multiDexEnabled true
+        signingConfig signingConfigs.release
         ndk {
             abiFilters "x86", "armeabi-v7a", "armeabi"
         }
@@ -48,7 +60,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "URL_API_BASE", '"https://api.aethercoder.com"')
+            buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
             buildConfigField("String", "BUG_TAGS_KEY", '"b3c6529bc0b6217c10a712cf329c3028"')
             buildConfigField("String", "XPROJECT_HTML", '"http://43.254.148.147:5022"')
             debuggable true
@@ -56,6 +68,7 @@ android {
             zipAlignEnabled true
             // 移除无用的resource文件
             shrinkResources false
+            signingConfig signingConfigs.release
         }
 
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.utility.XProjectUtil;
 
 
 /**
@@ -63,9 +64,11 @@ public class BetSureDialogFragment extends AppCompatDialogFragment implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image_close:
+                XProjectUtil.eventReport(v.getContext(),getString(R.string.event_id_1065));
                 dismiss();
                 break;
             case R.id.button_sure:
+                XProjectUtil.eventReport(v.getContext(),getString(R.string.event_id_1066));
                 dismiss();
                 if (clickListener!=null){
                     clickListener.onClick(null);

@@ -24,6 +24,7 @@ import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.CommonUtility;
 import com.qbao.xproject.app.utility.MaterialDialogUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.ArenaViewModel;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1035));
                         //已投注下一期，点击【下一期】进入投注结果页面
                         if (mNextGambleResponseEntity!=null&&mNextGambleResponseEntity.getGambleJoinList().size()>0){
                             BetResultActivity.goBetResultActivity(activity,mNextGambleResponseEntity.getGambleJoinList().get(0).getRedBallFirst(),mNextGambleResponseEntity.getGambleJoinList().get(0).getRedBallSecond()
@@ -81,6 +83,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1034));
                         WebViewActivity.goOpenIn(activity,Constants.getArenaRuleUrl());
                     }
                 });

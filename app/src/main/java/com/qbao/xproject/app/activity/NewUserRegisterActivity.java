@@ -21,6 +21,7 @@ import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityNewUserRegisterBinding;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.utility.XProjectUtil;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
 import com.qbao.xproject.app.widget.UITipDialog;
 
@@ -65,6 +66,7 @@ public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegis
                     @Override
                     public void accept(Object o) throws Exception {
 //                        MaterialDialogUtility.showNoWinPriceDialog(activity);
+                        XProjectUtil.eventReport(activity,getString(R.string.event_id_1003));
                         register();
                     }
                 });
