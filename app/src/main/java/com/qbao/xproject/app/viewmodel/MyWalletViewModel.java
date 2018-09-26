@@ -6,8 +6,10 @@ import android.nfc.Tag;
 import android.support.annotation.NonNull;
 
 import com.qbao.xproject.app.entity.MyWalletResponse;
+import com.qbao.xproject.app.entity.WithdrawResponseEntity;
 import com.qbao.xproject.app.http.ExceptionHandle;
 import com.qbao.xproject.app.http.XProjectService;
+import com.qbao.xproject.app.request_body.WithdrawRequest;
 import com.qbao.xproject.app.utility.Rx2Subscriber;
 
 import io.reactivex.Observable;
@@ -24,11 +26,11 @@ public class MyWalletViewModel extends BaseViewModel {
         super(application, tag);
     }
 
-    public Observable<MyWalletResponse> getMyWallet( ) {
+    public Observable<MyWalletResponse> getMyWallet() {
         return Observable.create(new ObservableOnSubscribe<MyWalletResponse>() {
             @Override
             public void subscribe(ObservableEmitter<MyWalletResponse> e) throws Exception {
-                XProjectService.newInstance().getMyWallet( )
+                XProjectService.newInstance().getMyWallet()
                         .subscribe(new Rx2Subscriber<MyWalletResponse>(application, TAG) {
                             @Override
                             public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
@@ -40,6 +42,25 @@ public class MyWalletViewModel extends BaseViewModel {
                                 e.onNext(value);
                             }
                         });
+            }
+        });
+    }
+
+    public Observable<WithdrawResponseEntity> withdrawApply(WithdrawRequest request) {
+        return Observable.create(new ObservableOnSubscribe<WithdrawResponseEntity>() {
+            @Override
+            public void subscribe(ObservableEmitter<WithdrawResponseEntity> e) throws Exception {
+                XProjectService.newInstance().withdrawApply(request).subscribe(new Rx2Subscriber<WithdrawResponseEntity>(application, TAG) {
+                    @Override
+                    public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
+                        e.onError(responseThrowable);
+                    }
+
+                    @Override
+                    public void onNext(WithdrawResponseEntity value) {
+                        e.onNext(value);
+                    }
+                });
             }
         });
     }

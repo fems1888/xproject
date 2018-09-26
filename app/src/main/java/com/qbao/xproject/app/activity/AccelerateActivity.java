@@ -65,7 +65,7 @@ public class AccelerateActivity extends BaseRxActivity<ActivityAccelerateBinding
         context.startActivity(intent);
     }
     public static void goAccelerateActivity(Context context,String gambleNo,int nextGambleId){
-        Intent intent = new Intent(context,BetRedActivity.class);
+        Intent intent = new Intent(context,AccelerateActivity.class);
         intent.putExtra(GAMBLE_NO,gambleNo);
         intent.putExtra(NEXT_GAMBLE_ID,nextGambleId);
         context.startActivity(intent);

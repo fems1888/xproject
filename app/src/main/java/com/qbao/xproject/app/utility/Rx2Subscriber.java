@@ -84,13 +84,13 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
             default:
                 break;
         }
-        showLoading(showLoading);
+//        showLoading(showLoading);
         CommonUtility.DebugLog.e(TAG, "Rx2Subscriber.onStart()");
         if (checkNetwork) {
             //接下来可以检查网络连接等操作
             if (!CheckNetwork.isNetworkConnected(context)) {
                 showTips("网络错误");
-                hideLoading();
+//                hideLoading();
                 onError(new ExceptionHandle.ResponseThrowable("网络错误", ExceptionHandle.ERROR.NETWORD_ERROR));
                 // 一定要主动调用下面这一句,取消本次Subscriber订阅
                 d.dispose();
@@ -99,10 +99,9 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
         }
     }
 
-
     @Override
     public void onError(Throwable e) {
-        hideLoading();
+//        hideLoading();
         if (e instanceof Exception) {
             //访问获得对应的Exception
             ExceptionHandle.ResponseThrowable responseThrowable = ExceptionHandle.handleException(e, context.getResources());
@@ -157,7 +156,7 @@ public abstract class Rx2Subscriber<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-        hideLoading();
+//        hideLoading();
         CommonUtility.DebugLog.e(TAG, "Rx2Subscriber.onComplete()");
     }
 

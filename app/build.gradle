@@ -49,6 +49,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "URL_API_BASE", '"https://api.aethercoder.com"')
+            buildConfigField("String", "BUG_TAGS_KEY", '"b3c6529bc0b6217c10a712cf329c3028"')
+            buildConfigField("String", "XPROJECT_HTML", '"http://43.254.148.147:5022"')
             debuggable true
             //Zipalign优化
             zipAlignEnabled true
@@ -62,6 +64,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
 //            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
+            buildConfigField("String", "BUG_TAGS_KEY", '"6e5d9857f0491ab54ed999854146a704"')
+            buildConfigField("String", "XPROJECT_HTML", '"http://43.254.148.147:5022"')
             debuggable true
         }
     }

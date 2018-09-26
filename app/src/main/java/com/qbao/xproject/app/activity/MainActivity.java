@@ -37,6 +37,7 @@ import com.qbao.xproject.app.fragment.ArenaFragment;
 import com.qbao.xproject.app.fragment.CoinMineFragment;
 import com.qbao.xproject.app.fragment.MineFragment;
 import com.qbao.xproject.app.viewmodel.RefreshTokenViewModel;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 
 import java.util.ArrayList;
@@ -143,34 +144,13 @@ public class MainActivity extends BaseRxActivity {
     @Override
     protected void initData() {
         super.initData();
-        //每次进入先判断上次登录的时间是否和现在差一天  如果差一天就重新刷新token
-        String time = AccountManager.getInstance().getAccountEntity().getLoginTime();
-        long loginTime = TextUtils.isEmpty(time)?System.currentTimeMillis():CommonUtility.byTimeGetMillis(time);
-        if (System.currentTimeMillis() - loginTime> Constants.A_DAY_MILLS){
-            refreshToken();
-        }
-
         initJpushTag();
         initJpushAlias();
+        MobclickAgent.onProfileSignIn(AccountManager.getInstance().getAccountEntity().getAccountNo());
         Log.e(TAG, "initData: "+UMConfigure.getUMIDString(activity));
     }
 
-    private void refreshToken() {
-        UserLoginRequest request = new UserLoginRequest();
-        request.setPhone("");
-        RefreshTokenViewModel viewModel = new RefreshTokenViewModel(activity.getApplication(),TAG);
-        viewModel.refreshToken(request)
-                .compose(RxSchedulers.io_main())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String str) throws Exception {
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-    }
+
 
     /**
      * 极光别名
@@ -208,13 +188,7 @@ public class MainActivity extends BaseRxActivity {
         TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(), sequence, tagAliasBean);
     }
 
-    @ColorInt
-    protected int getColorByAttributeId(@AttrRes int attrIdForColor) {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getTheme();
-        theme.resolveAttribute(attrIdForColor, typedValue, true);
-        return typedValue.data;
-    }
+
     /**
      * 菜单、返回键响应
      */
@@ -243,7 +217,7 @@ public class MainActivity extends BaseRxActivity {
     }
 
     private void exitApp() {
-        finish();
+        XProjectApplication.getInstance().finishAll();
         XProjectApplication.getInstance().exit(0);
     }
 

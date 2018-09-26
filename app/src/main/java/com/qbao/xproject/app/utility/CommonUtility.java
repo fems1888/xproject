@@ -5,16 +5,24 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.qbao.xproject.app.BuildConfig;
+import com.qbao.xproject.app.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -289,7 +297,6 @@ public class CommonUtility {
 
         public static boolean isDebuggable() {
             return !releaseBuild();
-//            return true;
         }
 
         public static boolean releaseBuild() {
@@ -531,5 +538,147 @@ public class CommonUtility {
     }
     public static String getFormatDoubleTwo(double value){
         return new BigDecimal(value).setScale(2,BigDecimal.ROUND_HALF_UP).toPlainString();
+    }
+
+
+    /**
+     * 获取磁盘上的bitmaps
+     *
+     * @param pathString
+     * @return
+     */
+    public static Bitmap getDiskBitmap(String pathString) {
+        Bitmap bitmap = null;
+        try {
+            File file = new File(pathString);
+            if (file.exists()) {
+                bitmap = BitmapFactory.decodeFile(pathString);
+            }
+        } catch (Exception e) {
+            CommonUtility.DebugLog.d("getDiskBitmap e" + e.getMessage());
+        }
+        return bitmap;
+    }
+
+    /**
+     * 缩放Bitmap满屏
+     *
+     * @param bitmap
+     * @param screenWidth
+     * @param screenHeight
+     * @return
+     */
+    public static Bitmap getBitmap(Bitmap bitmap, float screenWidth,
+                                   float screenHeight) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+
+        if (w == screenWidth && h == screenHeight) return bitmap;
+        Matrix matrix = new Matrix();
+        float widthScale = screenWidth / w;
+        float heightScale = screenHeight / h;
+
+        float scale = widthScale < heightScale ? widthScale : heightScale;
+        matrix.postScale(scale, scale);
+        Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+        if (bitmap != null && !bitmap.equals(bmp) && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+        return bmp;
+    }
+    /**
+     * 处理输入框0开头的情况
+     *
+     * @param editText
+     */
+    public static void setEditTextZeroStart(EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.toString().trim().substring(0).equals(".")) {
+                    s = "0" + s;
+                    editText.setText(s);
+                    editText.setSelection(2);
+                }
+                if (s.toString().startsWith("0") && s.toString().trim().length() > 1) {
+                    if (!s.toString().substring(1, 2).equals(".")) {
+                        editText.setText(s.subSequence(0, 1));
+                        editText.setSelection(1);
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+    }
+
+    /**
+     * 秒转化为天小时分秒字符串（dd-hh-mm-ss）
+     *
+     * @param seconds
+     * @return String
+     */
+    public static String formatSecondsStandard(Context context, long seconds) {
+        String timeStr = seconds + "";
+        String secondStr = "", minStr = "", hourStr = "";
+        if (seconds > 60) {
+            long second = seconds % 60;
+            long min = seconds / 60;
+            timeStr = CommonUtility.formatString(min, ":", second);
+            secondStr = formatString(second);
+            if (second < 10) {
+                secondStr = formatString("0", second);
+            }
+            if (min > 60) {
+                min = (seconds / 60) % 60;
+                minStr = formatString(min);
+                if (min < 10) {
+                    minStr = formatString("0", minStr);
+                }
+                long hour = (seconds / 60) / 60;
+                hourStr = formatString(hour);
+                if (hour < 10) {
+                    hourStr = formatString("0", hour);
+                }
+                timeStr = CommonUtility.formatString(hourStr, ":", minStr, ":", secondStr);
+                if (hour > 24) {
+                    hour = ((seconds / 60) / 60) % 24;
+                    hourStr = formatString(hour);
+                    if (hour < 10) {
+                        hourStr = formatString("0", hour);
+                    }
+                    long day = (((seconds / 60) / 60) / 24);
+                    if (day>1){
+
+                        timeStr = CommonUtility.formatString(day,context.getString(R.string.day), " ", hourStr, ":", minStr, ":", secondStr);
+                    }else {
+                        timeStr = CommonUtility.formatString(hourStr, ":", minStr, ":", secondStr);
+                    }
+                }
+            } else {
+                minStr = formatString(min);
+                if (min < 10) {
+                    minStr = formatString("0", minStr);
+                }
+                timeStr = CommonUtility.formatString("00", ":", minStr, ":", secondStr);
+            }
+        } else {
+            secondStr = formatString(seconds);
+            if (seconds < 10) {
+                secondStr = formatString("0", seconds);
+            }
+            timeStr = CommonUtility.formatString("00", ":", "00", ":", secondStr);
+        }
+        return timeStr;
     }
 }

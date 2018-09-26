@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XProjectApp</string>
+    <string name="app_name">金色星球</string>
     <string name="login_out_tips">再按一次退出程序</string>
     <string name="arena">竞技场</string>
     <string name="arena_period">竞技场第%s期</string>
@@ -25,6 +25,7 @@
     <string name="next_period">下一期</string>
     <string name="price_rule_one">本期中奖号码将于10:00:00之后，约每半小时</string>
     <string name="detail_see">生成一个，详细参考</string>
+    <string name="detail_see_two">本期已开奖，活动详细参考</string>
     <string name="arena_rule"><![CDATA[<竞技场规则>]]></string>
     <string name="choose_three_num">请选择三个号</string>
     <string name="sure_pay">确认支付</string>
@@ -92,5 +93,15 @@
     <string name="thrid_prize">三等奖</string>
     <string name="next">下一步</string>
     <string name="gamble_no">第%d期中奖号码</string>
+    <string name="input_withdraw_amount">请输入提现金额</string>
+    <string name="withdraw_success">提现成功</string>
+    <string name="commit_success">提交成功</string>
+    <string name="commit">提交</string>
+    <string name="input_feedback_content">请输入反馈内容</string>
+    <string name="no_start">未开始</string>
+    <string name="confirming">确认中</string>
+    <string name="confirmed">已确认</string>
+    <string name="strategy">攻略</string>
+    <string name="day">天</string>
 </resources>
 

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivitySetBinding;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
@@ -19,6 +20,7 @@ import com.qbao.xproject.app.utility.MaterialDialogUtility;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.LoginViewModel;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -66,8 +68,8 @@ public class SetActivity extends BaseRxActivity<ActivitySetBinding> {
                         .subscribe(new Consumer<Object>() {
                             @Override
                             public void accept(Object o) throws Exception {
-                                AccessTokenManager.getInstance().clearAccessToken();
-                                AccountManager.getInstance().cleanAccount();
+
+                                XProjectApplication.getInstance().logout();
                             }
                         }, new Consumer<Throwable>() {
                             @Override

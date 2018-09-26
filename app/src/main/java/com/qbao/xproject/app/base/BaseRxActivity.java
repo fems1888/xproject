@@ -14,8 +14,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bugtags.library.Bugtags;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.utility.CommonUtility;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * @author Created by jackieyao on 2018/9/11 下午6:04.
@@ -26,7 +29,7 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
     protected Activity activity;
     protected Toolbar mToolbar;
     protected String TAG;
-
+    private XProjectApplication mApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,8 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
         TAG = new StringBuilder().append(getPackageName()).append(".").append(getClass().getSimpleName()).toString();
         CommonUtility.DebugLog.e("BaseRxActivity", TAG);
         activity = this;
+        mApplication = (XProjectApplication) getApplication();
+        mApplication.putActivity(activity);
         getIntentData();
     }
 
@@ -72,6 +77,7 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
 
     }
 
+
     protected void setFitsSystemWindow() {
         ViewGroup content = (ViewGroup) findViewById(android.R.id.content);
         if (content.getChildCount() == 0)
@@ -87,38 +93,6 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
             mToolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        //记录按键操作步骤
-        return super.dispatchKeyEvent(event);
-    }
-
-    /**
-     * ]* @param ev
-     *
-     * @return
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return super.dispatchTouchEvent(ev);
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -159,5 +133,43 @@ public abstract class BaseRxActivity<SV extends ViewDataBinding> extends AppComp
             }
         }
 
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        Bugtags.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+        Bugtags.onPause(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        //记录按键操作步骤
+        Bugtags.onDispatchKeyEvent(this, event);
+        return super.dispatchKeyEvent(event);
+    }
+
+    /**
+     * ]* @param ev
+     *
+     * @return
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Bugtags.onDispatchTouchEvent(this, ev);
+        return super.dispatchTouchEvent(ev);
     }
 }

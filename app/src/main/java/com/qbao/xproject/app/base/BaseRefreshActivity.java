@@ -1,5 +1,7 @@
 package com.qbao.xproject.app.base;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,13 +12,14 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.utility.CommonUtility;
 
 import java.util.List;
 
 /**
- * Created by hubert on 2017/8/31.
+ * @author Created by jackieyao on 2018/9/25 下午8:34
  */
 
 public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends BaseViewHolder, B> extends BaseRxActivity<SV> implements SwipeRefreshLayout.OnRefreshListener
@@ -28,7 +31,6 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     protected BaseQuickAdapter<B, V> mAdapter;
-
     private int page;
     protected int mPage;
     protected int size = 10;
@@ -37,7 +39,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_refresh);
+        setContentView(getLayoutId());
     }
 
 
@@ -49,7 +51,15 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
         mAdapter = initAdapter();
         mRecyclerView.setLayoutManager(initLayoutManager());
         if (openAnimation()) {
-            mAdapter.openLoadAnimation(openLoadAnimation());
+            mAdapter.openLoadAnimation(new BaseAnimation() {
+                @Override
+                public Animator[] getAnimators(View view) {
+                    return new Animator[]{
+                            ObjectAnimator.ofFloat(view, "scaleY", 1, 1.1f, 1),
+                            ObjectAnimator.ofFloat(view, "scaleX", 1, 1.1f, 1)
+                    };
+                }
+            });
         }
         mAdapter.bindToRecyclerView(mRecyclerView);
     }
@@ -66,7 +76,6 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
 
     @Override
     protected void initData() {
-        super.initData();
         if (autoRefresh()) {
             refresh();
         }
@@ -80,6 +89,8 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
         size = initPageSize();
         onRefreshCallback(page, size);
     }
+
+    protected abstract int getLayoutId();
 
     /**
      * 默认RecyclerView为 LinearLayoutManager
@@ -136,7 +147,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
      * @return
      */
     protected int openLoadAnimation() {
-        return BaseQuickAdapter.SCALEIN;
+        return BaseQuickAdapter.SLIDEIN_BOTTOM;
     }
 
     /**
@@ -176,9 +187,7 @@ public abstract class BaseRefreshActivity<SV extends ViewDataBinding, V extends 
     protected void onRecyclerViewItemLongClick(B entity, int position) {
     }
 
-    protected boolean openAnimation() {
-        return false;
-    }
+    protected abstract boolean openAnimation();
 
     /**
      * 默认 为 page++ ; false为 page

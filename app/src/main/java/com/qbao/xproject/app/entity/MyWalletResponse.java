@@ -1,5 +1,8 @@
 package com.qbao.xproject.app.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -18,7 +21,7 @@ public class MyWalletResponse {
         this.result = result;
     }
 
-    public static class MyWalletList {
+    public static class MyWalletList implements Parcelable{
         /**
          * header : null
          * accountNo : 103
@@ -35,6 +38,28 @@ public class MyWalletResponse {
         private double amount;
         private double withdrowFee;
         private String unitName;
+
+        protected MyWalletList(Parcel in) {
+            header = in.readString();
+            icon = in.readString();
+            accountNo = in.readString();
+            unit = in.readInt();
+            amount = in.readDouble();
+            withdrowFee = in.readDouble();
+            unitName = in.readString();
+        }
+
+        public static final Creator<MyWalletList> CREATOR = new Creator<MyWalletList>() {
+            @Override
+            public MyWalletList createFromParcel(Parcel in) {
+                return new MyWalletList(in);
+            }
+
+            @Override
+            public MyWalletList[] newArray(int size) {
+                return new MyWalletList[size];
+            }
+        };
 
         public String getHeader() {
             return header;
@@ -90,6 +115,22 @@ public class MyWalletResponse {
 
         public void setIcon(String icon) {
             this.icon = icon;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(header);
+            dest.writeString(icon);
+            dest.writeString(accountNo);
+            dest.writeInt(unit);
+            dest.writeDouble(amount);
+            dest.writeDouble(withdrowFee);
+            dest.writeString(unitName);
         }
     }
 }

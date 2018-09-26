@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
 import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
@@ -83,7 +84,9 @@ public class NewUserRegisterActivity extends BaseRxActivity<ActivityNewUserRegis
                     public void accept(String str) throws Exception {
                         dialog.dismiss();
                         if (str.equals(Constants.SUCCESS)) {
+                            XProjectApplication.getInstance().finishActivity(LoginActivity.class);
                             MainActivity.go(activity);
+                            finish();
                         } else {
                             Toast.makeText(activity, str, Toast.LENGTH_LONG).show();
                         }

@@ -14,17 +14,21 @@ import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
+import com.qbao.xproject.app.entity.UploadImageResponseEntity;
+import com.qbao.xproject.app.entity.WithdrawResponseEntity;
 import com.qbao.xproject.app.http.converter.JsonConverterFactory;
 import com.qbao.xproject.app.http.interceptor.EncryptionInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpHeadInterceptor;
 import com.qbao.xproject.app.http.interceptor.HttpLoggingInterceptor;
 import com.qbao.xproject.app.http.interceptor.NetInterceptor;
 import com.qbao.xproject.app.http.interceptor.NoNetInterceptor;
+import com.qbao.xproject.app.http.interceptor.TokenInterceptor;
 import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
+import com.qbao.xproject.app.request_body.WithdrawRequest;
 
 import java.io.File;
 import java.util.List;
@@ -32,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import okhttp3.Cache;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -104,6 +109,7 @@ public class XProjectService {
                 .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
+                .addInterceptor(new TokenInterceptor())
                 .addInterceptor(new HttpLoggingInterceptor("XProjectService").setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(headInterceptor)
                 .addInterceptor(new NoNetInterceptor())
@@ -160,7 +166,7 @@ public class XProjectService {
         return mServiceApi.receiveSpeed(receiveSpeedRequest);
     }
 
-    public Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine() {
+    public Observable<UnReceiveMineEntity> findAllUnReceivedMine() {
         return mServiceApi.findAllUnReceivedMine();
     }
 
@@ -186,6 +192,18 @@ public class XProjectService {
 
     public Observable<NextGambleResponseEntity> getNextGambleInfo() {
         return mServiceApi.getNextGambleInfo();
+    }
+
+    public Observable<WithdrawResponseEntity> withdrawApply(WithdrawRequest request) {
+        return mServiceApi.withdrawApply(request);
+    }
+
+    public Observable<Object> feedBack(String phone,String content,String attachMent) {
+        return mServiceApi.feedBack(phone, content, attachMent);
+    }
+
+    public Observable<String> uploadImage(int type, MultipartBody.Part file) {
+        return mServiceApi.uploadImage(type, file);
     }
 }
 

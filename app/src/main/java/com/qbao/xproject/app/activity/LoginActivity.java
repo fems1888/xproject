@@ -120,6 +120,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
                     @Override
                     public void accept(Object o) throws Exception {
                         MainActivity.go(activity);
+                        finish();
 
                     }
                 });

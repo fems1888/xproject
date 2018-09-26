@@ -1,5 +1,7 @@
 package com.qbao.xproject.app.manager;
 
+import android.content.Context;
+
 import com.qbao.xproject.app.BuildConfig;
 import com.qbao.xproject.app.utility.CommonUtility;
 
@@ -28,6 +30,7 @@ public class Constants {
     public static final String GAMBLE_ID = "gamble_id";
 
     public static final int A_DAY_MILLS = 24*60*60*1000;
+    public static final int TEN_MINUTE_MILLS = 10*60*1000;
 
 
     public static String formatHttpUrl(String url) {
@@ -35,5 +38,21 @@ public class Constants {
             return "";
         }
         return CommonUtility.formatString(BuildConfig.URL_API_BASE, "/core/file/download/icon/", url);
+    }
+
+
+    /**
+     * 攻略
+     * @return
+     */
+    public static String getStrategyUrl() {
+        return CommonUtility.formatString(BuildConfig.XPROJECT_HTML, "/core/pageSkip/pageSkip?name=0");
+    }
+
+    /**竞技场规则
+     * @return
+     */
+    public static String getArenaRuleUrl() {
+        return CommonUtility.formatString(BuildConfig.XPROJECT_HTML, "/core/pageSkip/pageSkip?name=1");
     }
 }

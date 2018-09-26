@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityBetResultBinding;
@@ -73,7 +74,14 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        PayFailActivity.goPayFailActivity(activity,"");
+                        finish();
+                    }
+                });
+        RxView.clicks(bindingView.textRule).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        WebViewActivity.goOpenIn(activity, Constants.getArenaRuleUrl());
                     }
                 });
     }

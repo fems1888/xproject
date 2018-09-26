@@ -12,15 +12,15 @@ public class ReceiveMineEntity {
      * nextMineCreateTime : 1537460100000
      */
 
-    private UnReceiveMineEntity result;
+    private UnReceiveMineEntity.UnReceiveMineResult result;
     private long systemTime;
     private long nextMineCreateTime;
 
-    public UnReceiveMineEntity getResult() {
+    public UnReceiveMineEntity.UnReceiveMineResult getResult() {
         return result;
     }
 
-    public void setResult(UnReceiveMineEntity result) {
+    public void setResult(UnReceiveMineEntity.UnReceiveMineResult result) {
         this.result = result;
     }
 

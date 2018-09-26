@@ -30,6 +30,7 @@
                 android:layout_marginLeft="@dimen/size_dp_20"
                 android:layout_marginRight="@dimen/size_dp_20"
                 android:layout_marginTop="@dimen/size_dp_40"
+                android:layout_marginBottom="@dimen/size_dp_20"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -72,12 +73,13 @@
                     android:textColor="@color/text_ball_color"
                     android:textSize="@dimen/size_sp_30" />
             </LinearLayout>
+
             <TextView
+                android:id="@+id/text_tip_one"
                 style="@style/textStyleWhiteColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/size_dp_20"
                 android:text="@string/price_rule_one" />
 
             <LinearLayout
@@ -88,6 +90,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/text_tip_two"
                     style="@style/textStyleWhiteColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,15 +100,18 @@
                     android:text="@string/detail_see" />
 
                 <TextView
+                    android:id="@+id/text_rule"
                     style="@style/textStyleWhiteColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:background="?android:selectableItemBackgroundBorderless"
                     android:paddingBottom="@dimen/size_dp_4"
                     android:paddingTop="@dimen/size_dp_4"
                     android:text="@string/arena_rule"
                     android:textColor="@color/text_blue_light" />
             </LinearLayout>
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_dp_200"
@@ -144,8 +150,7 @@
                             android:layout_width="@dimen/size_dp_40"
                             android:layout_height="@dimen/size_dp_40"
                             android:background="@drawable/ic_bet_red_ball"
-                            android:gravity="center"
-                             />
+                            android:gravity="center" />
 
                         <TextView
                             android:id="@+id/text_red_two_my"
@@ -154,8 +159,7 @@
                             android:layout_height="@dimen/size_dp_40"
                             android:layout_marginLeft="@dimen/size_dp_14"
                             android:background="@drawable/ic_bet_red_ball"
-                            android:gravity="center"
-                            />
+                            android:gravity="center" />
 
                         <TextView
                             android:id="@+id/text_red_three_my"
@@ -164,8 +168,7 @@
                             android:layout_height="@dimen/size_dp_40"
                             android:layout_marginLeft="@dimen/size_dp_14"
                             android:background="@drawable/ic_bet_red_ball"
-                            android:gravity="center"
-                            />
+                            android:gravity="center" />
 
                         <TextView
                             android:id="@+id/text_blue_one_my"
@@ -174,8 +177,7 @@
                             android:layout_height="@dimen/size_dp_40"
                             android:layout_marginLeft="@dimen/size_dp_14"
                             android:background="@drawable/ic_bet_blue_ball"
-                            android:gravity="center"
-                             />
+                            android:gravity="center" />
                     </LinearLayout>
 
                     <TextView
@@ -190,9 +192,9 @@
                         style="@style/textStyleSeconderColor"
                         android:layout_width="@dimen/size_dp_118"
                         android:layout_height="@dimen/size_dp_30"
-                        android:foreground="?attr/selectableItemBackground"
                         android:layout_marginTop="@dimen/size_dp_12"
                         android:background="@drawable/red_round_shape_stroke"
+                        android:foreground="?attr/selectableItemBackground"
                         android:gravity="center"
                         android:text="@string/next_period"
                         android:textColor="@color/main_selected_color" />

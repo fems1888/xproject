@@ -15,20 +15,23 @@ import com.qbao.xproject.app.interf.WithdrawItemCallback;
 import com.qbao.xproject.app.databinding.ActivityMyWalletBinding;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.RxBusManager;
+import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.viewmodel.MyWalletViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 
 public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBinding,MyWalletAdapter.WalletViewHolder,MyWalletResponse.MyWalletList> implements WithdrawItemCallback {
     private MyWalletViewModel viewModel;
+    private ArrayList<MyWalletResponse.MyWalletList> mCoinList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_wallet);
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.text_main_color, StatusBarContentColor.WHITE);
         setToolBarTitle(getString(R.string.my_wallet));
     }
@@ -36,6 +39,11 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
     public static void goOpenIn(Context context){
         Intent intent = new Intent(context,MyWalletActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_my_wallet;
     }
 
     /**
@@ -58,16 +66,34 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
 
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        RxBus.getDefault().toFlowable(RxBusManager.EventWalletRefresh.class)
+                .toObservable().compose(RxSchedulers.io_main())
+                .subscribe(eventWalletRefresh -> {
+                    getWalletData();
+                });
+
+    }
+
+    @Override
+    protected boolean openAnimation() {
+        return true;
+    }
+
     private void getWalletData() {
         if (viewModel == null){
             viewModel = new MyWalletViewModel(activity.getApplication(),TAG);
         }
         viewModel.getMyWallet()
                 .compose(RxSchedulers.io_main())
+
                 .subscribe(new Consumer<MyWalletResponse>() {
                     @Override
                     public void accept(MyWalletResponse myWalletResponse) throws Exception {
-                        loadDataComplete(myWalletResponse.getResult());
+                        mCoinList = (ArrayList<MyWalletResponse.MyWalletList>) myWalletResponse.getResult();
+                        loadDataComplete(mCoinList);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -102,6 +128,6 @@ public class MyWalletActivity extends BaseRefreshActivity<ActivityMyWalletBindin
 
     @Override
     public void withdraw() {
-        WithdrawActivity.go(activity);
+        WithdrawActivity.go(activity,mCoinList);
     }
 }

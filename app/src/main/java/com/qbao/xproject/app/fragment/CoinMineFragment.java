@@ -5,6 +5,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.qbao.xproject.app.entity.UnReceiveMineEntity;
 import com.qbao.xproject.app.http.XProjectServiceApi;
 import com.qbao.xproject.app.manager.AccessTokenManager;
 import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.manager.Constants;
 import com.qbao.xproject.app.manager.RxBusManager;
 import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
@@ -56,7 +58,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBinding> {
     private MineViewModel viewModel;
-    private List<UnReceiveMineEntity> mineList;
+    private List<UnReceiveMineEntity.UnReceiveMineResult> mineList;
     private ObjectAnimator objectAnimator;
     private ObjectAnimator objectAnimator1;
     private ObjectAnimator objectAnimator2;
@@ -75,10 +77,13 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     private MyWalletViewModel walletViewModel;
     private double mineAmount = 0;
     private double mSpeedFactor = 0;
+    private int MINE_AMOUNT = 0;
+
     @Override
     public int setContent() {
         return R.layout.layout_fragment_coin_mine;
     }
+
     @Override
     protected void initListener() {
         super.initListener();
@@ -88,7 +93,7 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                     public void accept(Object o) throws Exception {
                         CurrentGambleResult currentGambleResult = ((MainActivity) getActivity()).getmCurrentGambleResult();
                         NextGambleResponseEntity nextGambleResponseEntity = ((MainActivity) getActivity()).getmNextGambleResponseEntity();
-                        AccelerateActivity.goAccelerateActivity(activity,String.valueOf(currentGambleResult.getGambleNo()),nextGambleResponseEntity.getId());
+                        AccelerateActivity.goAccelerateActivity(activity, String.valueOf(currentGambleResult.getGambleNo()), nextGambleResponseEntity.getId());
                     }
                 });
 
@@ -176,12 +181,19 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                         receiveMine(bindingView.appCompatImageView12);
                     }
                 });
+        RxView.clicks(bindingView.textStrategy).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        WebViewActivity.goOpenIn(activity, Constants.getStrategyUrl());
+                    }
+                });
     }
 
     private void receiveMine(AppCompatImageView appCompatImageView) {
         Object tag = appCompatImageView.getTag();
-        if (tag !=null){
-            UnReceiveMineEntity entity = (UnReceiveMineEntity) tag;
+        if (tag != null) {
+            UnReceiveMineEntity.UnReceiveMineResult entity = (UnReceiveMineEntity.UnReceiveMineResult) tag;
             ReceiveMineRequest request = new ReceiveMineRequest();
             request.setId(entity.getId());
             viewModel.receiveMine(request)
@@ -189,13 +201,17 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                     .subscribe(new Consumer<ReceiveMineEntity>() {
                         @Override
                         public void accept(ReceiveMineEntity receiveMineEntity) throws Exception {
-                            setVisibility(appCompatImageView,false);
-                            UnReceiveMineEntity unReceiveMineEntity = receiveMineEntity.getResult();
-                            mineAmount+=unReceiveMineEntity.getAmount();
+                            setVisibility(appCompatImageView, false);
+                            UnReceiveMineEntity.UnReceiveMineResult unReceiveMineEntity = receiveMineEntity.getResult();
+                            mineAmount += unReceiveMineEntity.getAmount();
                             bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
-                            if (receiveMineEntity.getNextMineCreateTime() <= receiveMineEntity.getSystemTime()){
+                            if (receiveMineEntity.getNextMineCreateTime() <= receiveMineEntity.getSystemTime()) {
 
                                 findAllUnReceivedMine();
+                            }
+                            MINE_AMOUNT--;
+                            if (MINE_AMOUNT == 0){
+                                showCountDown(receiveMineEntity.getSystemTime(),receiveMineEntity.getNextMineCreateTime());
                             }
                         }
                     }, new Consumer<Throwable>() {
@@ -210,8 +226,8 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     @Override
     protected void initData() {
         super.initData();
-        if (viewModel == null){
-            viewModel = new MineViewModel(activity.getApplication(),TAG);
+        if (viewModel == null) {
+            viewModel = new MineViewModel(activity.getApplication(), TAG);
         }
         setAllClickStatus(false);
         getMineAmount();
@@ -219,10 +235,10 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 .subscribe(new Consumer<List<AccelerateFactorEntity>>() {
                     @Override
                     public void accept(List<AccelerateFactorEntity> entities) throws Exception {
-                        for (AccelerateFactorEntity entity : entities){
-                            mSpeedFactor+=entity.getSpeedAdd();
+                        for (AccelerateFactorEntity entity : entities) {
+                            mSpeedFactor += entity.getSpeedAdd();
                         }
-                        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor)," ",CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
+                        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor), " ", CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -230,74 +246,74 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
 
                     }
                 });
-        if (holderX == null){
-            holderX = PropertyValuesHolder.ofFloat("scaleX", 1,0.9f);
-            holderY = PropertyValuesHolder.ofFloat("scaleY", 1,0.9f);
+        if (holderX == null) {
+            holderX = PropertyValuesHolder.ofFloat("scaleX", 1, 0.9f);
+            holderY = PropertyValuesHolder.ofFloat("scaleY", 1, 0.9f);
         }
-        if (objectAnimator == null){
+        if (objectAnimator == null) {
 
-            objectAnimator = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView,holderX,holderY);
+            objectAnimator = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView, holderX, holderY);
             objectAnimator.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator.setInterpolator(new LinearInterpolator());
 
-            objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView1,holderX,holderY);
+            objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView1, holderX, holderY);
             objectAnimator1.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator1.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator1.setInterpolator(new LinearInterpolator());
 
-            objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView2,holderX,holderY);
+            objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView2, holderX, holderY);
             objectAnimator2.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator2.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator2.setInterpolator(new LinearInterpolator());
 
-            objectAnimator3 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView3,holderX,holderY);
+            objectAnimator3 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView3, holderX, holderY);
             objectAnimator3.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator3.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator3.setInterpolator(new LinearInterpolator());
 
-            objectAnimator4 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView4,holderX,holderY);
+            objectAnimator4 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView4, holderX, holderY);
             objectAnimator4.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator4.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator4.setInterpolator(new LinearInterpolator());
 
-            objectAnimator5 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView5,holderX,holderY);
+            objectAnimator5 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView5, holderX, holderY);
             objectAnimator5.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator5.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator5.setInterpolator(new LinearInterpolator());
 
-            objectAnimator6 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView6,holderX,holderY);
+            objectAnimator6 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView6, holderX, holderY);
             objectAnimator6.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator6.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator6.setInterpolator(new LinearInterpolator());
 
-            objectAnimator7 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView7,holderX,holderY);
+            objectAnimator7 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView7, holderX, holderY);
             objectAnimator7.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator7.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator7.setInterpolator(new LinearInterpolator());
 
 
-            objectAnimator8 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView8,holderX,holderY);
+            objectAnimator8 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView8, holderX, holderY);
             objectAnimator8.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator8.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator8.setInterpolator(new LinearInterpolator());
 
-            objectAnimator9 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView9,holderX,holderY);
+            objectAnimator9 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView9, holderX, holderY);
             objectAnimator9.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator9.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator9.setInterpolator(new LinearInterpolator());
 
-            objectAnimator10 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView10,holderX,holderY);
+            objectAnimator10 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView10, holderX, holderY);
             objectAnimator10.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator10.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator10.setInterpolator(new LinearInterpolator());
 
-            objectAnimator11 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView11,holderX,holderY);
+            objectAnimator11 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView11, holderX, holderY);
             objectAnimator11.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator11.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator11.setInterpolator(new LinearInterpolator());
 
-            objectAnimator12 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView12,holderX,holderY);
+            objectAnimator12 = ObjectAnimator.ofPropertyValuesHolder(bindingView.appCompatImageView12, holderX, holderY);
             objectAnimator12.setDuration(800).setRepeatCount(ValueAnimator.INFINITE);
             objectAnimator12.setRepeatMode(ValueAnimator.REVERSE);
             objectAnimator12.setInterpolator(new LinearInterpolator());
@@ -316,18 +332,25 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     }
 
     private void initSpeed(double count) {
-        mSpeedFactor+=count;
-        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor)," ",CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
+        mSpeedFactor += count;
+        bindingView.textFactor.setText(CommonUtility.formatString(getString(R.string.velocity_factor), " ", CommonUtility.getFormatDoubleTwo(mSpeedFactor)));
     }
 
     private void findAllUnReceivedMine() {
         viewModel.findAllUnReceivedMine()
                 .compose(RxSchedulers.io_main())
-                .subscribe(new Consumer<List<UnReceiveMineEntity>>() {
+                .subscribe(new Consumer<UnReceiveMineEntity>() {
                     @Override
-                    public void accept(List<UnReceiveMineEntity> unReceiveMineEntities) throws Exception {
-                        mineList = unReceiveMineEntities;
+                    public void accept(UnReceiveMineEntity unReceiveMineEntities) throws Exception {
+                        mineList = unReceiveMineEntities.getResult();
+                        MINE_AMOUNT = mineList.size();
+                        if (mineList.size() == 0) {
+                            showCountDown(unReceiveMineEntities.getSystemTime(),unReceiveMineEntities.getNextMineCreateTime());
+                        }else {
+                            bindingView.textCounterDown.setVisibility(View.GONE);
+                        }
                         setMineStatus();
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -337,475 +360,544 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
                 });
     }
 
-    private void getMineAmount() {
-        if (walletViewModel == null){
+    private void showCountDown(long systemTime, long nextMineCreateTime) {
+        bindingView.textCounterDown.setVisibility(View.VISIBLE);
+        new CountDownTimer(nextMineCreateTime - systemTime, 1000L) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                bindingView.textCounterDown.setText(CommonUtility.formatSecondsStandard(activity,millisUntilFinished/1000));
+            }
+            @Override
+            public void onFinish() {
+                findAllUnReceivedMine();
+                cancel();
+            }
 
-            walletViewModel = new MyWalletViewModel(activity.getApplication(),TAG);
+        }.start();
+    }
+
+    private void getMineAmount() {
+        if (walletViewModel == null) {
+
+            walletViewModel = new MyWalletViewModel(activity.getApplication(), TAG);
         }
         walletViewModel.getMyWallet()
                 .compose(RxSchedulers.io_main())
-            .subscribe(new Consumer<MyWalletResponse>() {
-        @Override
-        public void accept(MyWalletResponse myWalletResponse) throws Exception {
-            List<MyWalletResponse.MyWalletList> result = myWalletResponse.getResult();
+                .subscribe(new Consumer<MyWalletResponse>() {
+                    @Override
+                    public void accept(MyWalletResponse myWalletResponse) throws Exception {
+                        List<MyWalletResponse.MyWalletList> result = myWalletResponse.getResult();
 
-            for (MyWalletResponse.MyWalletList list : result){
-                if (!list.getUnitName().equalsIgnoreCase("eth")){
-                    mineAmount+=list.getAmount();
-                }
-            }
-            bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
-        }
-    }, new Consumer<Throwable>() {
-        @Override
-        public void accept(Throwable throwable) throws Exception {
-            Log.e(TAG,throwable.getMessage());
-        }
-    });
+                        for (MyWalletResponse.MyWalletList list : result) {
+                            if (!list.getUnitName().equalsIgnoreCase("eth")) {
+                                mineAmount += list.getAmount();
+                            }
+                        }
+                        bindingView.textMineAmount.setText(CommonUtility.getFormatDoubleTwo(mineAmount));
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e(TAG, throwable.getMessage());
+                    }
+                });
     }
 
     /**
      *
      */
     private void setMineStatus() {
-        if (mineList.size()==1){
-            setVisibility(bindingView.appCompatImageView1,true);
+        if (mineList.size() == 1) {
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            if (!objectAnimator1.isStarted()){
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            setVisibility(bindingView.appCompatImageView2,false);
-            setVisibility(bindingView.appCompatImageView3,false);
-            setVisibility(bindingView.appCompatImageView4,false);
-            setVisibility(bindingView.appCompatImageView5,false);
-            setVisibility(bindingView.appCompatImageView6,false);
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==2){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView2, false);
+            setVisibility(bindingView.appCompatImageView3, false);
+            setVisibility(bindingView.appCompatImageView4, false);
+            setVisibility(bindingView.appCompatImageView5, false);
+            setVisibility(bindingView.appCompatImageView6, false);
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 2) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,false);
-            setVisibility(bindingView.appCompatImageView4,false);
-            setVisibility(bindingView.appCompatImageView5,false);
-            setVisibility(bindingView.appCompatImageView6,false);
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==3){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView3, false);
+            setVisibility(bindingView.appCompatImageView4, false);
+            setVisibility(bindingView.appCompatImageView5, false);
+            setVisibility(bindingView.appCompatImageView6, false);
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 3) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,false);
-            setVisibility(bindingView.appCompatImageView5,false);
-            setVisibility(bindingView.appCompatImageView6,false);
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==4){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView4, false);
+            setVisibility(bindingView.appCompatImageView5, false);
+            setVisibility(bindingView.appCompatImageView6, false);
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 4) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,false);
-            setVisibility(bindingView.appCompatImageView6,false);
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }
-        else if (mineList.size()==5){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView5, false);
+            setVisibility(bindingView.appCompatImageView6, false);
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 5) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
-            setVisibility(bindingView.appCompatImageView6,false);
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==6){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView6, false);
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 6) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
             }
 
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,false);
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==7){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView7, false);
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 7) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,false);
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==8){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView8, false);
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 8) {
+            if (!objectAnimator1.isStarted()) {
 
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
-            }if (!objectAnimator8.isStarted()){
+            }
+            if (!objectAnimator8.isStarted()) {
                 objectAnimator8.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,true);
+            setVisibility(bindingView.appCompatImageView8, true);
             bindingView.appCompatImageView8.setTag(mineList.get(7));
-            setVisibility(bindingView.appCompatImageView9,false);
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }
-        else if (mineList.size()==9){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView9, false);
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 9) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
-            }if (!objectAnimator8.isStarted()){
+            }
+            if (!objectAnimator8.isStarted()) {
                 objectAnimator8.start();
-            }if (!objectAnimator9.isStarted()){
+            }
+            if (!objectAnimator9.isStarted()) {
                 objectAnimator9.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,true);
+            setVisibility(bindingView.appCompatImageView8, true);
             bindingView.appCompatImageView8.setTag(mineList.get(7));
-            setVisibility(bindingView.appCompatImageView9,true);
+            setVisibility(bindingView.appCompatImageView9, true);
             bindingView.appCompatImageView9.setTag(mineList.get(8));
-            setVisibility(bindingView.appCompatImageView10,false);
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==10){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView10, false);
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 10) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
-            }if (!objectAnimator8.isStarted()){
+            }
+            if (!objectAnimator8.isStarted()) {
                 objectAnimator8.start();
-            }if (!objectAnimator9.isStarted()){
+            }
+            if (!objectAnimator9.isStarted()) {
                 objectAnimator9.start();
-            }if (!objectAnimator10.isStarted()){
+            }
+            if (!objectAnimator10.isStarted()) {
                 objectAnimator10.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,true);
+            setVisibility(bindingView.appCompatImageView8, true);
             bindingView.appCompatImageView8.setTag(mineList.get(7));
-            setVisibility(bindingView.appCompatImageView9,true);
+            setVisibility(bindingView.appCompatImageView9, true);
             bindingView.appCompatImageView9.setTag(mineList.get(8));
-            setVisibility(bindingView.appCompatImageView10,true);
+            setVisibility(bindingView.appCompatImageView10, true);
             bindingView.appCompatImageView10.setTag(mineList.get(9));
-            setVisibility(bindingView.appCompatImageView11,false);
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==11){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView11, false);
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() == 11) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
-            }if (!objectAnimator8.isStarted()){
+            }
+            if (!objectAnimator8.isStarted()) {
                 objectAnimator8.start();
-            }if (!objectAnimator9.isStarted()){
+            }
+            if (!objectAnimator9.isStarted()) {
                 objectAnimator9.start();
-            }if (!objectAnimator10.isStarted()){
+            }
+            if (!objectAnimator10.isStarted()) {
                 objectAnimator10.start();
-            }if (!objectAnimator11.isStarted()){
+            }
+            if (!objectAnimator11.isStarted()) {
                 objectAnimator11.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,true);
+            setVisibility(bindingView.appCompatImageView8, true);
             bindingView.appCompatImageView8.setTag(mineList.get(7));
-            setVisibility(bindingView.appCompatImageView9,true);
+            setVisibility(bindingView.appCompatImageView9, true);
             bindingView.appCompatImageView9.setTag(mineList.get(8));
-            setVisibility(bindingView.appCompatImageView10,true);
+            setVisibility(bindingView.appCompatImageView10, true);
             bindingView.appCompatImageView10.setTag(mineList.get(9));
-            setVisibility(bindingView.appCompatImageView11,true);
+            setVisibility(bindingView.appCompatImageView11, true);
             bindingView.appCompatImageView11.setTag(mineList.get(10));
-            setVisibility(bindingView.appCompatImageView12,false);
-        }else if (mineList.size()==12){
-            if (!objectAnimator1.isStarted()){
+            setVisibility(bindingView.appCompatImageView12, false);
+        } else if (mineList.size() >= 12) {
+            if (!objectAnimator1.isStarted()) {
                 objectAnimator1.start();
             }
-            if (!objectAnimator2.isStarted()){
+            if (!objectAnimator2.isStarted()) {
                 objectAnimator2.start();
-            }if (!objectAnimator3.isStarted()){
+            }
+            if (!objectAnimator3.isStarted()) {
                 objectAnimator3.start();
-            }if (!objectAnimator4.isStarted()){
+            }
+            if (!objectAnimator4.isStarted()) {
                 objectAnimator4.start();
-            }if (!objectAnimator5.isStarted()){
+            }
+            if (!objectAnimator5.isStarted()) {
                 objectAnimator5.start();
-            }if (!objectAnimator6.isStarted()){
+            }
+            if (!objectAnimator6.isStarted()) {
                 objectAnimator6.start();
-            }if (!objectAnimator7.isStarted()){
+            }
+            if (!objectAnimator7.isStarted()) {
                 objectAnimator7.start();
-            }if (!objectAnimator8.isStarted()){
+            }
+            if (!objectAnimator8.isStarted()) {
                 objectAnimator8.start();
-            }if (!objectAnimator9.isStarted()){
+            }
+            if (!objectAnimator9.isStarted()) {
                 objectAnimator9.start();
-            }if (!objectAnimator10.isStarted()){
+            }
+            if (!objectAnimator10.isStarted()) {
                 objectAnimator10.start();
-            }if (!objectAnimator11.isStarted()){
+            }
+            if (!objectAnimator11.isStarted()) {
                 objectAnimator11.start();
-            }if (!objectAnimator12.isStarted()){
+            }
+            if (!objectAnimator12.isStarted()) {
                 objectAnimator12.start();
             }
-            setVisibility(bindingView.appCompatImageView1,true);
+            setVisibility(bindingView.appCompatImageView1, true);
             bindingView.appCompatImageView1.setTag(mineList.get(0));
-            setVisibility(bindingView.appCompatImageView2,true);
+            setVisibility(bindingView.appCompatImageView2, true);
             bindingView.appCompatImageView2.setTag(mineList.get(1));
-            setVisibility(bindingView.appCompatImageView3,true);
+            setVisibility(bindingView.appCompatImageView3, true);
             bindingView.appCompatImageView3.setTag(mineList.get(2));
-            setVisibility(bindingView.appCompatImageView4,true);
+            setVisibility(bindingView.appCompatImageView4, true);
             bindingView.appCompatImageView4.setTag(mineList.get(3));
-            setVisibility(bindingView.appCompatImageView5,true);
+            setVisibility(bindingView.appCompatImageView5, true);
             bindingView.appCompatImageView5.setTag(mineList.get(4));
 
-            setVisibility(bindingView.appCompatImageView6,true);
+            setVisibility(bindingView.appCompatImageView6, true);
             bindingView.appCompatImageView6.setTag(mineList.get(5));
-            setVisibility(bindingView.appCompatImageView7,true);
+            setVisibility(bindingView.appCompatImageView7, true);
             bindingView.appCompatImageView7.setTag(mineList.get(6));
-            setVisibility(bindingView.appCompatImageView8,true);
+            setVisibility(bindingView.appCompatImageView8, true);
             bindingView.appCompatImageView8.setTag(mineList.get(7));
-            setVisibility(bindingView.appCompatImageView9,true);
+            setVisibility(bindingView.appCompatImageView9, true);
             bindingView.appCompatImageView9.setTag(mineList.get(8));
-            setVisibility(bindingView.appCompatImageView10,true);
+            setVisibility(bindingView.appCompatImageView10, true);
             bindingView.appCompatImageView10.setTag(mineList.get(9));
-            setVisibility(bindingView.appCompatImageView11,true);
+            setVisibility(bindingView.appCompatImageView11, true);
             bindingView.appCompatImageView11.setTag(mineList.get(10));
-            setVisibility(bindingView.appCompatImageView12,true);
+            setVisibility(bindingView.appCompatImageView12, true);
             bindingView.appCompatImageView12.setTag(mineList.get(11));
         }
     }
 
-    private void setVisibility(AppCompatImageView view, boolean show){
-        if (show){
+    private void setVisibility(AppCompatImageView view, boolean show) {
+        if (show) {
             view.setVisibility(View.VISIBLE);
             view.setEnabled(true);
-        }else {
+        } else {
             view.setVisibility(View.INVISIBLE);
             view.setEnabled(false);
         }
     }
 
-    private void setAllClickStatus(boolean clickStatus){
+    private void setAllClickStatus(boolean clickStatus) {
         bindingView.appCompatImageView12.setEnabled(clickStatus);
         bindingView.appCompatImageView11.setEnabled(clickStatus);
         bindingView.appCompatImageView10.setEnabled(clickStatus);
@@ -827,6 +919,6 @@ public class CoinMineFragment extends BaseRxFragment<LayoutFragmentCoinMineBindi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(activity,"ss",Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, "ss", Toast.LENGTH_LONG).show();
     }
 }

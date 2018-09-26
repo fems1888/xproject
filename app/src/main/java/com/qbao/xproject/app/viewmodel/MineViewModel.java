@@ -78,17 +78,17 @@ public class MineViewModel extends BaseViewModel {
         });
     }
 
-    public Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine() {
+    public Observable<UnReceiveMineEntity> findAllUnReceivedMine() {
         return Observable.create(e -> {
             XProjectService.newInstance().findAllUnReceivedMine()
-                    .subscribe(new Rx2Subscriber<List<UnReceiveMineEntity>>(application, TAG) {
+                    .subscribe(new Rx2Subscriber<UnReceiveMineEntity>(application, TAG) {
                         @Override
                         public void onError(ExceptionHandle.ResponseThrowable responseThrowable) {
                             e.onError(responseThrowable);
                         }
 
                         @Override
-                        public void onNext(List<UnReceiveMineEntity> value) {
+                        public void onNext(UnReceiveMineEntity value) {
                             e.onNext(value);
                         }
                     });

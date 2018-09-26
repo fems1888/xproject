@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 
 import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.base.BaseWebActivity;
+import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.utility.StatusBarUtils;
 
 public class WebViewActivity extends BaseWebActivity {
     public static final String URL = "url";
@@ -52,6 +54,7 @@ public class WebViewActivity extends BaseWebActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         mUrl = getIntent().getStringExtra(URL);
         super.onCreate(savedInstanceState);
+        StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
     }
 
     @Override

@@ -38,10 +38,12 @@
                         android:textSize="@dimen/size_sp_16" />
 
                     <EditText
+                        android:id="@+id/edit_address"
                         style="@style/textStyleMainColor"
                         android:layout_marginLeft="@dimen/size_dp_6"
                         android:background="@null"
                         android:hint="@string/input_withdraw_address"
+                        android:text="0x54e7914887f064971fa36cd9a7de09101989ca18"
                         android:textColorHint="@color/text_hint_color"
                         android:textSize="@dimen/size_sp_16" />
                 </LinearLayout>
@@ -61,23 +63,31 @@
                         android:id="@+id/text_coin_class"
                         style="@style/textStyleMainColor"
                         android:layout_marginLeft="@dimen/size_dp_16"
+                        android:layout_centerVertical="true"
                         android:text="@string/coin_class"
                         android:textSize="@dimen/size_sp_16" />
 
-                    <TextView
-                        android:id="@+id/text_coin_name"
-                        style="@style/textStyleMainColor"
-                        android:layout_marginLeft="@dimen/size_dp_16"
+                    <!--<TextView-->
+                        <!--android:id="@+id/text_coin_name"-->
+                        <!--style="@style/textStyleMainColor"-->
+                        <!--android:layout_marginLeft="@dimen/size_dp_16"-->
+                        <!--android:layout_toRightOf="@id/text_coin_class"-->
+                        <!--android:text="@string/coin_class"-->
+                        <!--android:textSize="@dimen/size_sp_16" />-->
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_toRightOf="@id/text_coin_class"
-                        android:text="@string/coin_class"
-                        android:textSize="@dimen/size_sp_16" />
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/size_sp_16"
-                        app:srcCompat="@drawable/ic_gray_back" />
+                        android:layout_marginLeft="@dimen/size_dp_8"
+                        ></android.support.v7.widget.AppCompatSpinner>
+                    <!--<android.support.v7.widget.AppCompatImageView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:layout_marginRight="@dimen/size_sp_16"-->
+                        <!--app:srcCompat="@drawable/ic_gray_back" />-->
                 </RelativeLayout>
 
                 <View
@@ -98,10 +108,12 @@
                         android:textSize="@dimen/size_sp_16" />
 
                     <EditText
+                        android:id="@+id/edit_amount"
                         style="@style/textStyleMainColor"
                         android:layout_marginLeft="@dimen/size_dp_6"
                         android:background="@null"
                         android:hint="@string/can_use_balance"
+                        android:inputType="numberDecimal"
                         android:textColorHint="@color/text_hint_color"
                         android:textSize="@dimen/size_sp_16" />
                 </LinearLayout>
@@ -124,9 +136,10 @@
                         android:textSize="@dimen/size_sp_16" />
 
                     <TextView
+                        android:id="@+id/text_fee"
                         style="@style/textStyleMainColor"
                         android:layout_marginLeft="@dimen/size_dp_16"
-                        android:text="@string/fee"
+                        android:text="1"
                         android:textSize="@dimen/size_sp_16" />
                 </LinearLayout>
             </LinearLayout>

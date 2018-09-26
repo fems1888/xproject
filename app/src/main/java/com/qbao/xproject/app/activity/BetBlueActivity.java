@@ -14,6 +14,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.qbao.xproject.app.R;
+import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.entity.BetNextResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.manager.AccountManager;
@@ -235,6 +236,8 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                     public void accept(BetNextResponseEntity betNextResponseEntity) throws Exception {
                         dialog.dismiss();
                         BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString());
+                        XProjectApplication.getInstance().finishActivity(BetRedActivity.class);
+                        finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

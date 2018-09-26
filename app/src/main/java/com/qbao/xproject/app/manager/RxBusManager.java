@@ -16,4 +16,6 @@ public class RxBusManager {
 
         private double count;
     }
+    public static class EventWalletRefresh{
+    }
 }

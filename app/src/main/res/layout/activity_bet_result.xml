@@ -114,10 +114,12 @@
                 android:text="@string/detail_see" />
 
             <TextView
+                android:id="@+id/text_rule"
                 style="@style/textStyleWhiteColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="?android:selectableItemBackgroundBorderless"
                 android:paddingBottom="@dimen/size_dp_4"
                 android:paddingTop="@dimen/size_dp_4"
                 android:text="@string/arena_rule"

@@ -1,292 +1,223 @@
 package com.qbao.xproject.app.entity;
 
+import android.content.Context;
+
+import com.qbao.xproject.app.R;
+
+import java.util.List;
+
 /**
  * @author Created by jackieyao on 2018/9/20 下午7:04.
  */
 
 public class BillResponseEntity {
 
+    public static final int WITHDRAW = 0;
+    public static final int NO_START = 0;
+    public static final int CONFIRMING = 1;
+    public static final int CONFIRMED = 2;
+    public static final int FAIL = 3;
+
     /**
-     * accountName : string
-     * customerId : string
-     * customerName : string
-     * customerOrderId : string
-     * header : string
-     * icon : string
-     * id : 0
-     * isDeleted : true
-     * number : 0
-     * orderId : string
-     * phone : string
-     * productId : 0
-     * productName : string
-     * sumAmount : 0
-     * symbol : string
-     * typeName : string
-     * address : string
-     * amount : 0
-     * exchangeTime : 2018-09-20T02:41:45.168Z
-     * transactionHash : string
-     * eventApplyId : 0
-     * unit : 0
-     * type : 0
-     * accountNo : string
-     * status : 0
-     * fromddress : string
-     * fee : 0
-     * feeUnit : 0
+     * time : 2018-09-25
+     * content : [{"id":176,"accountName":"用户19338997","address":"0x54e7914887f064971fa36cd9a7de09101989ca18","amount":0.1,"exchangeTime":"2018-09-25 11:53:05","isDeleted":false,"unit":101,"type":0,"accountNo":"19338997","status":0,"fee":0.0013,"feeUnit":101,"unitName":"ETH","typeContent":"提币","symbol":"-","icon":"withdraw.png"}]
      */
 
-    private String accountName;
-    private String customerId;
-    private String customerName;
-    private String customerOrderId;
-    private String header;
-    private String icon;
-    private int id;
-    private boolean isDeleted;
-    private int number;
-    private String orderId;
-    private String phone;
-    private int productId;
-    private String productName;
-    private int sumAmount;
-    private String symbol;
-    private String typeName;
-    private String address;
-    private int amount;
-    private String exchangeTime;
-    private String transactionHash;
-    private int eventApplyId;
-    private int unit;
-    private int type;
-    private String accountNo;
-    private int status;
-    private String fromddress;
-    private int fee;
-    private int feeUnit;
+    private String time;
+    private List<BillContentResponse> content;
 
-    public String getAccountName() {
-        return accountName;
+    public String getTime() {
+        return time;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public List<BillContentResponse> getContent() {
+        return content;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setContent(List<BillContentResponse> content) {
+        this.content = content;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
+    public static class BillContentResponse {
+        /**
+         * id : 176
+         * accountName : 用户19338997
+         * address : 0x54e7914887f064971fa36cd9a7de09101989ca18
+         * amount : 0.1
+         * exchangeTime : 2018-09-25 11:53:05
+         * isDeleted : false
+         * unit : 101
+         * type : 0:代表提现
+         * accountNo : 19338997
+         * status :    0。未开始。1 确认中 2 已确认。3 失败
+         * fee : 0.0013
+         * feeUnit : 101
+         * unitName : ETH
+         * typeContent : 提币
+         * symbol : -
+         * icon : withdraw.png
+         */
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+        private int id;
+        private String accountName;
+        private String address;
+        private double amount;
+        private String exchangeTime;
+        private boolean isDeleted;
+        private int unit;
+        private int type;
+        private String accountNo;
+        private int status;
+        private double fee;
+        private int feeUnit;
+        private String unitName;
+        private String typeContent;
+        private String symbol;
+        private String icon;
 
-    public String getCustomerOrderId() {
-        return customerOrderId;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public void setCustomerOrderId(String customerOrderId) {
-        this.customerOrderId = customerOrderId;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public String getHeader() {
-        return header;
-    }
+        public String getAccountName() {
+            return accountName;
+        }
 
-    public void setHeader(String header) {
-        this.header = header;
-    }
+        public void setAccountName(String accountName) {
+            this.accountName = accountName;
+        }
 
-    public String getIcon() {
-        return icon;
-    }
+        public String getAddress() {
+            return address;
+        }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+        public void setAddress(String address) {
+            this.address = address;
+        }
 
-    public int getId() {
-        return id;
-    }
+        public double getAmount() {
+            return amount;
+        }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
 
-    public boolean isIsDeleted() {
-        return isDeleted;
-    }
+        public String getExchangeTime() {
+            return exchangeTime;
+        }
 
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
+        public void setExchangeTime(String exchangeTime) {
+            this.exchangeTime = exchangeTime;
+        }
 
-    public int getNumber() {
-        return number;
-    }
+        public boolean isIsDeleted() {
+            return isDeleted;
+        }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
+        public void setIsDeleted(boolean isDeleted) {
+            this.isDeleted = isDeleted;
+        }
 
-    public String getOrderId() {
-        return orderId;
-    }
+        public int getUnit() {
+            return unit;
+        }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
+        public void setUnit(int unit) {
+            this.unit = unit;
+        }
 
-    public String getPhone() {
-        return phone;
-    }
+        public int getType() {
+            return type;
+        }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+        public void setType(int type) {
+            this.type = type;
+        }
 
-    public int getProductId() {
-        return productId;
-    }
+        public String getAccountNo() {
+            return accountNo;
+        }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
+        public void setAccountNo(String accountNo) {
+            this.accountNo = accountNo;
+        }
 
-    public String getProductName() {
-        return productName;
-    }
+        public int getStatus() {
+            return status;
+        }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+        public void setStatus(int status) {
+            this.status = status;
+        }
 
-    public int getSumAmount() {
-        return sumAmount;
-    }
+        public double getFee() {
+            return fee;
+        }
 
-    public void setSumAmount(int sumAmount) {
-        this.sumAmount = sumAmount;
-    }
+        public void setFee(double fee) {
+            this.fee = fee;
+        }
 
-    public String getSymbol() {
-        return symbol;
-    }
+        public int getFeeUnit() {
+            return feeUnit;
+        }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+        public void setFeeUnit(int feeUnit) {
+            this.feeUnit = feeUnit;
+        }
 
-    public String getTypeName() {
-        return typeName;
-    }
+        public String getUnitName() {
+            return unitName;
+        }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
+        public void setUnitName(String unitName) {
+            this.unitName = unitName;
+        }
 
-    public String getAddress() {
-        return address;
-    }
+        public String getTypeContent() {
+            return typeContent;
+        }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+        public void setTypeContent(String typeContent) {
+            this.typeContent = typeContent;
+        }
 
-    public int getAmount() {
-        return amount;
-    }
+        public String getSymbol() {
+            return symbol;
+        }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
 
-    public String getExchangeTime() {
-        return exchangeTime;
-    }
+        public String getIcon() {
+            return icon;
+        }
 
-    public void setExchangeTime(String exchangeTime) {
-        this.exchangeTime = exchangeTime;
-    }
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
 
-    public String getTransactionHash() {
-        return transactionHash;
-    }
-
-    public void setTransactionHash(String transactionHash) {
-        this.transactionHash = transactionHash;
-    }
-
-    public int getEventApplyId() {
-        return eventApplyId;
-    }
-
-    public void setEventApplyId(int eventApplyId) {
-        this.eventApplyId = eventApplyId;
-    }
-
-    public int getUnit() {
-        return unit;
-    }
-
-    public void setUnit(int unit) {
-        this.unit = unit;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getAccountNo() {
-        return accountNo;
-    }
-
-    public void setAccountNo(String accountNo) {
-        this.accountNo = accountNo;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getFromddress() {
-        return fromddress;
-    }
-
-    public void setFromddress(String fromddress) {
-        this.fromddress = fromddress;
-    }
-
-    public int getFee() {
-        return fee;
-    }
-
-    public void setFee(int fee) {
-        this.fee = fee;
-    }
-
-    public int getFeeUnit() {
-        return feeUnit;
-    }
-
-    public void setFeeUnit(int feeUnit) {
-        this.feeUnit = feeUnit;
+        public String getStatus(Context context) {
+            if (status == NO_START) {
+                return context.getString(R.string.no_start);
+            } else if (status == CONFIRMING) {
+                return context.getString(R.string.confirming);
+            } else if (status == CONFIRMED) {
+                return context.getString(R.string.confirmed);
+            } else if (status == FAIL) {
+                return context.getString(R.string.failed);
+            }
+            return "";
+        }
     }
 }

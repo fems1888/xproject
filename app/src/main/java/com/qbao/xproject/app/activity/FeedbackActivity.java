@@ -2,8 +2,16 @@ package com.qbao.xproject.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.View;
+import android.view.animation.ScaleAnimation;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -15,19 +23,26 @@ import com.qbao.xproject.app.R;
 import com.qbao.xproject.app.base.BaseRxActivity;
 import com.qbao.xproject.app.databinding.ActivityFeedbackBinding;
 import com.qbao.xproject.app.interf.StatusBarContentColor;
+import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
+import com.qbao.xproject.app.viewmodel.FeedbackViewModel;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * @author Created by jackieyao on 2018/9/17 下午1:55
  */
 
 public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
-
+    private String mPhotoPath;
+    private FeedbackViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +63,72 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
                     @Override
                     public void accept(Object o) throws Exception {
                         pickPhoto();
+                    }
+                });
+        RxView.clicks(bindingView.imagePhone).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        picturePreview(mPhotoPath,true);
+                    }
+                });
+
+        RxView.clicks(bindingView.imageClose).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        picturePreview(mPhotoPath,false);
+                    }
+                });
+
+        RxView.clicks(bindingView.imageDelete).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        mPhotoPath = null;
+                        bindingView.relativePhone.setVisibility(View.GONE);
+                    }
+                });
+        RxView.clicks(bindingView.buttonCommit).throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        commitFeedback();
+                    }
+                });
+    }
+
+    private void commitFeedback() {
+        if (TextUtils.isEmpty(bindingView.editContent.getText().toString())){
+            Toast.makeText(activity, R.string.input_feedback_content,Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (viewModel == null){
+            viewModel = new FeedbackViewModel(activity.getApplication(),TAG);
+        }
+
+        viewModel.upLoadImage(mPhotoPath)
+                .flatMap(new Function<String, ObservableSource<Object>>() {
+                    @Override
+                    public ObservableSource<Object> apply(String attachment) throws Exception {
+                        String attach = attachment.equals("null")?null:attachment;
+                        return viewModel.commitFeedback(AccountManager.getInstance().getAccountEntity().getPhone(),bindingView.editContent.getText().toString(),attach);
+                    }
+                })
+                .compose(RxSchedulers.io_main())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                           Toast.makeText(activity,R.string.commit_success,Toast.LENGTH_LONG).show();
+                           finish();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        try {
+                            Toast.makeText(activity,throwable.getMessage(),Toast.LENGTH_LONG).show();
+                        }catch (Exception e){e.printStackTrace();}
                     }
                 });
     }
@@ -99,8 +180,9 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
                             // 原图
                             mImageSeletedPath = media.getPath();
                         }
-
-                        Glide.with(activity.getApplication()).load(mImageSeletedPath).into(bindingView.imageAddPhone);
+                        bindingView.relativePhone.setVisibility(View.VISIBLE);
+                        mPhotoPath = mImageSeletedPath;
+                        Glide.with(activity.getApplication()).load(mImageSeletedPath).thumbnail(0.4f).into(bindingView.imagePhone);
 
                         //包括裁剪和压缩后的缓存，要在上传成功后调用，注意：需要系统sd卡权限
 //                        PictureFileUtils.deleteCacheDirFile(MainActivity.this);
@@ -113,4 +195,34 @@ public class FeedbackActivity extends BaseRxActivity<ActivityFeedbackBinding> {
         }
     }
 
+
+    private void picturePreview(String path, boolean fullScreen) {
+        ScaleAnimation sAnima = new ScaleAnimation(0, 1, 0, 1);
+        sAnima.setDuration(200);
+        bindingView.linearContent.setVisibility(fullScreen ? View.GONE : View.VISIBLE);
+        bindingView.scrollViewImage.setVisibility(fullScreen ? View.VISIBLE : View.GONE);
+        if (fullScreen) {
+            Bitmap bitmap = CommonUtility.getDiskBitmap(path);
+            DisplayMetrics localDisplayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
+            float density = getResources().getDisplayMetrics().density;
+            Bitmap newBitmap = CommonUtility.getBitmap(bitmap, localDisplayMetrics.widthPixels / density, localDisplayMetrics.heightPixels / density);
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) bindingView.imageSrc.getLayoutParams();
+            params.width = (int) (newBitmap.getWidth() * density);
+            params.height = (int) (newBitmap.getHeight() * density);
+            params.gravity = Gravity.CENTER;
+            bindingView.imageSrc.setLayoutParams(params);
+            bindingView.imageSrc.setImageBitmap(newBitmap);
+            bindingView.imageSrc.setAnimation(sAnima);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bindingView.scrollViewImage.getVisibility() == View.VISIBLE){
+            picturePreview(mPhotoPath,false);
+        }else {
+            super.onBackPressed();
+        }
+    }
 }

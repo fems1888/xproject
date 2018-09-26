@@ -13,22 +13,28 @@ import com.qbao.xproject.app.entity.NextGambleResponseEntity;
 import com.qbao.xproject.app.entity.ReceiveMineEntity;
 import com.qbao.xproject.app.entity.UnReceiveAirDropEntity;
 import com.qbao.xproject.app.entity.UnReceiveMineEntity;
+import com.qbao.xproject.app.entity.UploadImageResponseEntity;
+import com.qbao.xproject.app.entity.WithdrawResponseEntity;
 import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.request_body.ReceiveMineRequest;
 import com.qbao.xproject.app.request_body.ReceiveSpeedRequest;
 import com.qbao.xproject.app.request_body.UserLoginOutRequest;
 import com.qbao.xproject.app.request_body.UserLoginRequest;
+import com.qbao.xproject.app.request_body.WithdrawRequest;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -109,7 +115,7 @@ public interface XProjectServiceApi {
      * @return
      */
     @GET("/core/mine/findAllUnReceivedMine")
-    Observable<List<UnReceiveMineEntity>> findAllUnReceivedMine();
+    Observable<UnReceiveMineEntity> findAllUnReceivedMine();
 
     /**
      * 领取矿石
@@ -127,7 +133,7 @@ public interface XProjectServiceApi {
      * @param size
      * @return
      */
-    @POST("/core/exchangeLog/findExchangeLogByPage")
+    @GET("/core/exchangeLog/findExchangeLogByPage")
     Observable<List<BillResponseEntity>> findBillList(@Query("page") int page, @Query("size") int size);
 
     /**
@@ -161,4 +167,27 @@ public interface XProjectServiceApi {
      */
     @POST("/core/joinGamble")
     Observable<BetNextResponseEntity> betNextGamble(@Body BetNextRequest request);
+
+    /**
+     * XProject_提币接口
+     * @param request
+     * @return
+     */
+    @POST("/core/exchangeLog/withdrawApply")
+    Observable<WithdrawResponseEntity> withdrawApply(@Body WithdrawRequest request);
+
+    /**
+     *x-project_意见反馈
+     * @param phone
+     * @param content
+     * @param attachment
+     * @return
+     */
+    @GET("/core/feedBack/")
+    Observable<Object> feedBack(@Query("phone") String phone, @Query("content") String content, @Query("attachment") String attachment);
+
+
+    @Multipart
+    @POST("/core/file/upload/image")
+    Observable<String> uploadImage(@Query("type") int type, @Part MultipartBody.Part file);
 }
