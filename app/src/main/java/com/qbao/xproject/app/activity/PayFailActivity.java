@@ -65,7 +65,6 @@ public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sure){
-            Toast.makeText(activity,"ew",Toast.LENGTH_LONG).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
