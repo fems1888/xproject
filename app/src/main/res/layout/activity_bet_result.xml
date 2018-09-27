@@ -29,10 +29,11 @@
                 android:paddingTop="@dimen/size_dp_30">
 
                 <TextView
+                    android:id="@+id/text_name"
                     style="@style/textStyleMainColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="颠三倒四" />
+                    android:text="" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

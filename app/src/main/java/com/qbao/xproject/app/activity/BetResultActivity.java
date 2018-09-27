@@ -25,9 +25,11 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
     public static final String BALL_TWO = "Ball_two";
     public static final String BALL_THREE = "Ball_three";
     public static final String BALL_FOUR = "Ball_Four";
+    public static final String GAMBLE_NO = "GambleNo";
     private String mBlueOne;
     private String mRedBallOne;
     private String mRedBallTwo;
+    private String mGambleNo;
     private String mRedBallThree;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +37,13 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
         setContentView(R.layout.activity_bet_result);
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.bar_one_color);
     }
-    public static void goBetResultActivity(Context context, String mRedBallOne, String mRedBallTwo, String mRedBallThree, String mBlueBall){
+    public static void goBetResultActivity(Context context, String mRedBallOne, String mRedBallTwo, String mRedBallThree, String mBlueBall,String mGambleNo){
         Intent intent = new Intent(context,BetResultActivity.class);
         intent.putExtra(BALL_ONE,mRedBallOne);
         intent.putExtra(BALL_TWO,mRedBallTwo);
         intent.putExtra(BALL_THREE,mRedBallThree);
         intent.putExtra(BALL_FOUR,mBlueBall);
+        intent.putExtra(GAMBLE_NO,mGambleNo);
         context.startActivity(intent);
     }
 
@@ -51,6 +54,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
         mRedBallOne = getIntent().getStringExtra(BALL_ONE);
         mRedBallTwo = getIntent().getStringExtra(BALL_TWO);
         mRedBallThree = getIntent().getStringExtra(BALL_THREE);
+        mGambleNo = getIntent().getStringExtra(GAMBLE_NO);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class BetResultActivity extends BaseRxActivity<ActivityBetResultBinding> 
         bindingView.textRedTwo.setText(mRedBallTwo);
         bindingView.textRedThree.setText(mRedBallThree);
         bindingView.textRedFour.setText(mBlueOne);
+        bindingView.textName.setText(String.format(getString(R.string.bet_result_tip),mGambleNo));
     }
 
     @Override

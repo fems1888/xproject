@@ -30,7 +30,6 @@ public class PayFailActivity extends BaseRxActivity<ActivityPayFailBinding> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_fail);
         StatusBarUtils.setWindowStatusBarColor(activity,R.color.white, StatusBarContentColor.GRAY);
-        setToolBarTitle(getString(R.string.pay_fail));
     }
     public static void goPayFailActivity(Context context,String failReason){
         Intent intent = new Intent(context,PayFailActivity.class);

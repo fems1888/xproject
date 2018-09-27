@@ -18,8 +18,10 @@ import com.qbao.xproject.app.XProjectApplication;
 import com.qbao.xproject.app.entity.BetNextResponseEntity;
 import com.qbao.xproject.app.entity.MyWalletResponse;
 import com.qbao.xproject.app.manager.AccountManager;
+import com.qbao.xproject.app.manager.RxBusManager;
 import com.qbao.xproject.app.request_body.BetNextRequest;
 import com.qbao.xproject.app.utility.CommonUtility;
+import com.qbao.xproject.app.utility.RxBus;
 import com.qbao.xproject.app.utility.RxSchedulers;
 import com.qbao.xproject.app.utility.StatusBarUtils;
 import com.qbao.xproject.app.adapter.BetBlueBallAdapter;
@@ -259,7 +261,8 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                     @Override
                     public void accept(BetNextResponseEntity betNextResponseEntity) throws Exception {
                         dialog.dismiss();
-                        BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString());
+                        RxBus.getDefault().post(new RxBusManager.EventRefreshNextBet());
+                        BetResultActivity.goBetResultActivity(activity,mRedBallOne,mRedBallTwo,mRedBallThree,bindingView.textBlue.getText().toString(),mGambleNo);
                         XProjectApplication.getInstance().finishActivity(BetRedActivity.class);
                         finish();
                     }

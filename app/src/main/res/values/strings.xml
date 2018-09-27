@@ -93,6 +93,7 @@
     <string name="thrid_prize">三等奖</string>
     <string name="next">下一步</string>
     <string name="gamble_no">第%d期中奖号码</string>
+    <string name="bet_result_tip">您的第%s期投注号码为</string>
     <string name="input_withdraw_amount">请输入提现金额</string>
     <string name="withdraw_success">提现成功</string>
     <string name="commit_success">提交成功</string>

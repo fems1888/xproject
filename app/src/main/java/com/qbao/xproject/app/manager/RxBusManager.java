@@ -18,4 +18,7 @@ public class RxBusManager {
     }
     public static class EventWalletRefresh{
     }
+
+    public static class EventRefreshNextBet{
+    }
 }
