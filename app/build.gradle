@@ -69,13 +69,23 @@ android {
             // 移除无用的resource文件
             shrinkResources false
             signingConfig signingConfigs.release
+
         }
 
 
 
-        debug {
+        Dev {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField("String", "URL_API_BASE", '"http://43.254.148.147:5022"')
+//            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
+            buildConfigField("String", "BUG_TAGS_KEY", '"6e5d9857f0491ab54ed999854146a704"')
+            buildConfigField("String", "XPROJECT_HTML", '"http://43.254.148.147:5022"')
+            debuggable true
+        }
+
+        TestEn {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "URL_API_BASE", '"http://106.14.172.221:4022"')
 //            buildConfigField("String", "URL_API_BASE", '"http://172.16.2.92:4013"')
             buildConfigField("String", "BUG_TAGS_KEY", '"6e5d9857f0491ab54ed999854146a704"')
             buildConfigField("String", "XPROJECT_HTML", '"http://43.254.148.147:5022"')

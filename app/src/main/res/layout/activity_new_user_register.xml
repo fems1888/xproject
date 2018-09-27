@@ -48,7 +48,6 @@
                 android:background="@null"
                 android:hint="@string/input_verify_code"
                 android:singleLine="true"
-                android:text="BV58HW"
                 android:textColor="@color/text_main_color"
                 android:textColorHint="@color/text_hint_color"
                 android:textSize="@dimen/size_sp_14" />
