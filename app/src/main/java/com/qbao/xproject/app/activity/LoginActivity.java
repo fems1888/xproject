@@ -162,7 +162,11 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
             @Override
             public void onFinish() {
                 mIfCountDown = false;
-                bindingView.textGetCode.setEnabled(true);
+                if (bindingView.editPhone.getText().toString().length() == 11){
+                    bindingView.textGetCode.setEnabled(true);
+                }else {
+                    bindingView.textGetCode.setEnabled(false);
+                }
                 bindingView.textGetCode.setText(getString(R.string.get_code));
             }
 
