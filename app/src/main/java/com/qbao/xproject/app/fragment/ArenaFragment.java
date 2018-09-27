@@ -75,7 +75,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
                         }else if (mNextGambleResponseEntity!=null&&mNextGambleResponseEntity.getGambleJoinList().size()==0){
                             //进入投注第一个页面
 
-                            BetRedActivity.goBetActivity(activity,String.valueOf(mCurrentGambleResult.getGambleNo()),mNextGambleResponseEntity.getId());
+                            BetRedActivity.goBetActivity(activity,String.valueOf(mCurrentGambleResult.getGambleNo()+1),mNextGambleResponseEntity.getId());
                         }
                     }
                 });
@@ -258,7 +258,7 @@ public class ArenaFragment extends BaseRxFragment<LayoutFragmentArenaBinding> {
 
             }else{
                 bindingView.textGambleDesc.setText(R.string.current_no_bet);
-                showMyNoWinResult();
+                showMyNoBet();
                 fillData(false);
             }
 

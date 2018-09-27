@@ -125,9 +125,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/size_dp_20"
-                    android:layout_marginTop="@dimen/size_dp_20"
                     android:gravity="center"
+                    android:layout_marginTop="@dimen/size_dp_20"
                     android:orientation="vertical">
 
                     <TextView

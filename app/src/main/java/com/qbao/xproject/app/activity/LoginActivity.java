@@ -38,6 +38,10 @@ import retrofit2.Response;
 public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
     private CountDownTimer mCountDownTimer;
     private LoginViewModel viewModel;
+    /**
+     * 是否正在倒计时
+     */
+    private boolean mIfCountDown;
 
     public static void goLoginActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -76,7 +80,12 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
             @Override
             public void afterTextChanged(Editable s) {
                 if (bindingView.editPhone.getText().toString().length() == 11){
-                    bindingView.textGetCode.setEnabled(true);
+                    if (mIfCountDown){
+                        bindingView.textGetCode.setEnabled(false);
+                    }else {
+                        bindingView.textGetCode.setEnabled(true);
+                    }
+
                     if (bindingView.editCode.getText().toString().length() == 6){
                         bindingView.textLogin.setEnabled(true);
                     }else {
@@ -152,6 +161,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
 
             @Override
             public void onFinish() {
+                mIfCountDown = false;
                 bindingView.textGetCode.setEnabled(true);
                 bindingView.textGetCode.setText(getString(R.string.get_code));
             }
@@ -199,6 +209,7 @@ public class LoginActivity extends BaseRxActivity<ActivityLoginBinding> {
      * 获取验证码
      */
     private void getVerifyCode() {
+        mIfCountDown = true;
         mCountDownTimer.start();
         UITipDialog dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
         dialog.show();

@@ -65,7 +65,6 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
      */
     private boolean mIfBetSuccess;
     private MyWalletViewModel walletViewModel;
-    private UITipDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +108,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
     }
 
     private void getMyWallet() {
-        dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
+        UITipDialog dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
         dialog.show();
         if (walletViewModel == null) {
 
@@ -132,7 +131,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                         }else {
                             mIfBetSuccess = true;
                         }
-
+                        dialog.dismiss();
                         BetSureDialogFragment dialogFragment = new BetSureDialogFragment(mGambleNo);
                         dialogFragment.setClickListener(BetBlueActivity.this);
                         dialogFragment.show(getSupportFragmentManager(), dialogFragment.getClass().getCanonicalName());
@@ -140,6 +139,7 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        dialog.dismiss();
                         Log.e(TAG, throwable.getMessage());
                     }
                 });
@@ -238,12 +238,13 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
             betRequest();
 
         }else {
-            dialog.dismiss();
            PayFailActivity.goPayFailActivity(activity,getString(R.string.no_balance));
         }
     }
 
     private void betRequest() {
+        UITipDialog dialog = new UITipDialog.CustomBuilder(activity,false).setContent(R.layout.view_loading).create();
+        dialog.show();
         BetNextRequest request = new BetNextRequest();
         request.setGambleId(mNextgambleId);
         request.setAccountNo(AccountManager.getInstance().getAccountEntity().getAccountNo());
