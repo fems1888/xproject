@@ -241,6 +241,8 @@ public class BetBlueActivity extends BaseRxActivity<ActivityBetRedBinding> imple
 
         }else {
            PayFailActivity.goPayFailActivity(activity,getString(R.string.no_balance));
+            XProjectApplication.getInstance().finishActivity(BetRedActivity.class);
+            finish();
         }
     }
 
